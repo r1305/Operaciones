@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.LoginActivity"
+    android:background="@drawable/fondo_operaciones">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="140dp"
+            android:layout_marginTop="74dp"
+            android:foregroundGravity="center"
+            app:srcCompat="@drawable/logo_uezu_system"
+            tools:ignore="MissingConstraints"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_usuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:gravity="center"
+        android:layout_above="@+id/linear_password"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_usuario" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_login_usuario"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="Usuario"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textColor="@color/blanco"
+                android:paddingStart="25dp"
+                android:textColorHighlight="@color/blanco"
+                android:textColorHint="@color/blanco" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/icon_linea"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_above="@+id/btn_login"
+        android:layout_marginBottom="70dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/blanco"
+                android:src="@drawable/icon_psw"
+                android:foregroundTint="@color/blanco"
+                android:tint="@color/blanco" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_login_psw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:hint="Contraseña"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingStart="25dp"
+                android:textColor="@color/blanco"
+                android:textColorHighlight="@color/blanco"
+                android:textColorHint="@color/blanco"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_linea"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/celesteClaro"
+        android:text="INGRESAR"
+        android:textColor="@color/blanco"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="647dp"
+        android:layout_above="@+id/btn_forgot_psw"/>
+
+    <TextView
+        android:id="@+id/btn_forgot_psw"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Recuperar contraseña"
+        android:textColor="@color/blanco"
+        android:textSize="15sp"
+        android:gravity="center"/>
+
+</RelativeLayout>

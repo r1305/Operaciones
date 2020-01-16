@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Operaciones</string>
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <string name="base_url">https://www.uezuperu.com/app/connection/</string>
+    <string name="session_url">user/session.php</string>
+    <string name="company_settings_url">empresa/companySettings.php</string>
+    <string name="login_url">user/login.php</string>
+    <string name="crear_cliente_url">cliente/register.php</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

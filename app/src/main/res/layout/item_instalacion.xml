@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_card_instalacion"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_gravity="center"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:backgroundTint="@android:color/transparent"
+    android:layout_marginBottom="9dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/fondo_cardview">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp">
+
+            <LinearLayout
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_clock"/>
+                <TextView
+                    android:id="@+id/item_instalacion_codigo"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="CODIGO"
+                    android:textColor="@color/blanco"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_instalacion_cliente_proyecto"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Cliente - Proyecto"
+                android:textColor="@color/blanco"
+                android:fontFamily="@font/gotham_regular"
+                android:textSize="18sp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+        <ImageView
+            android:layout_marginEnd="20dp"
+            android:layout_weight="7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_instalation"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
