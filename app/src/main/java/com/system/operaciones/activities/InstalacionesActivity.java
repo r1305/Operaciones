@@ -32,13 +32,16 @@ public class InstalacionesActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Instalaciones");
 
-        recycler= findViewById(R.id.recycler_view_cotizados);
+        ctx = this;
+        cred = new Credentials(ctx);
+
+        recycler= findViewById(R.id.recycler_view_instalaciones);
         recycler.setLayoutManager(new LinearLayoutManager(ctx));
         adapter=new InstalacionAdapter(l);
         recycler.setAdapter(adapter);
         l.clear();
 
-        for (int i =0;i<10;i++){
+        for (int i =0;i<5;i++){
             JSONObject o = new JSONObject();
             l.add(o);
         }
