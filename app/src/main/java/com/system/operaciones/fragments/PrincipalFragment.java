@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.system.operaciones.activities.ClientesActivity;
 import com.system.operaciones.activities.InstalacionesActivity;
 import com.system.operaciones.activities.MantenimientosActivity;
 import com.system.operaciones.activities.UrgenciasActivity;
@@ -57,13 +58,13 @@ public class PrincipalFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_instalaciones:
-                startActivity(new Intent(ctx, InstalacionesActivity.class));
+                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","1"));
                 break;
             case R.id.btn_mantenimientos:
-                startActivity(new Intent(ctx, MantenimientosActivity.class));
+                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","2"));
                 break;
             case R.id.btn_urgencias:
-                startActivity(new Intent(ctx, UrgenciasActivity.class));
+                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","3"));
                 break;
         }
     }
