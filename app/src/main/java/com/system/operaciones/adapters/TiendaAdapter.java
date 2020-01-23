@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -40,10 +41,19 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TiendaAdapter.ViewHolder holder, int position) {
+        JSONObject ob = l.get(position);
+        final String id = (String)ob.get("id");
+        String tienda = (String)ob.get("tienda");
+        String ceco = (String)ob.get("ceco");
+        String direccion = (String)ob.get("direccion");
+
+        holder.tienda.setText(tienda);
+        holder.ceco.setText(ceco);
+        holder.direccion.setText(direccion);
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ctx.startActivity(new Intent(ctx, ClienteDetailActivity.class));
+                ctx.startActivity(new Intent(ctx, ClienteDetailActivity.class).putExtra("tienda_id",id));
             }
         });
     }
@@ -59,9 +69,13 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
+        TextView direccion,ceco,tienda;
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_tienda);
+            direccion = itemView.findViewById(R.id.item_tienda_direccion);
+            tienda = itemView.findViewById(R.id.item_tienda_tienda);
+            ceco = itemView.findViewById(R.id.item_tienda_ceco);
         }
     }
 }

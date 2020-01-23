@@ -34,19 +34,30 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_clock"/>
                 <TextView
-                    android:id="@+id/item_cliente_codigo"
+                    android:layout_weight="1"
+                    android:id="@+id/item_tienda_tienda"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textColor="@color/blanco"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="20sp"
+                    android:layout_gravity="start"/>
+                <TextView
+                    android:id="@+id/item_tienda_ceco"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="CODIGO"
                     android:textColor="@color/blanco"
                     android:fontFamily="@font/gotham_regular"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:layout_gravity="end"/>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/item_mantenimiento_cliente_proyecto"
+                android:id="@+id/item_tienda_direccion"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
@@ -58,13 +69,5 @@
                 android:textSize="18sp"
                 android:gravity="center_vertical"/>
         </LinearLayout>
-
-        <ImageView
-            android:layout_marginEnd="20dp"
-            android:layout_weight="7"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/icon_instalation"
-            android:background="@android:color/transparent"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

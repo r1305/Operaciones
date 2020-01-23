@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -40,11 +41,18 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        JSONObject ob = l.get(position);
+        final String id = (String)ob.get("id");
+        final String cliente = (String)ob.get("razon_social");
+        final String ruc = "RUC: "+ob.get("ruc");
+
+        holder.tienda.setText(cliente);
+        holder.ruc.setText(ruc);
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ctx.startActivity(new Intent(ctx, TiendasActivity.class).putExtra("cliente_id",position+""));
-                Log.e("position",position+"");
+                ctx.startActivity(new Intent(ctx, TiendasActivity.class).putExtra("cliente_id",id));
+                Log.e("position",id);
             }
         });
     }
@@ -60,9 +68,12 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
+        TextView codigo,tienda,ruc;
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_cliente);
+            tienda = itemView.findViewById(R.id.item_cliente_name);
+            ruc = itemView.findViewById(R.id.item_cliente_ruc);
         }
     }
 }
