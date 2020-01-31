@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/celesteClaro"
+    android:background="@color/verdePastel"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -15,12 +15,13 @@
         android:layout_marginTop="?attr/actionBarSize"/>
 
     <TextView
+        android:text="Usuario"
         android:id="@+id/NavDNombreUsuario"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/gotham_medium"
-        android:textColor="@color/celesteClaro"/>
+        android:textColor="@color/blanco"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="25sp"
-            android:textColor="@color/celesteClaro"
+            android:textColor="@color/blanco"
             android:text="0"
             android:layout_gravity="center_vertical"/>
         <ImageView

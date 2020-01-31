@@ -2,6 +2,7 @@ package com.system.operaciones.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.system.operaciones.R;
-import com.system.operaciones.activities.ClienteDetailActivity;
-import com.system.operaciones.activities.TiendasActivity;
+import com.system.operaciones.activities.InstalacionesActivity;
+import com.system.operaciones.activities.MantenimientosActivity;
+import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.utils.Credentials;
 
 import org.json.simple.JSONObject;
@@ -53,7 +55,22 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ctx.startActivity(new Intent(ctx, ClienteDetailActivity.class).putExtra("tienda_id",id));
+                Log.e("key_act",cred.getData("key_act"));
+                String act = cred.getData("key_act");
+                if(act.equals("1"))
+                {
+                    Log.e("tienda_adapter_act","1");
+                    ctx.startActivity(new Intent(ctx, InstalacionesActivity.class).putExtra("tienda_id",id));
+                }
+                else if(act.equals("2")){
+                    Log.e("tienda_adapter_act","2");
+                    ctx.startActivity(new Intent(ctx, MantenimientosActivity.class).putExtra("tienda_id",id));
+                }
+                else if(act.equals("3"))
+                {
+                    Log.e("tienda_adapter_act","3");
+                    ctx.startActivity(new Intent(ctx, UrgenciasActivity.class).putExtra("tienda_id",id));
+                }
             }
         });
     }

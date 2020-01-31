@@ -58,13 +58,16 @@ public class PrincipalFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_instalaciones:
-                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","1"));
+                startActivity(new Intent(ctx, ClientesActivity.class));
+                cred.save_data("key_act","1");
                 break;
             case R.id.btn_mantenimientos:
-                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","2"));
+                startActivity(new Intent(ctx, ClientesActivity.class));
+                cred.save_data("key_act","2");
                 break;
             case R.id.btn_urgencias:
-                startActivity(new Intent(ctx, ClientesActivity.class).putExtra("act","3"));
+                startActivity(new Intent(ctx, ClientesActivity.class));
+                cred.save_data("key_act","3");
                 break;
         }
     }

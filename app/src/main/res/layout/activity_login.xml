@@ -128,7 +128,7 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/celesteClaro"
+        android:background="@color/verdePastel"
         android:text="INGRESAR"
         android:textColor="@color/blanco"
         tools:ignore="MissingConstraints"

@@ -2,7 +2,10 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#62d7c7</color>
     <color name="blanco">#fff</color>
+    <color name="negro">#000</color>
     <color name="celesteClaro">#33C4FF</color>
+    <color name="verdePastel">#62d7c7</color>
+    <color name="plomoBackground">#dedede</color>
 </resources>

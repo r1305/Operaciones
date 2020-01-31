@@ -40,9 +40,6 @@
         android:supportsRtl="true"
         android:theme="@style/NoBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.ClienteDetailActivity"
-            android:theme="@style/YesBar"
-            tools:ignore="InnerclassSeparator"/>
         <activity
             android:name=".activities.TiendasActivity"
             android:theme="@style/YesBar"

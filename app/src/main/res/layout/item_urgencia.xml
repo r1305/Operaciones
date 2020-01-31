@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_card_urgencia"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_gravity="center"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:backgroundTint="@android:color/transparent"
+    android:layout_marginBottom="9dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/fondo_cardview">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp">
+            <!-- Registro-->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Registro: "
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"
+                    android:gravity="left|center"/>
+
+                <TextView
+                    android:id="@+id/item_urgencia_registro"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="29/01/2020 17:20"
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
+            <!-- Atención-->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Atención: "
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"
+                    android:gravity="left|center"/>
+                <TextView
+                    android:id="@+id/item_urgencia_atencion"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="29/01/2020 17:20"
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
+            <!-- Contratista-->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Contratista: "
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"
+                    android:gravity="left|center"/>
+                <TextView
+                    android:id="@+id/item_urgencia_contratista"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Pamela"
+                    android:textColor="@color/negro"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

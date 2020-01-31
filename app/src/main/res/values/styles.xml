@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="YesBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#000</item>
-        <item name="colorPrimaryDark">#000</item>
+        <item name="colorPrimary">#62d7c7</item>
+        <item name="colorPrimaryDark">#62d7c7</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Transparent status bar -->
         <!--<item name="android:windowTranslucentStatus">true</item>-->
@@ -13,8 +13,8 @@
 
     <style name="NoBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#000</item>
-        <item name="colorPrimaryDark">#000</item>
+        <item name="colorPrimary">#62d7c7</item>
+        <item name="colorPrimaryDark">#62d7c7</item><!-- Toolbar -->
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionMenuTextColor">@color/blanco</item>
         <!-- Transparent status bar -->

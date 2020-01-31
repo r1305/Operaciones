@@ -49,4 +49,7 @@ dependencies {
 
     //SEARCH BOX ARSENAL
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
+
+    //JRSpinner
+    implementation 'com.github.jrizani:JRSpinner:androidx-SNAPSHOT'
 }

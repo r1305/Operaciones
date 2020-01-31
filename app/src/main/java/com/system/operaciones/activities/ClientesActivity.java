@@ -54,8 +54,8 @@ public class ClientesActivity extends AppCompatActivity {
         adapter=new ClienteAdapter(l);
         recycler.setAdapter(adapter);
         l.clear();
-        Intent intent = getIntent();
-        String act = intent.getStringExtra("act");
+
+        String act = cred.getData("key_act");
         Log.e("act",act);
         getClientes("");
     }

@@ -34,6 +34,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements View.OnC
 
         nav_header = "¡Hola, " + cred.getData("key_name") + "!";
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
