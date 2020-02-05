@@ -17,15 +17,10 @@
     <string name="getMotivos_url">ocupa/tienda/getMotivos.php</string>
     <string name="getUrgencias_url">ocupa/urgencia/getUrgencias.php</string>
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
+    <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>
     <string name="update_urgencia_url">ocupa/urgencia/updateUrgencia.php</string>
     <string name="crear_urgencia_url">ocupa/urgencia/register.php</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    The "accepted" answer above does NOT work (when you try to use the string like textView.setText(Html.fromHtml(String.format(getString(...), ...))).
-
-    As stated in the documentations you must escape (html entity encoded) opening bracket of the inner tags with &lt;, e.g. result should look like:
+    <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
 
     <string name="equipo_string_marca"><u>Marca:</u></string>
     <string name="equipo_string_modelo"><u>Modelo:</u></string>

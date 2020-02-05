@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@drawable/border_dialog">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="19sp"
+                android:text="Descripción del equipo"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/blanco"
+                android:gravity="center"
+                android:background="@color/verdePastel"/>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- Marca -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Marca:"
+                        android:textSize="19sp"
+                        android:gravity="center|start"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="GREE"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+                <!-- Modelo -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Modelo:"
+                        android:gravity="center|start"
+                        android:textSize="19sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="GREE"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- Tipo -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Tipo:"
+                        android:textSize="19sp"
+                        android:gravity="center|start"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Split Pared"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+                <!-- Numero de Serie -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="N° Serie:"
+                        android:gravity="center|start"
+                        android:textSize="19sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="GREE"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- BTU -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="BTU/h:"
+                        android:gravity="center|start"
+                        android:textSize="19sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="18000"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+                <!-- Voltaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Voltaje:"
+                        android:gravity="center|start"
+                        android:textSize="19sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="220V/1F"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- REFRIGERANTE -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Refrigerante:"
+                        android:gravity="center|start"
+                        android:textSize="19sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="R22"
+                        android:gravity="center|start"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+        <!-- Presión -->
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- Presion -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/blanco"
+                    android:fontFamily="@font/gotham_medium"
+                    android:text="Presión"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:background="@color/verdePastel"/>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <!-- Baja -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Succión (Baja)"
+                            android:fontFamily="@font/gotham_medium"
+                            android:gravity="center|left"
+                            android:textSize="18sp"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 PSI"
+                            android:gravity="center|start"
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                    <!-- Alta -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="0.8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Descarga (Alta)"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textSize="18sp"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 PSI"
+                            android:gravity="center|start"
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Eléctrica -->
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- Presion -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blanco"
+                    android:fontFamily="@font/gotham_medium"
+                    android:text="Eléctrica"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:background="@color/verdePastel"/>
+                <!-- Amperaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="0.9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Amperaje:"
+                        android:fontFamily="@font/gotham_medium"
+                        android:textSize="18sp"/>
+                    <!-- L1 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L1"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 A"
+                            android:gravity="center|start"/>
+                    </LinearLayout>
+                    <!-- L2 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L2"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 A"
+                            android:gravity="center|start"/>
+                    </LinearLayout>
+                    <!-- L3 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L3"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center|start"
+                            android:text="10 A"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Voltaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="0.9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Voltaje:"
+                        android:fontFamily="@font/gotham_medium"
+                        android:textSize="18sp"
+                        android:gravity="center|start"/>
+                    <!-- L1 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L1"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 A"
+                            android:gravity="center|start"/>
+                    </LinearLayout>
+                    <!-- L2 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L2"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 A"/>
+                    </LinearLayout>
+                    <!-- L3 -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="L3"
+                            android:gravity="center"
+                            android:fontFamily="@font/gotham_medium"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10 A"
+                            android:gravity="center|start"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

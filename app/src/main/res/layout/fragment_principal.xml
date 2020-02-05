@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.PrincipalFragment"
     android:orientation="vertical"
-    android:theme="@style/NoBar">
+    android:background="@color/blanco"
+    android:gravity="center"
+    android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_instalaciones"
@@ -15,10 +17,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/fondo_instalaciones"
             android:layout_gravity="center"
             android:orientation="vertical"
+            android:background="@color/blanco"
             android:gravity="center">
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="80dp"
+                android:src="@drawable/logo_tambo"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -27,17 +33,21 @@
                 android:layout_gravity="center"
                 android:text="Instalaciones"
                 android:background="@null"
-                android:textColor="@color/blanco"
+                android:textColor="@color/negro"
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:id="@+id/btn_instalaciones"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_background_transparent"
+                android:background="@drawable/btn_ingresar"
                 android:text="Ingresar"
-                android:textColor="@color/blanco"
-                android:layout_marginTop="15dp"/>
+                android:textColor="@color/negro"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:src="@drawable/divider_linea"
+                android:layout_gravity="bottom"/>
 
         </LinearLayout>
 
@@ -50,9 +60,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/fondo_mantenimiento"
             android:orientation="vertical"
+            android:background="@color/blanco"
             android:gravity="center">
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="80dp"
+                android:src="@drawable/logo_tambo"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,17 +74,21 @@
                 android:layout_gravity="center"
                 android:text="Mantenimiento"
                 android:background="@null"
-                android:textColor="@color/blanco"
+                android:textColor="@color/negro"
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:id="@+id/btn_mantenimientos"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_background_transparent"
+                android:background="@drawable/btn_ingresar"
                 android:text="Ingresar"
-                android:textColor="@color/blanco"
-                android:layout_marginTop="15dp"/>
+                android:textColor="@color/negro"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:src="@drawable/divider_linea"
+                android:layout_gravity="bottom"/>
 
         </LinearLayout>
 
@@ -83,9 +101,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/fondo_urgencias"
             android:orientation="vertical"
-            android:gravity="center">
+            android:background="@color/blanco"
+            android:gravity="center"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="80dp"
+                android:src="@drawable/logo_tambo"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -93,18 +117,16 @@
                 android:textAlignment="center"
                 android:layout_gravity="center"
                 android:text="Urgencias"
-                android:background="@null"
-                android:textColor="@color/blanco"
+                android:textColor="@color/negro"
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:id="@+id/btn_urgencias"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_background_transparent"
+                android:background="@drawable/btn_ingresar"
                 android:text="Ingresar"
-                android:textColor="@color/blanco"
-                android:layout_marginTop="15dp"/>
+                android:textColor="@color/negro"/>
 
         </LinearLayout>
 

@@ -7,9 +7,9 @@
     android:layout_gravity="center"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:backgroundTint="@android:color/transparent"
     android:layout_marginBottom="9dp">
     <LinearLayout
+        android:id="@+id/linear_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -50,7 +50,7 @@
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="CODIGO"
+                    android:text=""
                     android:textColor="@color/negro"
                     android:fontFamily="@font/gotham_regular"
                     android:textSize="20sp"
@@ -64,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Tienda"
+                android:text=""
                 android:textColor="@color/negro"
                 android:fontFamily="@font/gotham_regular"
                 android:textSize="18sp"

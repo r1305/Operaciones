@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:layout_gravity="center">
+    android:padding="10dp"
+    android:layout_gravity="center"
+    android:background="@drawable/border_dialog"
+    android:gravity="center">
 
     <TextView
         android:text="Registrar atención"
@@ -22,42 +25,54 @@
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:text="Fecha"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/dialog_icon_calendar"
+                android:layout_weight="1.8"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/negro"
-                android:textSize="15sp"/>
-            <TextView
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_calendar"
+                android:tint="@color/negro"/>
+            <EditText
+                android:layout_weight="0.5"
                 android:id="@+id/dialog_urgencia_fecha"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:outlineAmbientShadowColor="@color/negro"
                 android:textColor="@color/negro"
-                android:textSize="15sp"/>
+                android:editable="false"
+                android:focusable="true"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:text="Hora"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/negro"
-                android:textSize="15sp"/>
-            <TextView
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/dialog_icon_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_clock"
+                android:tint="@color/negro"/>
+            <EditText
                 android:id="@+id/dialog_urgencia_hora"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:outlineAmbientShadowColor="@color/negro"
                 android:textColor="@color/negro"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:editable="false"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:textAlignment="center"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -85,15 +100,16 @@
             android:text="Cancelar"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/plomoBackground"/>
 
         <Button
             android:id="@+id/dialog_btn_agendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/celesteClaro"
+            android:background="@color/verdePastel"
             android:text="Agendar"
-            android:textColor="@color/white" />
+            android:textColor="@color/negro" />
     </LinearLayout>
 </LinearLayout>

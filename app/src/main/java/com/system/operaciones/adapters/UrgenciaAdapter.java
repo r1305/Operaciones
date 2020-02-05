@@ -4,13 +4,18 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -50,12 +55,14 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     Context ctx;
     List<JSONObject> l = new ArrayList<>();
     JRSpinner contratista_spinner;
-    TextView dialog_hora,dialog_fecha;
+    EditText dialog_hora,dialog_fecha;
     Button btn_cancelar,btn_update;
     String[] contratista_ids;
     AlertDialog alertDialog;
     String str_fecha,str_hora;
     String spinner_id;
+    ImageView icon_calendar,icon_clock;
+    int tipo_proveedor=1;
     public UrgenciaAdapter(List<JSONObject> l) {
         this.l = l;
     }
@@ -72,10 +79,34 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JSONObject ob = l.get(position);
         final String id = (String)ob.get("id");
+        final String status = (String)ob.get("status");
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
-        holder.card.setOnClickListener(new View.OnClickListener() {
+        if(status.equals("0")){
+            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_subir,null));
+        }else{
+            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_pdf,null));
+            holder.icon_pencil.setVisibility(View.GONE);
+        }
+        holder.icon_file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_ficha_atencion, null);
+                builder.setView(dialogView);
+                Rect displayRectangle = new Rect();
+                Window window = ((UrgenciasActivity)ctx).getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+                dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
+                dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.5f));
+                alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -87,7 +118,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 btn_update = dialogView.findViewById(R.id.dialog_btn_agendar);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
-                getContratistas();
+                icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
+                icon_clock = dialogView.findViewById(R.id.dialog_icon_clock);
+                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
+                getLastMantenimiento(((UrgenciasActivity)ctx).getTienda_id());
+
                 alertDialog = builder.create();
                 alertDialog.show();
                 btn_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +167,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         cal.get(Calendar.DAY_OF_MONTH));
                 datePicker.setCancelable(false);
                 datePicker.setTitle("Seleccione la fecha");
-                dialog_fecha.setOnClickListener(new View.OnClickListener() {
+                icon_calendar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         datePicker.show();
@@ -157,7 +192,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 datePicker.setCancelable(false);
                 datePicker.setTitle("Seleccione la hora");
 
-                dialog_hora.setOnClickListener(new View.OnClickListener() {
+                icon_clock.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         timePicker.show();
@@ -165,7 +200,15 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 });
             }
         });
-
+        if(status.equals("1")){
+            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.plomoBackground,null));
+            holder.icon_status.setImageResource(R.drawable.icon_check);
+            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.plomoBackground,null));
+        }else{
+            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
+            holder.icon_status.setImageResource(R.drawable.icon_file);
+            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
+        }
 
     }
 
@@ -181,12 +224,18 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
         TextView registro,fecha_hora_atencion,contratista;
+        LinearLayout linear_full;
+        ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_urgencia);
+            icon_pencil = itemView.findViewById(R.id.icon_pencil);
             registro = itemView.findViewById(R.id.item_urgencia_registro);
             fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
             contratista = itemView.findViewById(R.id.item_urgencia_contratista);
+            icon_file = itemView.findViewById(R.id.icon_file);
+            icon_status = itemView.findViewById(R.id.icon_status);
+            linear_full = itemView.findViewById(R.id.linear_card);
         }
     }
 
@@ -238,6 +287,55 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
+    private void getTecnicos()
+    {
+        tipo_proveedor=2;
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTecnicos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getTecnicos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("tecnico");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+                                contratista_ids = data_id;
+                                contratista_spinner.setItems(data);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getTecnicos_error: " + error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
     private void updateUrgencia(final String fecha,final String hora,final String contratista_id,final String urgencia_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_urgencia_url);
@@ -278,6 +376,62 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 params.put("contratista_id", contratista_id);
                 params.put("fecha",fecha);
                 params.put("hora",hora);
+                params.put("tipo_proveedor",tipo_proveedor+"");
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getLastMantenimiento(final String tienda_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
+        Log.i("getLastMantenimiento_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getLastMantenimiento_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
+                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
+                                    if(last_mantenimiento<=7)
+                                    {
+                                        getContratistas();
+                                    }else{
+                                        getTecnicos();
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getLastMantenimiento_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
                 return params;
             }
         };

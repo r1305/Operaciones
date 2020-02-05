@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.MenuPrincipalActivity"
     tools:showIn="@layout/app_bar_menu_principal"
-    android:background="@drawable/fondo_operaciones">
+    android:background="@color/verdePastel">
     
     <FrameLayout
         android:id="@+id/container"

@@ -15,7 +15,6 @@
         android:id="@+id/tienda"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Tambo Habich"
         android:gravity="center"
         android:fontFamily="@font/gotham_medium"
         android:textSize="25sp"
@@ -266,7 +265,6 @@
                     <TextView
                         android:id="@+id/email"
                         android:layout_marginStart="5dp"
-                        android:text="tambo.alisos@tambo.com"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textColor="@color/verdePastel"
@@ -385,7 +383,7 @@
             android:layout_marginBottom="5dp"/>
         <ImageView
             android:id="@+id/btn_new_urgencia_equipo"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:src="@drawable/icon_new"
@@ -408,7 +406,7 @@
             android:layout_marginBottom="5dp"/>
         <ImageView
             android:id="@+id/btn_new_urgencia"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:src="@drawable/icon_new"
