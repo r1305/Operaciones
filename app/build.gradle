@@ -52,4 +52,7 @@ dependencies {
 
     //JRSpinner
     implementation 'com.github.jrizani:JRSpinner:androidx-SNAPSHOT'
+
+    //Signature Pag
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
 }

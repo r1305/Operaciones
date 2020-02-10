@@ -37,6 +37,7 @@
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
+                android:layout_marginTop="6dp"
                 android:id="@+id/btn_instalaciones"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
@@ -78,6 +79,7 @@
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
+                android:layout_marginTop="6dp"
                 android:id="@+id/btn_mantenimientos"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
@@ -121,6 +123,7 @@
                 android:textSize="32sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
+                android:layout_marginTop="6dp"
                 android:id="@+id/btn_urgencias"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"

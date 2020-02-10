@@ -34,6 +34,7 @@ import java.util.Map;
 import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.FOREGROUND_SERVICE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -60,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE , READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION,FOREGROUND_SERVICE,READ_EXTERNAL_STORAGE,ACCESS_BACKGROUND_LOCATION}, 100);
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE , READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION,FOREGROUND_SERVICE,READ_EXTERNAL_STORAGE,ACCESS_BACKGROUND_LOCATION,CAMERA}, 100);
         }
     }
 
@@ -69,6 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         if (requestCode == 100) {
             if (ActivityCompat.checkSelfPermission(this, READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED &&

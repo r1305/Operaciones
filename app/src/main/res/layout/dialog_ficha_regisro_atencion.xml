@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,20 +12,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="19sp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
                 android:text="Descripción del equipo"
                 android:fontFamily="@font/gotham_medium"
                 android:textColor="@color/blanco"
                 android:gravity="center"
-                android:background="@color/verdePastel"/>
+                android:background="@color/verdePastel"
+                android:layout_marginBottom="10dp"/>
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="match_parent"
@@ -42,20 +43,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Marca:"
-                        android:textSize="19sp"
+                        android:textSize="15sp"
                         android:gravity="center|start"
                         android:fontFamily="@font/gotham_medium"/>
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="GREE"
                         android:gravity="center|start"
-                        android:textSize="19sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
                 <!-- Modelo -->
                 <LinearLayout
-                    android:layout_weight="1"
+                    android:layout_weight="0.7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -65,66 +66,15 @@
                         android:layout_height="match_parent"
                         android:text="Modelo:"
                         android:gravity="center|start"
-                        android:textSize="19sp"
+                        android:textSize="15sp"
                         android:fontFamily="@font/gotham_medium"/>
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="GREE"
+                        android:text="GMV-N28G/A3A-D"
                         android:gravity="center|start"
-                        android:textSize="19sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <!-- Tipo -->
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Tipo:"
-                        android:textSize="19sp"
-                        android:gravity="center|start"
-                        android:fontFamily="@font/gotham_medium"/>
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Split Pared"
-                        android:gravity="center|start"
-                        android:textSize="19sp"/>
-                </LinearLayout>
-                <!-- Numero de Serie -->
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="N° Serie:"
-                        android:gravity="center|start"
-                        android:textSize="19sp"
-                        android:fontFamily="@font/gotham_medium"/>
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="GREE"
-                        android:gravity="center|start"
-                        android:textSize="19sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -145,17 +95,48 @@
                         android:layout_height="match_parent"
                         android:text="BTU/h:"
                         android:gravity="center|start"
-                        android:textSize="19sp"
+                        android:textSize="15sp"
                         android:fontFamily="@font/gotham_medium"/>
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="18000"
                         android:gravity="center|start"
-                        android:textSize="19sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
-                <!-- Voltaje -->
+
+                <!-- Numero de Serie -->
+                <LinearLayout
+                    android:layout_weight="0.7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="N° Serie:"
+                        android:gravity="center|start"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/gotham_medium"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:gravity="center|start"
+                        android:text="00247-774"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- Tipo -->
                 <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -165,17 +146,39 @@
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Voltaje:"
+                        android:text="Tipo:"
+                        android:textSize="15sp"
                         android:gravity="center|start"
-                        android:textSize="19sp"
                         android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="0.6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Split Pared"
+                        android:gravity="center|start"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+                <!-- Voltaje -->
+                <LinearLayout
+                    android:layout_weight="0.7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
                     <TextView
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:text="Voltaje:"
+                        android:gravity="center|start"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <TextView
+                        android:layout_weight="0.6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:text="220V/1F"
                         android:gravity="center|start"
-                        android:textSize="19sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -197,42 +200,43 @@
                         android:layout_height="match_parent"
                         android:text="Refrigerante:"
                         android:gravity="center|start"
-                        android:textSize="19sp"
+                        android:textSize="15sp"
                         android:fontFamily="@font/gotham_medium"/>
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.7"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="R22"
                         android:gravity="center|start"
-                        android:textSize="19sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
         <!-- Presión -->
         <LinearLayout
+            android:layout_weight="1"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Presion -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/blanco"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/verdePastel"
                     android:fontFamily="@font/gotham_medium"
-                    android:text="Presión"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:background="@color/verdePastel"/>
+                    android:text="Presión (PSI)"
+                    android:textColor="@color/blanco"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="10dp"/>
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -242,45 +246,75 @@
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <TextView
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="Succión (Baja)"
                             android:fontFamily="@font/gotham_medium"
-                            android:gravity="center|left"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 PSI"
-                            android:gravity="center|start"
-                            android:textSize="18sp"/>
+                            android:layout_height="40dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/et_presion_baja"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="10"
+                                android:inputType="numberSigned"
+                                android:gravity="center"
+                                android:textSize="15sp"/>
+
+                            <ImageView
+                                android:layout_weight="1"
+                                android:id="@+id/icon_camera_presion_baja"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_cam" />
+                        </LinearLayout>
+
                     </LinearLayout>
                     <!-- Alta -->
                     <LinearLayout
                         android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
                         <TextView
-                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="Descarga (Alta)"
                             android:fontFamily="@font/gotham_medium"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 PSI"
-                            android:gravity="center|start"
-                            android:textSize="18sp"/>
+                            android:layout_height="40dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/et_presion_alta"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="10"
+                                android:inputType="numberSigned"
+                                android:gravity="center"
+                                android:textSize="15sp"/>
+
+                            <ImageView
+                                android:layout_weight="1"
+                                android:id="@+id/icon_camera_presion_alta"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_cam" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -288,183 +322,324 @@
 
         <!-- Eléctrica -->
         <LinearLayout
+            android:layout_weight="1"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <!-- Presion -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blanco"
                     android:fontFamily="@font/gotham_medium"
                     android:text="Eléctrica"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="19sp"
+                    android:textSize="15sp"
                     android:background="@color/verdePastel"/>
-                <!-- Amperaje -->
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_weight="0.9"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Amperaje:"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"/>
-                    <!-- L1 -->
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="L1"
-                            android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 A"
-                            android:gravity="center|start"/>
-                    </LinearLayout>
-                    <!-- L2 -->
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="L2"
-                            android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 A"
-                            android:gravity="center|start"/>
-                    </LinearLayout>
-                    <!-- L3 -->
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="L3"
-                            android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center|start"
-                            android:text="10 A"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Voltaje -->
                 <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_weight="0.9"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Voltaje:"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"
-                        android:gravity="center|start"/>
-                    <!-- L1 -->
+                    android:layout_height="0dp"
+                    android:orientation="vertical">
+                    <!-- Amperaje -->
                     <LinearLayout
                         android:layout_weight="1"
+                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <TextView
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="L1"
+                            android:layout_height="wrap_content"
+                            android:text="Amperaje:"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textSize="15sp"
                             android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
-
-                        <TextView
-                            android:layout_weight="1"
+                            android:layout_marginBottom="10dp"/>
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10 A"
-                            android:gravity="center|start"/>
+                            android:orientation="horizontal">
+                            <!-- Lineas Amperaje -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <!-- L1 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L1"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_amperaje_l1"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+                                        <ImageView
+                                            android:id="@+id/icon_cam_amp_l1"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_cam"
+                                            android:layout_gravity="center"/>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+                                <!-- L2 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L2"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_amperaje_l2"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+                                        <ImageView
+                                            android:id="@+id/icon_cam_amp_l2"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_cam"
+                                            android:layout_gravity="center"/>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+                                <!-- L3 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L3"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_amperaje_l3"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+                                        <ImageView
+                                            android:id="@+id/icon_cam_amp_l3"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_cam"
+                                            android:layout_gravity="center"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
-                    <!-- L2 -->
+                    <!-- Voltaje -->
                     <LinearLayout
                         android:layout_weight="1"
+                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Voltaje:"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textSize="15sp"
+                            android:gravity="center"/>
+                        <LinearLayout
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="L2"
-                            android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
+                            android:orientation="horizontal">
+                            <!-- Lineas Amperaje -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <!-- L1 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L1"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_voltaje_l1"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+                                        <ImageView
+                                            android:id="@+id/icon_cam_volt_l1"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_cam"
+                                            android:layout_gravity="center"/>
 
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 A"/>
-                    </LinearLayout>
-                    <!-- L3 -->
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="L3"
-                            android:gravity="center"
-                            android:fontFamily="@font/gotham_medium"/>
+                                    </LinearLayout>
 
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="10 A"
-                            android:gravity="center|start"/>
+                                </LinearLayout>
+                                <!-- L2 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L2"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_voltaje_l2"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+                                        <ImageView
+                                            android:id="@+id/icon_cam_volt_l2"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_cam"
+                                            android:layout_gravity="center"/>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+                                <!-- L3 -->
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:text="L3"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/gotham_medium"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:orientation="horizontal">
+                                        <EditText
+                                            android:id="@+id/et_voltaje_l3"
+                                            android:layout_weight="1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="10"
+                                            android:inputType="numberSigned"
+                                            android:gravity="center"/>
+
+                                        <ImageView
+                                            android:id="@+id/icon_cam_volt_l3"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_weight="1"
+                                            android:src="@drawable/icon_cam" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            <Button
+                android:id="@+id/btn_cerrar"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/plomoBackground"
+                android:text="Cancelar"/>
+            <Button
+                android:id="@+id/btn_registrar"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/verdePastel"
+                android:text="Registrar"/>
+        </LinearLayout>
+
+        <com.github.gcacace.signaturepad.views.SignaturePad
+            android:id="@+id/signature_pad"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:penColor="@android:color/black"
+            />
+    </LinearLayout>
 </LinearLayout>

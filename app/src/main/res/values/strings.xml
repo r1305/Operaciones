@@ -19,6 +19,7 @@
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
     <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>
     <string name="update_urgencia_url">ocupa/urgencia/updateUrgencia.php</string>
+    <string name="register_ficha_urgencia_url">ocupa/urgencia/registerFicha.php</string>
     <string name="crear_urgencia_url">ocupa/urgencia/register.php</string>
     <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
 

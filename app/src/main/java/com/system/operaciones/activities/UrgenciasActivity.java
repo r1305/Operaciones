@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.system.operaciones.adapters.TiendaAdapter;
 import com.system.operaciones.adapters.UrgenciaAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.Image;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -69,6 +71,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     RecyclerView equipos_recycler;
     List<JSONObject> equipos_l=new ArrayList<>();
     EquipoAdapter equipos_adapter;
+
+    String image_presion_baja,image_presion_alta,image_amp_l1,image_amp_l2,image_amp_l3,image_volt_l1,image_volt_l2,image_volt_l3,image_signature;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,12 +140,52 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         equipos_adapter.notifyDataSetChanged();
     }
 
+    public String getImage_presion_baja() {
+        return image_presion_baja;
+    }
+
+    public String getImage_presion_alta() {
+        return image_presion_alta;
+    }
+
+    public String getImage_amp_l1() {
+        return image_amp_l1;
+    }
+
+    public String getImage_amp_l2() {
+        return image_amp_l2;
+    }
+
+    public String getImage_amp_l3() {
+        return image_amp_l3;
+    }
+
+    public String getImage_volt_l1() {
+        return image_volt_l1;
+    }
+
+    public String getImage_volt_l2() {
+        return image_volt_l2;
+    }
+
+    public String getImage_volt_l3() {
+        return image_volt_l3;
+    }
+
     public String getTienda_id() {
         return tienda_id;
     }
 
     public void setTienda_id(String tienda_id) {
         this.tienda_id = tienda_id;
+    }
+
+    public String getImage_signature() {
+        return image_signature;
+    }
+
+    public void setImage_signature(String image_signature) {
+        this.image_signature = image_signature;
     }
 
     @Override
@@ -232,6 +276,61 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 alertDialog = builder.create();
                 alertDialog.show();
                 break;
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            String b64 = Image.convert(image);
+            String image_type = cred.getData("image_type");
+            switch (image_type){
+                case "1":
+                    image_presion_baja = b64;
+                    Log.e("image_presion_baja","1");
+                    adapter.getIcon_camera_presion_baja().setVisibility(View.GONE);
+                    break;
+                case "2":
+                    image_presion_alta = b64;
+                    Log.e("image_presion_alta","2");
+                    adapter.getIcon_camera_presion_alta().setVisibility(View.GONE);
+                    break;
+                case "3":
+                    image_amp_l1 = b64;
+                    Log.e("image_amp_l1","3");
+                    adapter.getIcon_camera_amp_l1().setVisibility(View.GONE);
+                    break;
+                case "4":
+                    image_amp_l2 = b64;
+                    Log.e("image_amp_l2","4");
+                    adapter.getIcon_camera_amp_l2().setVisibility(View.GONE);
+                    break;
+                case "5":
+                    image_amp_l3 = b64;
+                    Log.e("image_amp_l3","5");
+                    adapter.getIcon_camera_amp_l3().setVisibility(View.GONE);
+                    break;
+                case "6":
+                    image_volt_l1 = b64;
+                    Log.e("image_volt_l1","6");
+                    adapter.getIcon_camera_volt_l1().setVisibility(View.GONE);
+                    break;
+                case "7":
+                    image_volt_l2 = b64;
+                    Log.e("image_volt_l2","7");
+                    adapter.getIcon_camera_volt_l2().setVisibility(View.GONE);
+                    break;
+                case "8":
+                    image_volt_l3 = b64;
+                    Log.e("image_volt_l3","8");
+                    adapter.getIcon_camera_volt_l3().setVisibility(View.GONE);
+                    break;
+                case "9":
+                    image_signature = Image.convert(adapter.getSignature().getTransparentSignatureBitmap());
+                    Log.e("image_signature","9");
+                    break;
+            }
         }
     }
 
