@@ -94,7 +94,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         tv_tienda = findViewById(R.id.tienda);
         tv_tienda_tlf = findViewById(R.id.tienda_tlf);
         tv_email = findViewById(R.id.email);
-        tv_distrito = findViewById(R.id.distrito);
         tv_direccion = findViewById(R.id.direccion);
 
         btn_new_urgencia = findViewById(R.id.btn_new_urgencia);

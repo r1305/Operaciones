@@ -33,6 +33,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.gson.Gson;
+import com.system.operaciones.FichaActivity;
 import com.system.operaciones.R;
 import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
@@ -67,9 +68,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private ImageView icon_calendar,icon_clock;
     private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
     private EditText presion_baja,presion_alta,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
-    private int tipo_proveedor=1;
-    private Button btn_registrar,btn_cerrar;
     private SignaturePad signature;
+    private Button btn_registrar,btn_cerrar;
+    private int tipo_proveedor=1;
     public UrgenciaAdapter(List<JSONObject> l) {
         this.l = l;
     }
@@ -122,7 +123,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JSONObject ob = l.get(position);
         final String id = (String)ob.get("id");
+
         final String status = (String)ob.get("status");
+
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
@@ -131,135 +134,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.dialog_ficha_regisro_atencion, null);
-                    builder.setView(dialogView);
-                    icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
-                    icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
-                    icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
-                    icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
-                    icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
-                    icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
-                    icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
-                    icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
-                    btn_cerrar = dialogView.findViewById(R.id.btn_cerrar);
-                    btn_registrar = dialogView.findViewById(R.id.btn_registrar);
-                    signature = dialogView.findViewById(R.id.signature_pad);
-
-
-                    presion_baja = dialogView.findViewById(R.id.et_presion_baja);
-                    presion_alta = dialogView.findViewById(R.id.et_presion_alta);
-                    amp_l1 = dialogView.findViewById(R.id.et_amperaje_l1);
-                    amp_l2 = dialogView.findViewById(R.id.et_amperaje_l2);
-                    amp_l3 = dialogView.findViewById(R.id.et_amperaje_l3);
-                    volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
-                    volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
-                    volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
-
-                    icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","1");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","2");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","3");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","4");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","5");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","6");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","7");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cred.save_data("image_type","8");
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((UrgenciasActivity) ctx).startActivityForResult(intent, 1);
-                        }
-                    });
-                    Rect displayRectangle = new Rect();
-                    Window window = ((UrgenciasActivity)ctx).getWindow();
-                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                    dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-                    dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.6f));
-                    alertDialog = builder.create();
-                    alertDialog.show();
-
-                    btn_cerrar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialog.dismiss();
-                        }
-                    });
-
-                    btn_registrar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            registrarFicha(id);
-                        }
-                    });
-
-                    signature.setOnSignedListener(new SignaturePad.OnSignedListener() {
-                        @Override
-                        public void onStartSigning() {
-
-                        }
-
-                        @Override
-                        public void onSigned() {
-                            cred.save_data("image_type","9");
-                            ((UrgenciasActivity)ctx).setImage_signature(Image.convert(getSignature().getTransparentSignatureBitmap()));
-                        }
-
-                        @Override
-                        public void onClear() {
-
-                        }
-                    });
+                    ctx.startActivity(new Intent(ctx, FichaActivity.class)
+                            .putExtra("urgencia",id)
+                            .putExtra("tienda_id",((UrgenciasActivity)ctx).getTienda_id()));
                 }
             });
 
@@ -283,7 +160,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 }
             });
         }
-
 
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,7 +195,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Log.e("contratista_id",spinner_id+"");
                         updateUrgencia(str_fecha,str_hora,spinner_id,id);
                     }
@@ -509,7 +384,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 System.out.println("getTecnicos_error: " + error.getMessage());
             }
         });
-
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }

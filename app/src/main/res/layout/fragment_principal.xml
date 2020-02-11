@@ -41,7 +41,7 @@
                 android:id="@+id/btn_instalaciones"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_ingresar"
+                android:background="@color/plomoBackground"
                 android:text="Ingresar"
                 android:textColor="@color/negro"/>
             <ImageView
@@ -83,7 +83,7 @@
                 android:id="@+id/btn_mantenimientos"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_ingresar"
+                android:background="@color/plomoBackground"
                 android:text="Ingresar"
                 android:textColor="@color/negro"/>
             <ImageView
@@ -127,7 +127,7 @@
                 android:id="@+id/btn_urgencias"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_ingresar"
+                android:background="@color/plomoBackground"
                 android:text="Ingresar"
                 android:textColor="@color/negro"/>
 
