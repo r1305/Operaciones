@@ -21,7 +21,10 @@
     <string name="update_urgencia_url">ocupa/urgencia/updateUrgencia.php</string>
     <string name="register_ficha_urgencia_url">ocupa/urgencia/registerFicha.php</string>
     <string name="crear_urgencia_url">ocupa/urgencia/register.php</string>
+    <string name="crear_ficha_url">ocupa/urgencia/createFicha.php</string>
     <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
+
+    <string name="pdf_url">https://uezuperu.com/app/files/pdf/urgencias/</string>
 
     <string name="equipo_string_marca"><u>Marca:</u></string>
     <string name="equipo_string_modelo"><u>Modelo:</u></string>

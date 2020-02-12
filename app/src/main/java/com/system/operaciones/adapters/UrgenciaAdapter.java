@@ -39,6 +39,7 @@ import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
+import com.system.operaciones.utils.Utils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -146,17 +147,20 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.dialog_ficha_atencion, null);
-                    builder.setView(dialogView);
-                    Rect displayRectangle = new Rect();
-                    Window window = ((UrgenciasActivity)ctx).getWindow();
-                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                    dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
-                    dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.6f));
-                    alertDialog = builder.create();
-                    alertDialog.show();
+//                    final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+//                    LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
+//                    View dialogView = inflater.inflate(R.layout.dialog_ficha_atencion, null);
+//                    builder.setView(dialogView);
+//                    Rect displayRectangle = new Rect();
+//                    Window window = ((UrgenciasActivity)ctx).getWindow();
+//                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//                    dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
+//                    dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.6f));
+//                    alertDialog = builder.create();
+//                    alertDialog.show();
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+id+".pdf";
+                    System.out.println("pdf_url: "+pdf_url);
+                    Utils.openPdf(ctx,pdf_url);
                 }
             });
         }

@@ -592,20 +592,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                String[] data = new String[respuesta.size()];
-
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("motivo");
-                                    data[i] = motivo;
-                                    i++;
-                                }
-
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
-                                motivos_spin.setAdapter(adapter);
-
-                                adapter.notifyDataSetChanged();
+                                getUrgencias(tienda_id);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -148,6 +148,7 @@ public class FichaActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_ficha_registro_atencion, null);
                 builder.setView(dialogView);
+                builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
                 final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
@@ -176,25 +177,34 @@ public class FichaActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(image_signature_cliente.isEmpty()){
                             Toast.makeText(ctx,"Ingrese firma de cliente",Toast.LENGTH_SHORT).show();
-                            return;
                         }
                         if(name.getText().toString().trim().isEmpty()){
                             Toast.makeText(ctx,"Ingrese Nombre y Apellido",Toast.LENGTH_SHORT).show();
-                            return;
+                            name.setError("Completar campo");
                         }else{
+                            name.setError(null);
                             name_cliente = name.getText().toString().trim();
                         }
                         if(dni.getText().toString().trim().isEmpty() || dni.getText().toString().length()<8 || dni.getText().toString().length()>8){
+                            dni.setError("Completar campo");
                             Toast.makeText(ctx,"Ingrese DNI válido",Toast.LENGTH_SHORT).show();
-                            return;
                         }else{
+                            dni.setError(null);
                             dni_cliente = dni.getText().toString().trim();
                         }
                         if(cargo.getText().toString().trim().isEmpty()){
+                            cargo.setError("Completar campo");
                             Toast.makeText(ctx,"Ingrese Cargo válido",Toast.LENGTH_SHORT).show();
-                            return;
                         }else{
+                            cargo.setError(null);
                             cargo_cliente = cargo.getText().toString().trim();
+                        }
+                        if(!image_signature_cliente.isEmpty() && !name_cliente.isEmpty() && !dni_cliente.isEmpty() && !cargo_cliente.isEmpty())
+                        {
+                            Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                            alertDialog.dismiss();
+                        }else{
+                            Toast.makeText(ctx,"Debe completar la información",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -214,6 +224,7 @@ public class FichaActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_ficha_registro_atencion, null);
                 builder.setView(dialogView);
+                builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
                 final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
@@ -262,7 +273,7 @@ public class FichaActivity extends AppCompatActivity {
                         }else{
                             cargo_tecnico = cargo.getText().toString().trim();
                         }
-                        if(!name_tecnico.isEmpty() && !dni_tecnico.isEmpty() && !cargo_tecnico.isEmpty())
+                        if(!image_signature_tecnico.isEmpty() && !name_tecnico.isEmpty() && !dni_tecnico.isEmpty() && !cargo_tecnico.isEmpty())
                         {
                             Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
@@ -526,6 +537,7 @@ public class FichaActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Registro correcto",Toast.LENGTH_SHORT).show();
+                                createFicha(urgencia_id);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -561,7 +573,58 @@ public class FichaActivity extends AppCompatActivity {
                 params.put("voltaje_l3", volt_l3.getText().toString());
                 params.put("img_voltaje_l3", image_volt_l3);
                 params.put("img_signature_tecnico",image_signature_tecnico);
+                params.put("name_tecnico",name_tecnico);
+                params.put("dni_tecnico",dni_tecnico);
+                params.put("cargo_tecnico",cargo_tecnico);
                 params.put("img_signature_cliente",image_signature_cliente);
+                params.put("name_cliente",name_cliente);
+                params.put("dni_cliente",dni_cliente);
+                params.put("cargo_cliente",cargo_cliente);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void createFicha(final String urgencia_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_ficha_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("create_ficha_urgencia_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("create_ficha_urgencia_error: " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("urgencia_id", urgencia_id);
                 return params;
             }
         };
