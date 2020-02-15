@@ -14,7 +14,9 @@
     <string name="getTiendas_url">ocupa/tienda/getTiendas.php</string>
     <string name="getTienda_url">ocupa/tienda/getTienda.php</string>
     <string name="getEquipos_url">ocupa/tienda/getEquipos.php</string>
-    <string name="getMotivos_url">ocupa/tienda/getMotivos.php</string>
+    <string name="getMotivos_url">ocupa/urgencia/getMotivos.php</string>
+    <string name="getDiagnosticos_url">ocupa/urgencia/getDiagnosticos.php</string>
+    <string name="getSolucion_url">ocupa/urgencia/getSolucion.php</string>
     <string name="getUrgencias_url">ocupa/urgencia/getUrgencias.php</string>
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
     <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,30 +26,49 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.gson.Gson;
+import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import jrizani.jrspinner.JRSpinner;
+
 public class FichaActivity extends AppCompatActivity {
 
     Context ctx;
     Credentials cred;
-    private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
-    private ImageView icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
-    String image_presion_baja="",image_presion_alta="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
-    private EditText presion_baja,presion_alta,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
-    private Button btn_registrar,btn_firma_tecnico,btn_firma_cliente;
+    //ANTES
+    private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_temp_l1,icon_camera_temp_l2,icon_camera_temp_l3,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
+    private ImageView icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_temp_l1,icon_gallery_temp_l2,icon_gallery_temp_l3,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
+    String image_presion_baja="",image_presion_alta="",image_temp_l1="",image_temp_l2="",image_temp_l3="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
+    private EditText presion_baja,presion_alta,temp_l1,temp_l2,temp_l3,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
+    //DESPUES
+    private ImageView despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_temp_l3,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
+    private ImageView despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_temp_l3,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
+    String despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
+    private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_temp_l3,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
+
+    private Button btn_registrar,btn_cerrar,btn_firma_tecnico,btn_firma_cliente,btn_antes,btn_despues,btn_lectura_cancelar,btn_lectura_guardar;
     private String id,tienda_id;
-    ImageView img;
-    AlertDialog.Builder builder;
+
     AlertDialog alertDialog;
+    JRSpinner spinner_motivos;
+    String[] motivos_id;
+
+    JRSpinner spinner_diagnosticos;
+    String[] diagnosticos_id;
+
+    String solucion;
+    TextView tv_solucion;
+    EditText et_diagnostico;
 
     private String name_tecnico,dni_tecnico,cargo_tecnico,name_cliente,dni_cliente,cargo_cliente;
     @Override
@@ -62,79 +82,811 @@ public class FichaActivity extends AppCompatActivity {
         cred = new Credentials(ctx);
         id = getIntent().getStringExtra("urgencia");
         tienda_id = getIntent().getStringExtra("tienda_id");
-
-        builder = new AlertDialog.Builder(ctx);
-        final LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_preview_photo, null);
-        builder.setCancelable(false);
-        builder.setView(dialogView);
-        builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+        spinner_motivos = findViewById(R.id.spinner_motivo);
+        spinner_diagnosticos = findViewById(R.id.spinner_diagnostico);
+        et_diagnostico = findViewById(R.id.et_diagnostico);
+        getMotivos();
+        spinner_motivos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onItemClick(int position) {
+                String id = motivos_id[position];
+                if(id.equals("6")){
+                    et_diagnostico.setVisibility(View.VISIBLE);
+                }else{
+                    et_diagnostico.setVisibility(View.GONE);
+                }
+                getDiagnostico(id);
             }
         });
-        img = dialogView.findViewById(R.id.dialog_preview_photo);
-        alertDialog = builder.create();
 
+        spinner_diagnosticos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String id = diagnosticos_id[position];
+                getSolucion(id);
+            }
+        });
+        tv_solucion = findViewById(R.id.tv_solucion);
+        btn_antes = findViewById(R.id.btn_antes);
+        btn_despues = findViewById(R.id.btn_despues);
+        btn_antes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas, null);
+                builder.setView(dialogView);
+                builder.setCancelable(false);
 
-        icon_camera_presion_baja = findViewById(R.id.icon_camera_presion_baja);
-        icon_camera_presion_alta = findViewById(R.id.icon_camera_presion_alta);
-        icon_camera_amp_l1 = findViewById(R.id.icon_cam_amp_l1);
-        icon_camera_amp_l2 = findViewById(R.id.icon_cam_amp_l2);
-        icon_camera_amp_l3 = findViewById(R.id.icon_cam_amp_l3);
-        icon_camera_volt_l1 = findViewById(R.id.icon_cam_volt_l1);
-        icon_camera_volt_l2 = findViewById(R.id.icon_cam_volt_l2);
-        icon_camera_volt_l3 = findViewById(R.id.icon_cam_volt_l3);
+                icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
+                icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
 
-        icon_gallery_presion_baja = findViewById(R.id.icon_gallery_presion_baja);
-        icon_gallery_presion_alta = findViewById(R.id.icon_gallery_presion_alta);
-        icon_gallery_amp_l1 = findViewById(R.id.icon_gallery_amp_l1);
-        icon_gallery_amp_l2 = findViewById(R.id.icon_gallery_amp_l2);
-        icon_gallery_amp_l3 = findViewById(R.id.icon_gallery_amp_l3);
-        icon_gallery_volt_l1 = findViewById(R.id.icon_gallery_volt_l1);
-        icon_gallery_volt_l2 = findViewById(R.id.icon_gallery_volt_l2);
-        icon_gallery_volt_l3 = findViewById(R.id.icon_gallery_volt_l3);
+                icon_camera_temp_l1 = dialogView.findViewById(R.id.icon_cam_temp_l1);
+                icon_camera_temp_l2 = dialogView.findViewById(R.id.icon_cam_temp_l2);
+                icon_camera_temp_l3 = dialogView.findViewById(R.id.icon_cam_temp_l3);
+
+                icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
+                icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
+                icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
+
+                icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
+                icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
+                icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
+                icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
+
+                icon_gallery_temp_l1 = dialogView.findViewById(R.id.icon_gallery_temp_l1);
+                icon_gallery_temp_l2 = dialogView.findViewById(R.id.icon_gallery_temp_l2);
+                icon_gallery_temp_l3 = dialogView.findViewById(R.id.icon_gallery_temp_l3);
+
+                icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
+                icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
+                icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
+
+                icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
+                icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
+                icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
+
+                presion_baja = dialogView.findViewById(R.id.et_presion_baja);
+                presion_alta = dialogView.findViewById(R.id.et_presion_alta);
+
+                temp_l1 = dialogView.findViewById(R.id.et_temperatura_l1);
+                temp_l2 = dialogView.findViewById(R.id.et_temperatura_l2);
+                temp_l3 = dialogView.findViewById(R.id.et_temperatura_l3);
+
+                amp_l1 = dialogView.findViewById(R.id.et_amperaje_l1);
+                amp_l2 = dialogView.findViewById(R.id.et_amperaje_l2);
+                amp_l3 = dialogView.findViewById(R.id.et_amperaje_l3);
+
+                volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
+                volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
+                volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+                btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("presion_baja","1");
+                        cred.save_data("image_type","1");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_presion_baja);
+                    }
+                });
+
+                icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","2");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_presion_alta);
+                    }
+                });
+
+                icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","3");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_amp_l1);
+                    }
+                });
+
+                icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","4");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_amp_l2);
+                    }
+                });
+
+                icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","5");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_amp_l3);
+                    }
+                });
+
+                icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","6");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_volt_l1);
+                    }
+                });
+
+                icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","7");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_volt_l2);
+                    }
+                });
+
+                icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","8");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_volt_l3);
+                    }
+                });
+
+                icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","9");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l1);
+                    }
+                });
+
+                icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","10");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l2);
+                    }
+                });
+
+                icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","11");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l3);
+                    }
+                });
+
+                //Temperatura
+                if(!image_temp_l1.isEmpty()){
+                    icon_camera_temp_l1.setVisibility(View.GONE);
+                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_temp_l1.setVisibility(View.VISIBLE);
+                    icon_gallery_temp_l1.setVisibility(View.GONE);
+                }
+
+                if(!image_temp_l2.isEmpty()){
+                    icon_camera_temp_l2.setVisibility(View.GONE);
+                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_temp_l2.setVisibility(View.VISIBLE);
+                    icon_gallery_temp_l2.setVisibility(View.GONE);
+                }
+
+                if(!image_temp_l3.isEmpty()){
+                    icon_camera_temp_l3.setVisibility(View.GONE);
+                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_temp_l3.setVisibility(View.VISIBLE);
+                    icon_gallery_temp_l3.setVisibility(View.GONE);
+                }
+
+                //Presión
+
+                if(!image_presion_baja.isEmpty()){
+                    icon_camera_presion_baja.setVisibility(View.GONE);
+                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_presion_baja.setVisibility(View.VISIBLE);
+                    icon_gallery_presion_baja.setVisibility(View.GONE);
+                }
+
+                if(!image_presion_alta.isEmpty()){
+                    icon_camera_presion_alta.setVisibility(View.GONE);
+                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_presion_alta.setVisibility(View.VISIBLE);
+                    icon_gallery_presion_alta.setVisibility(View.GONE);
+                }
+
+                //Amperaje
+                if(!image_amp_l1.isEmpty()){
+                    icon_camera_amp_l1.setVisibility(View.GONE);
+                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_amp_l1.setVisibility(View.VISIBLE);
+                    icon_gallery_amp_l1.setVisibility(View.GONE);
+                }
+
+                if(!image_amp_l2.isEmpty()){
+                    icon_camera_amp_l2.setVisibility(View.GONE);
+                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_amp_l2.setVisibility(View.VISIBLE);
+                    icon_gallery_amp_l2.setVisibility(View.GONE);
+                }
+
+                if(!image_amp_l3.isEmpty()){
+                    icon_camera_amp_l3.setVisibility(View.GONE);
+                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                    icon_gallery_amp_l3.setVisibility(View.GONE);
+                }
+
+                //Voltaje
+                if(!image_volt_l1.isEmpty()){
+                    icon_camera_volt_l1.setVisibility(View.GONE);
+                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_volt_l1.setVisibility(View.VISIBLE);
+                    icon_gallery_volt_l1.setVisibility(View.GONE);
+                }
+
+                if(!image_volt_l2.isEmpty()){
+                    icon_camera_volt_l2.setVisibility(View.GONE);
+                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_volt_l2.setVisibility(View.VISIBLE);
+                    icon_gallery_volt_l2.setVisibility(View.GONE);
+                }
+
+                if(!image_volt_l3.isEmpty()){
+                    icon_camera_volt_l3.setVisibility(View.GONE);
+                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                }else{
+                    icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                    icon_gallery_volt_l3.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //BTN_DESPUES
+        btn_despues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas, null);
+                builder.setView(dialogView);
+                builder.setCancelable(false);
+
+                despues_icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
+                despues_icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
+
+                despues_icon_camera_temp_l1 = dialogView.findViewById(R.id.icon_cam_temp_l1);
+                despues_icon_camera_temp_l2 = dialogView.findViewById(R.id.icon_cam_temp_l2);
+                despues_icon_camera_temp_l3 = dialogView.findViewById(R.id.icon_cam_temp_l3);
+
+                despues_icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
+                despues_icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
+                despues_icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
+
+                despues_icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
+                despues_icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
+                despues_icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                despues_icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
+                despues_icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
+
+                despues_icon_gallery_temp_l1 = dialogView.findViewById(R.id.icon_gallery_temp_l1);
+                despues_icon_gallery_temp_l2 = dialogView.findViewById(R.id.icon_gallery_temp_l2);
+                despues_icon_gallery_temp_l3 = dialogView.findViewById(R.id.icon_gallery_temp_l3);
+
+                despues_icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
+                despues_icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
+                despues_icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
+
+                despues_icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
+                despues_icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
+                despues_icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
+
+                despues_presion_baja = dialogView.findViewById(R.id.et_presion_baja);
+                despues_presion_alta = dialogView.findViewById(R.id.et_presion_alta);
+
+                despues_temp_l1 = dialogView.findViewById(R.id.et_temperatura_l1);
+                despues_temp_l2 = dialogView.findViewById(R.id.et_temperatura_l2);
+                despues_temp_l3 = dialogView.findViewById(R.id.et_temperatura_l3);
+
+                despues_amp_l1 = dialogView.findViewById(R.id.et_amperaje_l1);
+                despues_amp_l2 = dialogView.findViewById(R.id.et_amperaje_l2);
+                despues_amp_l3 = dialogView.findViewById(R.id.et_amperaje_l3);
+
+                despues_volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
+                despues_volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
+                despues_volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+                btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("presion_baja","12");
+                        cred.save_data("image_type","12");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_presion_baja);
+                    }
+                });
+
+                despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","13");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_presion_alta);
+                    }
+                });
+
+                despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","14");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_amp_l1);
+                    }
+                });
+
+                despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","15");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_amp_l2);
+                    }
+                });
+
+                despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","16");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_amp_l3);
+                    }
+                });
+
+                despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","17");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_volt_l1);
+                    }
+                });
+
+                despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","18");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_volt_l2);
+                    }
+                });
+
+                despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","19");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_volt_l3);
+                    }
+                });
+
+                despues_icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","20");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_temp_l1);
+                    }
+                });
+
+                despues_icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","21");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_temp_l2);
+                    }
+                });
+
+                despues_icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","22");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_temp_l3);
+                    }
+                });
+
+                //Temperatura
+                if(!despues_image_temp_l1.isEmpty()){
+                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_temp_l1.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_temp_l2.isEmpty()){
+                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_temp_l2.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_temp_l3.isEmpty()){
+                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_temp_l3.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_temp_l3.setVisibility(View.GONE);
+                }
+
+                //Presión
+
+                if(!despues_image_presion_baja.isEmpty()){
+                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_presion_alta.isEmpty()){
+                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.GONE);
+                }
+
+                //Amperaje
+                if(!despues_image_amp_l1.isEmpty()){
+                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_amp_l2.isEmpty()){
+                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_amp_l3.isEmpty()){
+                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.GONE);
+                }
+
+                //Voltaje
+                if(!despues_image_volt_l1.isEmpty()){
+                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_volt_l2.isEmpty()){
+                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.GONE);
+                }
+
+                if(!despues_image_volt_l3.isEmpty()){
+                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                }else{
+                    despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.GONE);
+                }
+            }
+        });
 
         btn_registrar = findViewById(R.id.btn_registrar);
+        btn_cerrar = findViewById(R.id.btn_cerrar);
+        btn_cerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FichaActivity)ctx).finish();
+            }
+        });
         btn_firma_tecnico = findViewById(R.id.btn_firma_tecnico);
         btn_firma_cliente = findViewById(R.id.btn_firma_cliente);
-
-        presion_baja = findViewById(R.id.et_presion_baja);
-        presion_alta = findViewById(R.id.et_presion_alta);
-        amp_l1 = findViewById(R.id.et_amperaje_l1);
-        amp_l2 = findViewById(R.id.et_amperaje_l2);
-        amp_l3 = findViewById(R.id.et_amperaje_l3);
-        volt_l1 = findViewById(R.id.et_voltaje_l1);
-        volt_l2 = findViewById(R.id.et_voltaje_l2);
-        volt_l3 = findViewById(R.id.et_voltaje_l3);
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(image_presion_alta.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto de presión alta",Toast.LENGTH_SHORT).show();
+                if(image_temp_l1.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T1",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_temp_l2.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T2",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_temp_l3.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T3",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(image_presion_baja.isEmpty())
                 {
-                    Toast.makeText(ctx,"Debe cargar foto de presión baja",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de presión baja",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_presion_alta.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de presión alta",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(image_amp_l1.isEmpty())
                 {
-                    Toast.makeText(ctx,"Debe cargar foto de amperaje en la Línea 1",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 1",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(image_amp_l2.isEmpty())
                 {
-                    Toast.makeText(ctx,"Debe cargar foto de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(image_amp_l3.isEmpty())
                 {
-                    Toast.makeText(ctx,"Debe cargar foto de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(despues_image_temp_l1.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de temperatura T1",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_temp_l2.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de temperatura T2",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_temp_l3.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de temperatura T3",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_presion_baja.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de presión baja",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_presion_alta.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de presión alta",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_amp_l1.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 1",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_amp_l2.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_amp_l3.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 registrarFicha(id);
@@ -214,6 +966,18 @@ public class FichaActivity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
+                if(!image_signature_cliente.isEmpty()){
+                    signaturePad.setSignatureBitmap(Image.convert(image_signature_cliente));
+                }
+                if(name_cliente!=null && !name_cliente.isEmpty()){
+                    name.setText(name_cliente);
+                }
+                if(dni_cliente!=null && !dni_cliente.isEmpty()){
+                    dni.setText(dni_cliente);
+                }
+                if(cargo_cliente!=null && !cargo_cliente.isEmpty()){
+                    cargo.setText(cargo_cliente);
+                }
             }
         });
 
@@ -245,7 +1009,6 @@ public class FichaActivity extends AppCompatActivity {
 
                     @Override
                     public void onClear() {
-
                     }
                 });
                 guardar.setOnClickListener(new View.OnClickListener() {
@@ -288,156 +1051,50 @@ public class FichaActivity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
-            }
-        });
-
-        icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","1");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_presion_baja));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","2");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_presion_alta));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","3");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_amp_l1));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","4");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_amp_l2));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","5");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_amp_l3));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","6");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_volt_l1));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","7");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_volt_l2));
-                img.setMaxHeight(100);
-                alertDialog.show();
-            }
-        });
-
-        icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cred.save_data("image_type","8");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img.setImageBitmap(Image.convert(image_volt_l3));
-                img.setMaxHeight(100);
-                alertDialog.show();
+                if(!image_signature_tecnico.isEmpty()){
+                    signaturePad.setSignatureBitmap(Image.convert(image_signature_tecnico));
+                }
+                if(name_tecnico!=null && !name_tecnico.isEmpty()){
+                    name.setText(name_tecnico);
+                }
+                if(dni_tecnico!=null && !dni_tecnico.isEmpty()){
+                    dni.setText(dni_tecnico);
+                }
+                if(cargo_tecnico!=null && !cargo_tecnico.isEmpty()){
+                    cargo.setText(cargo_tecnico);
+                }
             }
         });
     }
 
+    private void showPreview(String b64)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_preview_photo, null);
+        ImageView preview = dialogView.findViewById(R.id.dialog_preview_photo);
+        preview.setImageBitmap(Image.convert(b64));
+        preview.setMaxHeight(100);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        builder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert_preview = builder.create();
+        alert_preview.show();
+    }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("requestCode: "+requestCode);
         System.out.println("resultCode: "+resultCode);
@@ -513,6 +1170,119 @@ public class FichaActivity extends AppCompatActivity {
                     if(image_volt_l3.isEmpty())
                         System.out.println("image_volt_l3 NULL");
                     break;
+                case "9":
+                    image_temp_l1 = b64;
+                    Log.e("image_temp_l1","9");
+                    icon_camera_temp_l1.setVisibility(View.GONE);
+                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(image_temp_l1.isEmpty())
+                        System.out.println("image_temp_l1 NULL");
+                    break;
+                case "10":
+                    image_temp_l2 = b64;
+                    Log.e("image_temp_l2","10");
+                    icon_camera_temp_l2.setVisibility(View.GONE);
+                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(image_temp_l2.isEmpty())
+                        System.out.println("image_temp_l2 NULL");
+                    break;
+                case "11":
+                    image_temp_l3 = b64;
+                    Log.e("image_temp_l3","11");
+                    icon_camera_temp_l3.setVisibility(View.GONE);
+                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(image_temp_l3.isEmpty())
+                        System.out.println("image_temp_l3 NULL");
+                    break;
+                    //despues
+                case "12":
+                    despues_image_presion_baja = b64;
+                    Log.e("image_presion_baja","12");
+                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_baja.isEmpty())
+                        System.out.println("despues_image_presion_baja NULL");
+                    break;
+                case "13":
+                    despues_image_presion_alta = b64;
+                    Log.e("despues_image_presion_alta","13");
+                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_alta.isEmpty())
+                        System.out.println("despues_image_presion_alta NULL");
+                    break;
+                case "14":
+                    despues_image_amp_l1 = b64;
+                    Log.e("image_amp_l1","14");
+                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l1.isEmpty())
+                        System.out.println("image_amp_l1 NULL");
+                    break;
+                case "15":
+                    despues_image_amp_l2 = b64;
+                    Log.e("despues_image_amp_l2","15");
+                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l2.isEmpty())
+                        System.out.println("despues_image_amp_l2 NULL");
+                    break;
+                case "16":
+                    despues_image_amp_l3 = b64;
+                    Log.e("despues_image_amp_l3","16");
+                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l3.isEmpty())
+                        System.out.println("despues_image_amp_l3 NULL");
+                    break;
+                case "17":
+                    despues_image_volt_l1 = b64;
+                    Log.e("despues_image_volt_l1","17");
+                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l1.isEmpty())
+                        System.out.println("despues_image_volt_l1 NULL");
+                    break;
+                case "18":
+                    despues_image_volt_l2 = b64;
+                    Log.e("despues_image_volt_l2","18");
+                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l2.isEmpty())
+                        System.out.println("despues_image_volt_l2 NULL");
+                    break;
+                case "19":
+                    despues_image_volt_l3 = b64;
+                    Log.e("despues_image_volt_l3","19");
+                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l3.isEmpty())
+                        System.out.println("despues_image_volt_l3 NULL");
+                    break;
+                case "20":
+                    despues_image_temp_l1 = b64;
+                    Log.e("despues_image_temp_l1","20");
+                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l1.isEmpty())
+                        System.out.println("despues_image_temp_l1 NULL");
+                    break;
+                case "21":
+                    despues_image_temp_l2 = b64;
+                    Log.e("despues_image_temp_l2","21");
+                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l2.isEmpty())
+                        System.out.println("despues_image_temp_l2 NULL");
+                    break;
+                case "22":
+                    despues_image_temp_l3 = b64;
+                    Log.e("despues_image_temp_l3","22");
+                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l3.isEmpty())
+                        System.out.println("despues_image_temp_l3 NULL");
+                    break;
             }
         }
     }
@@ -556,26 +1326,65 @@ public class FichaActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("urgencia_id", urgencia_id);
                 params.put("tienda_id", tienda_id);
+                //ANTES
                 params.put("presion_baja", presion_baja.getText().toString());
                 params.put("img_presion_baja", image_presion_baja);
                 params.put("presion_alta", presion_alta.getText().toString());
                 params.put("img_presion_alta", image_presion_alta);
+
                 params.put("amperaje_l1", amp_l1.getText().toString());
                 params.put("img_amperaje_l1", image_amp_l1);
                 params.put("amperaje_l2", amp_l2.getText().toString());
                 params.put("img_amperaje_l2", image_amp_l2);
                 params.put("amperaje_l3", amp_l3.getText().toString());
                 params.put("img_amperaje_l3", image_amp_l3);
+
                 params.put("voltaje_l1", volt_l1.getText().toString());
                 params.put("img_voltaje_l1", image_volt_l1);
                 params.put("voltaje_l2", volt_l2.getText().toString());
                 params.put("img_voltaje_l2", image_volt_l2);
                 params.put("voltaje_l3", volt_l3.getText().toString());
                 params.put("img_voltaje_l3", image_volt_l3);
+
+                params.put("temperatura_l1", temp_l1.getText().toString());
+                params.put("img_temperatura_l1", image_temp_l1);
+                params.put("temperatura_l2", temp_l2.getText().toString());
+                params.put("img_temperatura_l2", image_temp_l2);
+                params.put("temperatura_l3", temp_l3.getText().toString());
+                params.put("img_temperatura_l3", image_temp_l3);
+                //DESPUES
+                params.put("despues_presion_baja", despues_presion_baja.getText().toString());
+                params.put("despues_img_presion_baja", despues_image_presion_baja);
+                params.put("despues_presion_alta", despues_presion_alta.getText().toString());
+                params.put("despues_img_presion_alta", despues_image_presion_alta);
+
+                params.put("despues_amperaje_l1", despues_amp_l1.getText().toString());
+                params.put("despues_img_amperaje_l1", despues_image_amp_l1);
+                params.put("despues_amperaje_l2", despues_amp_l2.getText().toString());
+                params.put("despues_img_amperaje_l2", despues_image_amp_l2);
+                params.put("despues_amperaje_l3", despues_amp_l3.getText().toString());
+                params.put("despues_img_amperaje_l3", despues_image_amp_l3);
+
+                params.put("despues_voltaje_l1", despues_volt_l1.getText().toString());
+                params.put("despues_img_voltaje_l1", despues_image_volt_l1);
+                params.put("despues_voltaje_l2", despues_volt_l2.getText().toString());
+                params.put("despues_img_voltaje_l2", despues_image_volt_l2);
+                params.put("despues_voltaje_l3", despues_volt_l3.getText().toString());
+                params.put("despues_img_voltaje_l3", despues_image_volt_l3);
+
+                params.put("despues_temperatura_l1", despues_temp_l1.getText().toString());
+                params.put("despues_img_temperatura_l1", despues_image_temp_l1);
+                params.put("despues_temperatura_l2", despues_temp_l2.getText().toString());
+                params.put("despues_img_temperatura_l2", despues_image_temp_l2);
+                params.put("despues_temperatura_l3", despues_temp_l3.getText().toString());
+                params.put("despues_img_temperatura_l3", despues_image_temp_l3);
+
+                //FIRMAS
                 params.put("img_signature_tecnico",image_signature_tecnico);
                 params.put("name_tecnico",name_tecnico);
                 params.put("dni_tecnico",dni_tecnico);
                 params.put("cargo_tecnico",cargo_tecnico);
+
                 params.put("img_signature_cliente",image_signature_cliente);
                 params.put("name_cliente",name_cliente);
                 params.put("dni_cliente",dni_cliente);
@@ -594,7 +1403,7 @@ public class FichaActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url+"?urgencia_id="+urgencia_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -608,6 +1417,7 @@ public class FichaActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
+                                ((FichaActivity)ctx).finish();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -619,12 +1429,111 @@ public class FichaActivity extends AppCompatActivity {
                 error.printStackTrace();
                 System.out.println("create_ficha_urgencia_error: " + error);
             }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getMotivos()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMotivos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] motivos = new String[respuesta.size()];
+                                motivos_id = new String[respuesta.size()];
+                                int i=0;
+                                for (Object o : respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    motivos[i] = (String)ob.get("motivo");
+                                    motivos_id[i] = (String)ob.get("id");
+                                    i++;
+                                }
+                                spinner_motivos.setItems(motivos);
+                                spinner_motivos.clear();
+                                spinner_diagnosticos.clear();
+                                tv_solucion.setText("");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getMotivos_error: " + error);
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getDiagnostico(final String motivo_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getDiagnosticos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getDiagnosticos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] diagnosticos = new String[respuesta.size()];
+                                diagnosticos_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o:respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    diagnosticos[i] = (String)ob.get("diagnostico");
+                                    diagnosticos_id[i] = (String)ob.get("id");
+                                    i++;
+                                }
+                                spinner_diagnosticos.setItems(diagnosticos);
+                                spinner_diagnosticos.clear();
+                                tv_solucion.setText("");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getDiagnosticos_error: " + error);
+            }
         }){
             @Override
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", urgencia_id);
+                params.put("motivo_id", motivo_id);
                 return params;
             }
         };
@@ -632,4 +1541,55 @@ public class FichaActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
+    private void getSolucion(final String diagnostico_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getSolucion_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getDiagnosticos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for(Object o : respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    solucion = (String)ob.get("solucion");
+                                }
+                                tv_solucion.setText(solucion);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getDiagnosticos_error: " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("diagnostico_id", diagnostico_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
 }

@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,10 +19,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,10 +48,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
+
+import jrizani.jrspinner.JRSpinner;
 
 public class UrgenciasActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -63,6 +72,13 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     String tienda_id;
     ArrayAdapter<String> motivo_adapter,equipo_adapter;
     String[] motivo_id_adapter,equipo_id_adapter;
+    private EditText dialog_hora,dialog_fecha;
+    private ImageView icon_calendar,icon_clock;
+    private String str_fecha,str_hora;
+    private int tipo_proveedor=1;
+
+    private String[] contratista_ids;
+    private JRSpinner personal_spinner;
 
     RecyclerView recycler;
     List<JSONObject> l=new ArrayList<>();
@@ -137,6 +153,18 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         equipos_l.add(new JSONObject());
         equipos_l.add(new JSONObject());
         equipos_adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getUrgencias(tienda_id);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getUrgencias(tienda_id);
     }
 
     public String getImage_presion_baja() {
@@ -233,23 +261,84 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
                 dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
 
+                personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
+                getLastMantenimiento(tienda_id);
+
                 builder.setView(dialogView);
 
                 equipos_spin = dialogView.findViewById(R.id.urgencia_spinner_equipos);
                 equipos_spin.setDropDownWidth(500);
                 motivos_spin = dialogView.findViewById(R.id.urgencia_spinner_motivos);
+                dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
+                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
+                icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
+                icon_clock = dialogView.findViewById(R.id.dialog_icon_clock);
+                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
                 //getEquipos(tienda_id);
-                String[] data= {"Equipo 1","Equipo 2"};
-                String[] data_id= {"1","2"};
+                String[] data= {"No identificado","Equipo 1","Equipo 2"};
+                String[] data_id= {"3","1","2"};
                 equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                 equipo_id_adapter = new String[2];
                 equipo_id_adapter = data_id;
 
                 equipos_spin.setAdapter(equipo_adapter);
                 equipo_adapter.notifyDataSetChanged();
+
+                Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
+
+                // Create the DatePickerDialog instance
+                final DatePickerDialog datePicker = new DatePickerDialog(ctx, new DatePickerDialog.OnDateSetListener() {
+
+                    // when dialog box is closed, below method will be called.
+                    public void onDateSet(DatePicker view, int selectedYear,
+                                          int selectedMonth, int selectedDay) {
+                        String year1 = String.valueOf(selectedYear);
+                        String month1 = ((selectedMonth + 1)<10?"0":"")+(selectedMonth + 1);
+                        String day1 = ((selectedDay<10)?"0":"")+selectedDay;
+                        str_fecha = year1+"-"+ month1+"-"+ day1;
+                        dialog_fecha.setText(str_fecha);
+                        dialog_fecha.setError(null);
+                    }
+                },
+                        cal.get(Calendar.YEAR),
+                        cal.get(Calendar.MONTH),
+                        cal.get(Calendar.DAY_OF_MONTH));
+                datePicker.setCancelable(false);
+                datePicker.setTitle("Seleccione la fecha");
+                icon_calendar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datePicker.show();
+                    }
+                });
+
+                // Create the DatePickerDialog instance
+                final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String hour = (hourOfDay<10?"0":"")+hourOfDay;
+                        String min = (minute<10?"0":"")+minute;
+                        str_hora = hour+":"+ min;
+                        dialog_hora.setText(str_hora);
+                        dialog_hora.setError(null);
+                    }
+                },
+                        cal.get(Calendar.HOUR_OF_DAY),
+                        cal.get(Calendar.MINUTE),
+                        true);
+                datePicker.setCancelable(false);
+                datePicker.setTitle("Seleccione la hora");
+
+                icon_clock.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timePicker.show();
+                    }
+                });
 
                 getMotivos();
                 dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -349,6 +438,102 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         txt_datos.setTextColor(ctx.getResources().getColor(R.color.negro));
         txt_equipos.setTextColor(ctx.getResources().getColor(R.color.negro));
         txt_settings.setTextColor(ctx.getResources().getColor(R.color.negro));
+    }
+
+    private void getContratistas()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getContratistas_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getContratistas_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("proveedor");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+                                contratista_ids = data_id;
+                                personal_spinner.setItems(data);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getContratistas_error: " + error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getTecnicos()
+    {
+        tipo_proveedor=2;
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTecnicos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getTecnicos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("tecnico");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+                                contratista_ids = data_id;
+                                personal_spinner.setItems(data);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getTecnicos_error: " + error.getMessage());
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
     public void getTienda(final String tienda_id)
@@ -613,6 +798,61 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("motivo_id", motivo_id);
                 params.put("equipo_id", equipo_id);
                 params.put("observaciones", observaciones);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getLastMantenimiento(final String tienda_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
+        Log.i("getLastMantenimiento_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getLastMantenimiento_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
+                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
+                                    if(last_mantenimiento<=7)
+                                    {
+                                        getContratistas();
+                                    }else{
+                                        getTecnicos();
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getLastMantenimiento_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
                 return params;
             }
         };

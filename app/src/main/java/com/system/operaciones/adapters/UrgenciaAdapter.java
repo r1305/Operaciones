@@ -61,12 +61,12 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private List<JSONObject> l = new ArrayList<>();
     private JRSpinner contratista_spinner;
     private EditText dialog_hora,dialog_fecha;
+    private ImageView icon_calendar,icon_clock;
     private Button btn_cancelar,btn_update;
     private String[] contratista_ids;
     private AlertDialog alertDialog;
     private String str_fecha,str_hora;
     private String spinner_id;
-    private ImageView icon_calendar,icon_clock;
     private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
     private EditText presion_baja,presion_alta,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
     private SignaturePad signature;
@@ -124,14 +124,15 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JSONObject ob = l.get(position);
         final String id = (String)ob.get("id");
-
         final String status = (String)ob.get("status");
+        Log.e("status","id: "+id+"->status: "+status);
 
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
         if(status.equals("0")){
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_subir,null));
+            holder.icon_pencil.setVisibility(View.VISIBLE);
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

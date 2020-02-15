@@ -34,7 +34,7 @@
                 android:text="Instalaciones"
                 android:background="@null"
                 android:textColor="@color/negro"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:layout_marginTop="6dp"
@@ -76,7 +76,7 @@
                 android:text="Mantenimiento"
                 android:background="@null"
                 android:textColor="@color/negro"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:layout_marginTop="6dp"
@@ -120,7 +120,7 @@
                 android:layout_gravity="center"
                 android:text="Urgencias"
                 android:textColor="@color/negro"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:fontFamily="@font/gotham_medium"/>
             <Button
                 android:layout_marginTop="6dp"

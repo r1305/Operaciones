@@ -208,7 +208,6 @@
                         android:textSize="19sp"/>
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
         <!-- Presión -->
         <LinearLayout

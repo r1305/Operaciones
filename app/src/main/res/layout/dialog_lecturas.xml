@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <!-- Temperatura -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/verdePastel"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="center"
+                android:text="Temperatura"
+                android:textColor="@color/blanco"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp"/>
+            <!-- Lineas Temperaturas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- L1 -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="T1"
+                        android:gravity="center"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/et_temperatura_l1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10"
+                            android:inputType="numberSigned"
+                            android:gravity="center"/>
+                        <ImageView
+                            android:id="@+id/icon_cam_temp_l1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_cam"
+                            android:layout_gravity="center"/>
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_gallery_temp_l1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!-- L2 -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="T2"
+                        android:gravity="center"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/et_temperatura_l2"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10"
+                            android:inputType="numberSigned"
+                            android:gravity="center"/>
+                        <ImageView
+                            android:id="@+id/icon_cam_temp_l2"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_cam"
+                            android:layout_gravity="center"/>
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_gallery_temp_l2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!-- L3 -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="T3"
+                        android:gravity="center"
+                        android:fontFamily="@font/gotham_medium"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/et_temperatura_l3"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10"
+                            android:inputType="numberSigned"
+                            android:gravity="center"/>
+                        <ImageView
+                            android:id="@+id/icon_cam_temp_l3"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_cam"
+                            android:layout_gravity="center"/>
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_gallery_temp_l3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Presión -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/verdePastel"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="center"
+                android:text="Presión (PSI)"
+                android:textColor="@color/blanco"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp"/>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!-- Baja -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Succión (Baja)"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_presion_baja"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10"
+                            android:inputType="numberSigned"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_camera_presion_baja"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_cam" />
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_gallery_presion_baja"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!-- Alta -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descarga (Alta)"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_presion_alta"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="10"
+                            android:inputType="numberSigned"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_camera_presion_alta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_cam" />
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/icon_gallery_presion_alta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Eléctrica -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blanco"
+                android:fontFamily="@font/gotham_medium"
+                android:text="Eléctrica (A)"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:background="@color/verdePastel"/>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+                <!-- Amperaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Amperaje:"
+                        android:fontFamily="@font/gotham_medium"
+                        android:textSize="15sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <!-- Lineas Amperaje -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <!-- L1 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L1"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_amperaje_l1"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_amp_l1"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/icon_cam"
+                                        android:layout_gravity="center"/>
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_amp_l1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L2 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L2"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_amperaje_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_amp_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/icon_cam"
+                                        android:layout_gravity="center"/>
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_amp_l2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L3 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L3"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_amperaje_l3"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_amp_l3"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/icon_cam"
+                                        android:layout_gravity="center"/>
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_amp_l3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Voltaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Voltaje:"
+                        android:fontFamily="@font/gotham_medium"
+                        android:textSize="15sp"
+                        android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <!-- Lineas Amperaje -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <!-- L1 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L1"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_voltaje_l1"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l1"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/icon_cam"
+                                        android:layout_gravity="center"/>
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_volt_l1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L2 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L2"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_voltaje_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/icon_cam"
+                                        android:layout_gravity="center"/>
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_volt_l2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L3 -->
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:text="L3"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_voltaje_l3"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="10"
+                                        android:inputType="numberSigned"
+                                        android:gravity="center"/>
+
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="1"
+                                        android:src="@drawable/icon_cam" />
+
+                                    <ImageView
+                                        android:layout_weight="1"
+                                        android:id="@+id/icon_gallery_volt_l3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/dialog_lectura_btn_cancelar"
+                    android:text="Cancelar"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/plomoBackground"/>
+
+                <Button
+                    android:id="@+id/dialog_lectura_btn_guardar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/verdePastel"
+                    android:text="Guardar"
+                    android:textColor="@color/negro" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
