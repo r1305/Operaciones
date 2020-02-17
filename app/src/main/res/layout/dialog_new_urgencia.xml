@@ -149,7 +149,7 @@
                     android:fontFamily="@font/gotham_medium"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
-                <Spinner
+                <jrizani.jrspinner.JRSpinner
                     android:layout_weight="0.5"
                     android:id="@+id/urgencia_spinner_equipos"
                     android:layout_width="match_parent"

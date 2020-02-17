@@ -6,17 +6,18 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -31,14 +32,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.gson.Gson;
-import com.system.operaciones.FichaActivity;
 import com.system.operaciones.R;
+import com.system.operaciones.activities.FichaActivity;
 import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
-import com.system.operaciones.utils.Image;
 import com.system.operaciones.utils.Utils;
 
 import org.json.simple.JSONArray;
@@ -59,19 +58,28 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private Credentials cred;
     private Context ctx;
     private List<JSONObject> l = new ArrayList<>();
-    private JRSpinner contratista_spinner;
-    private EditText dialog_hora,dialog_fecha;
+    private EditText dialog_hora,dialog_fecha,observaciones;
     private ImageView icon_calendar,icon_clock;
     private Button btn_cancelar,btn_update;
-    private String[] contratista_ids;
     private AlertDialog alertDialog;
     private String str_fecha,str_hora;
     private String spinner_id;
-    private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
-    private EditText presion_baja,presion_alta,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
-    private SignaturePad signature;
-    private Button btn_registrar,btn_cerrar;
     private int tipo_proveedor=1;
+    private Spinner motivos_spin;
+
+    JRSpinner spinner_equipos;
+    String[] equipos_ids;
+    String equipo_id;
+
+    ArrayAdapter<String> motivo_adapter;
+    String[] motivo_id_adapter;
+
+    private String[] personal_ids;
+    private JRSpinner personal_spinner;
+    private String personal_id;
+
+    String urgencia_id = "0";
+
     public UrgenciaAdapter(List<JSONObject> l) {
         this.l = l;
     }
@@ -84,48 +92,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         return new UrgenciaAdapter.ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_urgencia, parent, false));
     }
 
-    public ImageView getIcon_camera_presion_baja() {
-        return icon_camera_presion_baja;
-    }
-
-    public ImageView getIcon_camera_presion_alta() {
-        return icon_camera_presion_alta;
-    }
-
-    public ImageView getIcon_camera_amp_l1() {
-        return icon_camera_amp_l1;
-    }
-
-    public ImageView getIcon_camera_amp_l2() {
-        return icon_camera_amp_l2;
-    }
-
-    public ImageView getIcon_camera_amp_l3() {
-        return icon_camera_amp_l3;
-    }
-
-    public ImageView getIcon_camera_volt_l1() {
-        return icon_camera_volt_l1;
-    }
-
-    public ImageView getIcon_camera_volt_l2() {
-        return icon_camera_volt_l2;
-    }
-
-    public ImageView getIcon_camera_volt_l3() {
-        return icon_camera_volt_l3;
-    }
-
-    public SignaturePad getSignature() {
-        return signature;
-    }
-
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
-        final String id = (String)ob.get("id");
         final String status = (String)ob.get("status");
-        Log.e("status","id: "+id+"->status: "+status);
+        Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
 
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
@@ -137,29 +108,17 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     ctx.startActivity(new Intent(ctx, FichaActivity.class)
-                            .putExtra("urgencia",id)
+                            .putExtra("urgencia",(String)l.get(position).get("id"))
                             .putExtra("tienda_id",((UrgenciasActivity)ctx).getTienda_id()));
                 }
             });
-
         }else{
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_pdf,null));
             holder.icon_pencil.setVisibility(View.GONE);
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-//                    LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
-//                    View dialogView = inflater.inflate(R.layout.dialog_ficha_atencion, null);
-//                    builder.setView(dialogView);
-//                    Rect displayRectangle = new Rect();
-//                    Window window = ((UrgenciasActivity)ctx).getWindow();
-//                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//                    dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
-//                    dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.6f));
-//                    alertDialog = builder.create();
-//                    alertDialog.show();
-                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+id+".pdf";
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+urgencia_id+".pdf";
                     System.out.println("pdf_url: "+pdf_url);
                     Utils.openPdf(ctx,pdf_url);
                 }
@@ -169,21 +128,34 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                JSONObject json = l.get(holder.getAdapterPosition());
+                urgencia_id = (String)json.get("id");
+                System.out.println("holder_id: "+position);
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                Rect displayRectangle = new Rect();
+                Window window = ((UrgenciasActivity)ctx).getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
                 LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_update_urgencia, null);
+                dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
+                dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
                 builder.setView(dialogView);
-                contratista_spinner = dialogView.findViewById(R.id.spinner_contratista);
-                btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
-                btn_update = dialogView.findViewById(R.id.dialog_btn_agendar);
-                dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
-                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
-                icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
-                icon_clock = dialogView.findViewById(R.id.dialog_icon_clock);
-                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
-                getLastMantenimiento(((UrgenciasActivity)ctx).getTienda_id());
+                personal_spinner = dialogView.findViewById(R.id.spinner_edit_contratista);
+                motivos_spin = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
+                spinner_equipos = dialogView.findViewById(R.id.urgencia_edit_spinner_equipos);
+                btn_cancelar = dialogView.findViewById(R.id.dialog_edit_btn_cancelar);
+                btn_update = dialogView.findViewById(R.id.dialog_btn_actualizar);
+                dialog_fecha = dialogView.findViewById(R.id.dialog_edit_urgencia_fecha);
+                dialog_hora = dialogView.findViewById(R.id.dialog_edit_urgencia_hora);
+                icon_calendar = dialogView.findViewById(R.id.dialog_edit_icon_calendar);
+                icon_clock = dialogView.findViewById(R.id.dialog_edit_icon_clock);
+                dialog_hora = dialogView.findViewById(R.id.dialog_edit_urgencia_hora);
+                observaciones = dialogView.findViewById(R.id.dialog_edit_observaciones);
 
                 alertDialog = builder.create();
+                getEquipos(((UrgenciasActivity)ctx).getTienda_id());
+                getMotivos();
+                getLastMantenimiento(((UrgenciasActivity)ctx).getTienda_id());
                 alertDialog.show();
                 btn_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -191,17 +163,29 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         alertDialog.dismiss();
                     }
                 });
-                contratista_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        spinner_id = contratista_ids[position];
+                        equipo_id = equipos_ids[position];
+                    }
+                });
+                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        personal_id = personal_ids[position];
                     }
                 });
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.e("contratista_id",spinner_id+"");
-                        updateUrgencia(str_fecha,str_hora,spinner_id,id);
+                        motivos_spin.getSelectedItem();
+                        long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
+                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id+"")];
+                        str_fecha = dialog_fecha.getText().toString();
+                        str_hora = dialog_hora.getText().toString();
+
+                        updateUrgencia(item_motivo,observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,urgencia_id);
                     }
                 });
 
@@ -299,6 +283,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     private void getContratistas()
     {
+        tipo_proveedor=1;
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getContratistas_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -327,8 +312,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     data_id[i] = id;
                                     i++;
                                 }
-                                contratista_ids = data_id;
-                                contratista_spinner.setItems(data);
+                                System.out.println("contratistas_data_ids: "+data_id.length);
+                                personal_ids = data_id;
+                                personal_spinner.setItems(data);
+                                personal_spinner.setHint("Tecnico");
+                                getUrgencia(urgencia_id);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -376,8 +364,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     data_id[i] = id;
                                     i++;
                                 }
-                                contratista_ids = data_id;
-                                contratista_spinner.setItems(data);
+                                personal_ids = data_id;
+                                personal_spinner.setItems(data);
+                                personal_spinner.setHint("Tecnico");
+                                getUrgencia(urgencia_id);
+
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -393,120 +384,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
-    private void updateUrgencia(final String fecha,final String hora,final String contratista_id,final String urgencia_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_urgencia_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("update_urgencia_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                ((UrgenciasActivity)ctx).getUrgencias(((UrgenciasActivity) ctx).getTienda_id());
-                                alertDialog.dismiss();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("update_urgencia_error: " + error.getMessage());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", urgencia_id);
-                params.put("contratista_id", contratista_id);
-                params.put("fecha",fecha);
-                params.put("hora",hora);
-                params.put("tipo_proveedor",tipo_proveedor+"");
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void registrarFicha(final String urgencia_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_ficha_urgencia_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("register_ficha_urgencia_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                ((UrgenciasActivity)ctx).getUrgencias(((UrgenciasActivity) ctx).getTienda_id());
-                                alertDialog.dismiss();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                System.out.println("register_ficha_urgencia_error: " + error);
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", urgencia_id);
-                params.put("tienda_id", ((UrgenciasActivity)ctx).getTienda_id()+"");
-                params.put("presion_baja", presion_baja.getText().toString());
-                params.put("img_presion_baja", ((UrgenciasActivity)ctx).getImage_presion_baja());
-                params.put("presion_alta", presion_alta.getText().toString()+"");
-                params.put("img_presion_alta", ((UrgenciasActivity)ctx).getImage_presion_alta());
-                params.put("amperaje_l1", amp_l1.getText().toString()+"");
-                params.put("img_amperaje_l1", ((UrgenciasActivity)ctx).getImage_amp_l1());
-                params.put("amperaje_l2", amp_l2.getText().toString()+"");
-                params.put("img_amperaje_l2", ((UrgenciasActivity)ctx).getImage_amp_l2());
-                params.put("amperaje_l3", amp_l3.getText().toString()+"");
-                params.put("img_amperaje_l3", ((UrgenciasActivity)ctx).getImage_amp_l3());
-                params.put("voltaje_l1", volt_l1.getText().toString()+"");
-                params.put("img_voltaje_l1", ((UrgenciasActivity)ctx).getImage_volt_l1());
-                params.put("voltaje_l2", volt_l2.getText().toString()+"");
-                params.put("img_voltaje_l2", ((UrgenciasActivity)ctx).getImage_volt_l2());
-                params.put("voltaje_l3", volt_l3.getText().toString()+"");
-                params.put("img_voltaje_l3", ((UrgenciasActivity)ctx).getImage_volt_l3());
-                params.put("img_signature",((UrgenciasActivity)ctx).getImage_signature());
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    public void getLastMantenimiento(final String tienda_id)
+    private void getLastMantenimiento(final String tienda_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
         Log.i("getLastMantenimiento_url",url);
@@ -560,4 +438,221 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
+    private void getEquipos(final String tienda_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
+        Log.i("getEquipos_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getEquipos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] equipos = new String[respuesta.size()];
+                                equipos_ids = new String[respuesta.size()];
+                                int i=0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    equipos[i] = (String)ob.get("equipo");
+                                    equipos_ids[i] = (String)ob.get("id");
+                                }
+                                spinner_equipos.setItems(equipos);
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getEquipos_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getMotivos()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
+        Log.i("getMotivos_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMotivos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("motivo");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+
+                                motivo_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
+                                motivo_id_adapter = data_id;
+                                motivos_spin.setAdapter(motivo_adapter);
+                                motivo_adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getMotivos_error: " + error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getUrgencia(final String id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencia_url);
+        Log.i("getMotivos_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMotivos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for (Object ob : respuesta){
+                                    JSONObject o = (JSONObject)ob;
+                                    dialog_fecha.setText((String)o.get("fecha_atencion"));
+                                    dialog_hora.setText((String)o.get("hora_atencion"));
+                                    observaciones.setText((String)o.get("observaciones"));
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getMotivos_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void updateUrgencia(final String motivo_id,final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
+    {
+        System.out.println("motivo_id: "+motivo_id);
+        System.out.println("observaciones: "+observaciones);
+        System.out.println("equipo_id: "+equipo_id);
+        System.out.println("fecha: "+fecha);
+        System.out.println("hora: "+hora);
+        System.out.println("contratista_id: "+contratista_id);
+        System.out.println("tipo_proveedor: "+tipo_proveedor);
+        System.out.println("id: "+id);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_urgencia_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("update_urgencia_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                ((UrgenciasActivity)ctx).getUrgencias(((UrgenciasActivity) ctx).getTienda_id());
+                                alertDialog.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("update_urgencia_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("urgencia_id", id);
+                params.put("motivo_id", motivo_id);
+                params.put("equipo_id", equipo_id);
+                params.put("observaciones", observaciones);
+                params.put("fecha", fecha);
+                params.put("hora", hora);
+                params.put("personal_id", contratista_id);
+                params.put("tipo", String.valueOf(tipo_proveedor));
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
 }

@@ -43,7 +43,7 @@
         android:supportsRtl="true"
         android:theme="@style/NoBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FichaActivity"
+        <activity android:name=".activities.FichaActivity"
             android:theme="@style/YesBar"
             tools:ignore="InnerclassSeparator" />
         <activity

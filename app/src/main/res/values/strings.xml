@@ -13,11 +13,15 @@
     <string name="getClientes_url">ocupa/cliente/getClientes.php</string>
     <string name="getTiendas_url">ocupa/tienda/getTiendas.php</string>
     <string name="getTienda_url">ocupa/tienda/getTienda.php</string>
-    <string name="getEquipos_url">ocupa/tienda/getEquipos.php</string>
+    <string name="getEquipos_url">ocupa/urgencia/getEquipos.php</string>
     <string name="getMotivos_url">ocupa/urgencia/getMotivos.php</string>
     <string name="getDiagnosticos_url">ocupa/urgencia/getDiagnosticos.php</string>
     <string name="getSolucion_url">ocupa/urgencia/getSolucion.php</string>
+    <string name="getEquipo_url">ocupa/urgencia/getEquipo.php</string>
+    <string name="getMarcas_url">ocupa/urgencia/getMarcas.php</string>
+    <string name="getModelos_url">ocupa/urgencia/getModelos.php</string>
     <string name="getUrgencias_url">ocupa/urgencia/getUrgencias.php</string>
+    <string name="getUrgencia_url">ocupa/urgencia/getUrgencia.php</string>
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
     <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>
     <string name="update_urgencia_url">ocupa/urgencia/updateUrgencia.php</string>

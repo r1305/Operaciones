@@ -374,7 +374,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginTop="6dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_urgencias_equipos"
             android:layout_weight="1"
@@ -397,6 +398,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="6dp"
         android:visibility="gone">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_urgencias"

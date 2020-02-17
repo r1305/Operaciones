@@ -1,4 +1,4 @@
-package com.system.operaciones;
+package com.system.operaciones.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +12,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.gson.Gson;
-import com.system.operaciones.activities.UrgenciasActivity;
+import com.system.operaciones.R;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
@@ -56,7 +58,8 @@ public class FichaActivity extends AppCompatActivity {
     String despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
     private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_temp_l3,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
 
-    private Button btn_registrar,btn_cerrar,btn_firma_tecnico,btn_firma_cliente,btn_antes,btn_despues,btn_lectura_cancelar,btn_lectura_guardar;
+    private Button btn_lectura_cancelar;
+    private Button btn_lectura_guardar;
     private String id,tienda_id;
 
     AlertDialog alertDialog;
@@ -70,6 +73,14 @@ public class FichaActivity extends AppCompatActivity {
     TextView tv_solucion;
     EditText et_diagnostico;
 
+    String motivo_id;
+    String diagnostico_id;
+
+    //Dialog New Equipo
+    Spinner spinner_marcas;
+    ArrayAdapter<String> marcas_adapter;
+    String[] marcas_id;
+
     private String name_tecnico,dni_tecnico,cargo_tecnico,name_cliente,dni_cliente,cargo_cliente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +93,8 @@ public class FichaActivity extends AppCompatActivity {
         cred = new Credentials(ctx);
         id = getIntent().getStringExtra("urgencia");
         tienda_id = getIntent().getStringExtra("tienda_id");
+        getEquipo();
+
         spinner_motivos = findViewById(R.id.spinner_motivo);
         spinner_diagnosticos = findViewById(R.id.spinner_diagnostico);
         et_diagnostico = findViewById(R.id.et_diagnostico);
@@ -89,26 +102,26 @@ public class FichaActivity extends AppCompatActivity {
         spinner_motivos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                String id = motivos_id[position];
-                if(id.equals("6")){
+                motivo_id = motivos_id[position];
+                if(motivo_id.equals("6")){
                     et_diagnostico.setVisibility(View.VISIBLE);
                 }else{
                     et_diagnostico.setVisibility(View.GONE);
                 }
-                getDiagnostico(id);
+                getDiagnostico(motivo_id);
             }
         });
 
         spinner_diagnosticos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                String id = diagnosticos_id[position];
-                getSolucion(id);
+                diagnostico_id = diagnosticos_id[position];
+                getSolucion(diagnostico_id);
             }
         });
         tv_solucion = findViewById(R.id.tv_solucion);
-        btn_antes = findViewById(R.id.btn_antes);
-        btn_despues = findViewById(R.id.btn_despues);
+        Button btn_antes = findViewById(R.id.btn_antes);
+        Button btn_despues = findViewById(R.id.btn_despues);
         btn_antes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -800,16 +813,16 @@ public class FichaActivity extends AppCompatActivity {
             }
         });
 
-        btn_registrar = findViewById(R.id.btn_registrar);
-        btn_cerrar = findViewById(R.id.btn_cerrar);
+        Button btn_registrar = findViewById(R.id.btn_registrar);
+        Button btn_cerrar = findViewById(R.id.btn_cerrar);
         btn_cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((FichaActivity)ctx).finish();
             }
         });
-        btn_firma_tecnico = findViewById(R.id.btn_firma_tecnico);
-        btn_firma_cliente = findViewById(R.id.btn_firma_cliente);
+        Button btn_firma_tecnico = findViewById(R.id.btn_firma_tecnico);
+        Button btn_firma_cliente = findViewById(R.id.btn_firma_cliente);
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1088,7 +1101,8 @@ public class FichaActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         onBackPressed();
         return true;
     }
@@ -1487,6 +1501,7 @@ public class FichaActivity extends AppCompatActivity {
 
     private void getDiagnostico(final String motivo_id)
     {
+        System.out.println("motivo_id: "+motivo_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getDiagnosticos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -1592,4 +1607,153 @@ public class FichaActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    private void getEquipo()
+    {
+        System.out.println("urgencia_id: "+id);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipo_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getEquipo_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String equipo_id="";
+                                for (Object o:respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    equipo_id= (String)ob.get("equipo_id");
+                                }
+                                if(equipo_id.equals("3")){
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
+                                    builder.setView(dialogView);
+                                    builder.setCancelable(false);
+                                    spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);
+                                    getMarcas();
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getEquipo_error: " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("urgencia_id", id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getMarcas()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMarcas_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMarcas_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("marca");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+                                marcas_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                marcas_id = data_id;
+                                spinner_marcas.setAdapter(marcas_adapter);
+                                marcas_adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getMarcas_error: " + error);
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getModelos()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getModelos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getModelos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                System.out.println();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getModelos_error: " + error);
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
 }

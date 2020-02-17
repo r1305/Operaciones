@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="6dp"
+    android:gravity="center">
+
+    <TextView
+        android:text="Nuevo Equipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/negro"/>
+
+    <jrizani.jrspinner.JRSpinner
+        android:id="@+id/spinner_modelo"
+        android:textAlignment="center"
+        android:hint="Modelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:jrs_icon_tint="@color/negro"/>
+
+    <Spinner
+        android:id="@+id/spinner_marcas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_btus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_tipos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_fases"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_voltajes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/nro_serie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nro. Serie"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="Cancelar"
+            android:layout_weight="1"
+            android:background="@color/plomoBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="Registrar"
+            android:layout_weight="1"
+            android:background="@color/verdePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

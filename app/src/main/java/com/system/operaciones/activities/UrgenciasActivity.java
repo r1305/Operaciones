@@ -1,22 +1,16 @@
 package com.system.operaciones.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,6 +22,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -37,11 +35,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.system.operaciones.R;
 import com.system.operaciones.adapters.EquipoAdapter;
-import com.system.operaciones.adapters.TiendaAdapter;
 import com.system.operaciones.adapters.UrgenciaAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
-import com.system.operaciones.utils.Image;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -65,30 +61,32 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     LinearLayout tab_datos,tab_equipos,tab_servicios;
     ImageView btn_new_urgencia,icon_tuerca,icon_split,icon_check;
     Spinner equipos_spin,motivos_spin;
-    TextView tv_admin_cel,tv_admin,tv_tienda_tlf,tv_tienda,tv_email,tv_distrito,tv_direccion;
+    TextView tv_admin_cel,tv_admin,tv_tienda_tlf,tv_tienda,tv_email,tv_direccion;
     TextView txt_settings,txt_equipos,txt_datos,observaciones;
     Button dialog_btn_cancelar,dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
-    ArrayAdapter<String> motivo_adapter,equipo_adapter;
-    String[] motivo_id_adapter,equipo_id_adapter;
+    ArrayAdapter<String> motivo_adapter;
+    String[] motivo_id_adapter;
     private EditText dialog_hora,dialog_fecha;
     private ImageView icon_calendar,icon_clock;
     private String str_fecha,str_hora;
     private int tipo_proveedor=1;
 
-    private String[] contratista_ids;
+    private String[] personal_ids;
     private JRSpinner personal_spinner;
+    private String personal_id;
 
     RecyclerView recycler;
     List<JSONObject> l=new ArrayList<>();
     UrgenciaAdapter adapter;
-
+    JRSpinner spinner_equipos;
     RecyclerView equipos_recycler;
     List<JSONObject> equipos_l=new ArrayList<>();
     EquipoAdapter equipos_adapter;
 
-    String image_presion_baja,image_presion_alta,image_amp_l1,image_amp_l2,image_amp_l3,image_volt_l1,image_volt_l2,image_volt_l3,image_signature;
+    String[] equipos_ids;
+    String equipo_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,37 +165,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         getUrgencias(tienda_id);
     }
 
-    public String getImage_presion_baja() {
-        return image_presion_baja;
-    }
-
-    public String getImage_presion_alta() {
-        return image_presion_alta;
-    }
-
-    public String getImage_amp_l1() {
-        return image_amp_l1;
-    }
-
-    public String getImage_amp_l2() {
-        return image_amp_l2;
-    }
-
-    public String getImage_amp_l3() {
-        return image_amp_l3;
-    }
-
-    public String getImage_volt_l1() {
-        return image_volt_l1;
-    }
-
-    public String getImage_volt_l2() {
-        return image_volt_l2;
-    }
-
-    public String getImage_volt_l3() {
-        return image_volt_l3;
-    }
 
     public String getTienda_id() {
         return tienda_id;
@@ -205,14 +172,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     public void setTienda_id(String tienda_id) {
         this.tienda_id = tienda_id;
-    }
-
-    public String getImage_signature() {
-        return image_signature;
-    }
-
-    public void setImage_signature(String image_signature) {
-        this.image_signature = image_signature;
     }
 
     @Override
@@ -262,12 +221,17 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
 
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
+                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        personal_id = personal_ids[position];
+                    }
+                });
                 getLastMantenimiento(tienda_id);
 
                 builder.setView(dialogView);
 
-                equipos_spin = dialogView.findViewById(R.id.urgencia_spinner_equipos);
-                equipos_spin.setDropDownWidth(500);
+                spinner_equipos = dialogView.findViewById(R.id.urgencia_spinner_equipos);
                 motivos_spin = dialogView.findViewById(R.id.urgencia_spinner_motivos);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
@@ -277,15 +241,14 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
-                //getEquipos(tienda_id);
-                String[] data= {"No identificado","Equipo 1","Equipo 2"};
-                String[] data_id= {"3","1","2"};
-                equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                equipo_id_adapter = new String[2];
-                equipo_id_adapter = data_id;
 
-                equipos_spin.setAdapter(equipo_adapter);
-                equipo_adapter.notifyDataSetChanged();
+                getEquipos(tienda_id);
+                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        equipo_id = equipos_ids[position];
+                    }
+                });
 
                 Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
 
@@ -353,72 +316,13 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         alertDialog.dismiss();
                         motivos_spin.getSelectedItem();
                         long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
-                        long equipo_id =equipo_adapter.getItemId(equipos_spin.getSelectedItemPosition());
                         String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id+"")];
-                        String item_equipo = motivo_id_adapter[Integer.parseInt(equipo_id+"")];
-                        Log.e("item_motivo",item_motivo);
-                        Log.e("item_equipo",item_equipo);
-                        registerUrgencia(item_motivo,observaciones.getText().toString(),item_equipo);
+                        registerUrgencia(item_motivo,observaciones.getText().toString(),equipo_id,str_fecha,str_hora,personal_id);
                     }
                 });
                 alertDialog = builder.create();
                 alertDialog.show();
                 break;
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            String b64 = Image.convert(image);
-            String image_type = cred.getData("image_type");
-            switch (image_type){
-                case "1":
-                    image_presion_baja = b64;
-                    Log.e("image_presion_baja","1");
-                    adapter.getIcon_camera_presion_baja().setVisibility(View.GONE);
-                    break;
-                case "2":
-                    image_presion_alta = b64;
-                    Log.e("image_presion_alta","2");
-                    adapter.getIcon_camera_presion_alta().setVisibility(View.GONE);
-                    break;
-                case "3":
-                    image_amp_l1 = b64;
-                    Log.e("image_amp_l1","3");
-                    adapter.getIcon_camera_amp_l1().setVisibility(View.GONE);
-                    break;
-                case "4":
-                    image_amp_l2 = b64;
-                    Log.e("image_amp_l2","4");
-                    adapter.getIcon_camera_amp_l2().setVisibility(View.GONE);
-                    break;
-                case "5":
-                    image_amp_l3 = b64;
-                    Log.e("image_amp_l3","5");
-                    adapter.getIcon_camera_amp_l3().setVisibility(View.GONE);
-                    break;
-                case "6":
-                    image_volt_l1 = b64;
-                    Log.e("image_volt_l1","6");
-                    adapter.getIcon_camera_volt_l1().setVisibility(View.GONE);
-                    break;
-                case "7":
-                    image_volt_l2 = b64;
-                    Log.e("image_volt_l2","7");
-                    adapter.getIcon_camera_volt_l2().setVisibility(View.GONE);
-                    break;
-                case "8":
-                    image_volt_l3 = b64;
-                    Log.e("image_volt_l3","8");
-                    adapter.getIcon_camera_volt_l3().setVisibility(View.GONE);
-                    break;
-                case "9":
-                    image_signature = Image.convert(adapter.getSignature().getTransparentSignatureBitmap());
-                    Log.e("image_signature","9");
-                    break;
-            }
         }
     }
 
@@ -470,7 +374,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
-                                contratista_ids = data_id;
+                                personal_ids = data_id;
                                 personal_spinner.setItems(data);
                             }
                         } catch (Exception e) {
@@ -519,7 +423,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
-                                contratista_ids = data_id;
+                                personal_ids = data_id;
                                 personal_spinner.setItems(data);
                             }
                         } catch (Exception e) {
@@ -665,22 +569,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                String[] equipos = new String[respuesta.size()];
+                                equipos_ids = new String[respuesta.size()];
+                                int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    String tienda = (String)ob.get("tienda");
-                                    String tienda_tlf = (String)ob.get("tienda_cel");
-                                    String admin = (String)ob.get("administrador");
-                                    String admin_cel = (String)ob.get("admin_cel");
-                                    String direccion = (String)ob.get("direccion");
-                                    String distrito = (String)ob.get("distrito");
-
-                                    tv_tienda.setText(tienda);
-                                    tv_tienda_tlf.setText(tienda_tlf);
-                                    tv_admin.setText(admin);
-                                    tv_admin_cel.setText(admin_cel);
-                                    tv_direccion.setText(direccion);
-                                    tv_distrito.setText(distrito);
+                                    equipos[i] = (String)ob.get("equipo");
+                                    equipos_ids[i] = (String)ob.get("id");
                                 }
+                                spinner_equipos.setItems(equipos);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -757,7 +654,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void registerUrgencia(final String motivo_id,final String observaciones,final String equipo_id)
+    public void registerUrgencia(final String motivo_id,final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_urgencia_url);
         Log.i("create_urgencia_url",url);
@@ -798,6 +695,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("motivo_id", motivo_id);
                 params.put("equipo_id", equipo_id);
                 params.put("observaciones", observaciones);
+                params.put("fecha", fecha);
+                params.put("hora", hora);
+                params.put("personal_id", contratista_id);
+                params.put("tipo", tipo_proveedor+"");
                 return params;
             }
         };

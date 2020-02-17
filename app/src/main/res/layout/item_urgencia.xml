@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_marginStart="20dp">
+                    android:layout_marginStart="2dp">
                     <!-- Registro-->
                     <LinearLayout
                         android:layout_weight="1"
@@ -116,7 +116,7 @@
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Contratista: "
+                            android:text="Atendido por: "
                             android:textColor="@color/negro"
                             android:fontFamily="@font/gotham_regular"
                             android:textSize="15sp"
