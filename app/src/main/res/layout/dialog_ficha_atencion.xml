@@ -246,7 +246,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Succión (Baja)"
+                            android:text="Baja"
                             android:fontFamily="@font/gotham_medium"
                             android:gravity="center|left"
                             android:textSize="18sp"/>
@@ -269,7 +269,7 @@
                             android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Descarga (Alta)"
+                            android:text="Alta"
                             android:fontFamily="@font/gotham_medium"
                             android:textSize="18sp"/>
 

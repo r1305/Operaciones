@@ -55,4 +55,7 @@ dependencies {
 
     //Signature Pag
     implementation 'com.github.gcacace:signature-pad:1.2.1'
+
+    //Lector de Barras y QR
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 }

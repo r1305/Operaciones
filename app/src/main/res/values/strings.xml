@@ -20,14 +20,23 @@
     <string name="getEquipo_url">ocupa/urgencia/getEquipo.php</string>
     <string name="getMarcas_url">ocupa/urgencia/getMarcas.php</string>
     <string name="getModelos_url">ocupa/urgencia/getModelos.php</string>
+    <string name="getCondensadoraModelos_url">ocupa/urgencia/getCondensadoraModelos.php</string>
+    <string name="getBtus_url">ocupa/urgencia/getBtus.php</string>
+    <string name="getTipos_url">ocupa/urgencia/getTipos.php</string>
+    <string name="getCondensadoraTipos_url">ocupa/urgencia/getCondensadoraTipos.php</string>
+    <string name="getVoltajes_url">ocupa/urgencia/getVoltajes.php</string>
+    <string name="getFases_url">ocupa/urgencia/getFases.php</string>
+    <string name="getRefrigerantes_url">ocupa/urgencia/getRefrigerantes.php</string>
     <string name="getUrgencias_url">ocupa/urgencia/getUrgencias.php</string>
     <string name="getUrgencia_url">ocupa/urgencia/getUrgencia.php</string>
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
     <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>
     <string name="update_urgencia_url">ocupa/urgencia/updateUrgencia.php</string>
+    <string name="update_equipo_url">ocupa/urgencia/updateEquipo.php</string>
     <string name="register_ficha_urgencia_url">ocupa/urgencia/registerFicha.php</string>
     <string name="crear_urgencia_url">ocupa/urgencia/register.php</string>
     <string name="crear_ficha_url">ocupa/urgencia/createFicha.php</string>
+    <string name="register_equipo_url">ocupa/urgencia/registerEquipo.php</string>
     <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
 
     <string name="pdf_url">https://uezuperu.com/app/files/pdf/urgencias/</string>

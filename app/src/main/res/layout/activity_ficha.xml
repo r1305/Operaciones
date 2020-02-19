@@ -52,10 +52,11 @@
                             android:gravity="center|start"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_marca"
                             android:layout_weight="0.6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="GREE"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -74,10 +75,11 @@
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_modelo"
                             android:layout_weight="0.6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="GMV-N28G/A3A-D"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -103,10 +105,11 @@
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_btu"
                             android:layout_weight="0.6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="18000"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -127,11 +130,12 @@
                             android:fontFamily="@font/gotham_medium"/>
 
                         <TextView
+                            android:id="@+id/ficha_nro_serie"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="0.6"
                             android:gravity="center|start"
-                            android:text="00247-774"
+                            android:text="- -"
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -156,10 +160,11 @@
                             android:gravity="center|start"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_tipo"
                             android:layout_weight="0.6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Split Pared"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -178,10 +183,11 @@
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_voltaje"
                             android:layout_weight="0.6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="220V/1F"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -208,10 +214,11 @@
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
+                            android:id="@+id/ficha_refrigerante"
                             android:layout_weight="0.7"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="R22"
+                            android:text="- -"
                             android:gravity="center|start"
                             android:textSize="15sp"/>
                     </LinearLayout>
@@ -340,7 +347,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_ingresar"
-                        android:text="Despúes"
+                        android:text="Después"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"/>
                 </LinearLayout>
