@@ -95,6 +95,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
+        urgencia_id = (String)ob.get("id");
         final String status = (String)ob.get("status");
         Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
 
@@ -102,6 +103,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
         if(status.equals("0")){
+
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_subir,null));
             holder.icon_pencil.setVisibility(View.VISIBLE);
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +120,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    urgencia_id = (String)l.get(position).get("id");
                     String pdf_url = ctx.getResources().getString(R.string.pdf_url)+urgencia_id+".pdf";
                     System.out.println("pdf_url: "+pdf_url);
                     Utils.openPdf(ctx,pdf_url);

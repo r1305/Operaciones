@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -58,14 +59,14 @@ public class FichaActivity extends AppCompatActivity {
     Context ctx;
     Credentials cred;
     //ANTES
-    private ImageView icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_temp_l1,icon_camera_temp_l2,icon_camera_temp_l3,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
-    private ImageView icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_temp_l1,icon_gallery_temp_l2,icon_gallery_temp_l3,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
-    String image_presion_baja="",image_presion_alta="",image_temp_l1="",image_temp_l2="",image_temp_l3="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
+    private ImageView icon_camera_falla,icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_temp_l1,icon_camera_temp_l2,icon_camera_temp_l3,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
+    private ImageView icon_gallery_falla,icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_temp_l1,icon_gallery_temp_l2,icon_gallery_temp_l3,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
+    String image_falla="",image_presion_baja="",image_presion_alta="",image_temp_l1="",image_temp_l2="",image_temp_l3="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
     private EditText presion_baja,presion_alta,temp_l1,temp_l2,temp_l3,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
     //DESPUES
-    private ImageView despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_temp_l3,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
-    private ImageView despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_temp_l3,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
-    String despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
+    private ImageView despues_icon_camera_falla,despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_temp_l3,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
+    private ImageView despues_icon_gallery_falla,despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_temp_l3,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
+    String despues_image_falla="",despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
     private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_temp_l3,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
 
     private Button btn_lectura_cancelar;
@@ -145,6 +146,7 @@ public class FichaActivity extends AppCompatActivity {
                 View dialogView = inflater.inflate(R.layout.dialog_lecturas, null);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
+                icon_camera_falla = dialogView.findViewById(R.id.icon_camera_falla);
 
                 icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
                 icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
@@ -160,6 +162,8 @@ public class FichaActivity extends AppCompatActivity {
                 icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
                 icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
                 icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                icon_gallery_falla = dialogView.findViewById(R.id.icon_gallery_falla);
 
                 icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
                 icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
@@ -209,6 +213,23 @@ public class FichaActivity extends AppCompatActivity {
 
                 alertDialog = builder.create();
                 alertDialog.show();
+
+                icon_camera_falla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("falla","23");
+                        cred.save_data("image_type","23");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_falla);
+                    }
+                });
 
                 icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -492,6 +513,8 @@ public class FichaActivity extends AppCompatActivity {
                 builder.setView(dialogView);
                 builder.setCancelable(false);
 
+                despues_icon_camera_falla = dialogView.findViewById(R.id.icon_camera_falla);
+
                 despues_icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
                 despues_icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
 
@@ -506,6 +529,8 @@ public class FichaActivity extends AppCompatActivity {
                 despues_icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
                 despues_icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
                 despues_icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                despues_icon_gallery_falla = dialogView.findViewById(R.id.icon_gallery_falla);
 
                 despues_icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
                 despues_icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
@@ -555,6 +580,23 @@ public class FichaActivity extends AppCompatActivity {
 
                 alertDialog = builder.create();
                 alertDialog.show();
+
+                despues_icon_camera_falla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("falla","24");
+                        cred.save_data("image_type","24");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_falla);
+                    }
+                });
 
                 despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1148,6 +1190,10 @@ public class FichaActivity extends AppCompatActivity {
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -1380,24 +1426,38 @@ public class FichaActivity extends AppCompatActivity {
                     if(despues_image_temp_l3.isEmpty())
                         System.out.println("despues_image_temp_l3 NULL");
                     break;
+                case "23":
+                    image_falla = b64;
+                    Log.e("image_falla","23");
+                    icon_camera_falla.setVisibility(View.GONE);
+                    icon_gallery_falla.setVisibility(View.VISIBLE);
+                    if(image_falla.isEmpty())
+                        System.out.println("image_falla NULL");
+                    break;
+                case "24":
+                    despues_image_falla = b64;
+                    Log.e("despues_image_falla","24");
+                    despues_icon_camera_falla.setVisibility(View.GONE);
+                    despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+                    if(despues_image_falla.isEmpty())
+                        System.out.println("despues_image_falla NULL");
+                    break;
             }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CODIGO_PERMISOS_CAMARA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Escanear directamten solo si fue pedido desde el botón
-                    if (permisoSolicitadoDesdeBoton) {
-                        escanear();
-                    }
-                    permisoCamaraConcedido = true;
-                } else {
-                    permisoDeCamaraDenegado();
+        if (requestCode == CODIGO_PERMISOS_CAMARA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Escanear directamten solo si fue pedido desde el botón
+                if (permisoSolicitadoDesdeBoton) {
+                    escanear();
                 }
-                break;
+                permisoCamaraConcedido = true;
+            } else {
+                permisoDeCamaraDenegado();
+            }
         }
     }
 
@@ -1440,7 +1500,13 @@ public class FichaActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("urgencia_id", urgencia_id);
                 params.put("tienda_id", tienda_id);
+
+                //MOTIVO DIAGNOSTICO SOLUCION
+                params.put("motivo",motivo_id);
+                params.put("diagnostico",diagnostico_id);
+
                 //ANTES
+                params.put("falla", image_falla);
                 params.put("presion_baja", presion_baja.getText().toString());
                 params.put("img_presion_baja", image_presion_baja);
                 params.put("presion_alta", presion_alta.getText().toString());
@@ -1467,6 +1533,7 @@ public class FichaActivity extends AppCompatActivity {
                 params.put("temperatura_l3", temp_l3.getText().toString());
                 params.put("img_temperatura_l3", image_temp_l3);
                 //DESPUES
+                params.put("despues_falla", despues_image_falla);
                 params.put("despues_presion_baja", despues_presion_baja.getText().toString());
                 params.put("despues_img_presion_baja", despues_image_presion_baja);
                 params.put("despues_presion_alta", despues_presion_alta.getText().toString());
@@ -1506,6 +1573,10 @@ public class FichaActivity extends AppCompatActivity {
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -1517,7 +1588,7 @@ public class FichaActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url+"?urgencia_id="+urgencia_id,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url+"?urgencia_id="+urgencia_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1544,6 +1615,10 @@ public class FichaActivity extends AppCompatActivity {
                 System.out.println("create_ficha_urgencia_error: " + error);
             }
         });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -1861,6 +1936,15 @@ public class FichaActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    String marca_id="",cond_marca_id = "";
+    String modelo_id="",cond_modelo_id = "";
+    String btu_id="",cond_btu_id="";
+    String tipo_id="",cond_tipo_id="";
+    String voltaje_id="",cond_voltaje_id="";
+    String fase_id="", cond_fase_id="";
+    String refrigerante_id="",cond_refrigerante_id="";
+    String nro_serie="",cond_nro_serie="";
+
     private void getMarcas()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMarcas_url);
@@ -1895,11 +1979,13 @@ public class FichaActivity extends AppCompatActivity {
                                 marcas_id = data_id;
                                 spinner_marcas.setAdapter(marcas_adapter);
                                 marcas_adapter.notifyDataSetChanged();
+                                marca_id = marcas_id[0];
 
                                 marcas_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 marcas_cond_id = data_id;
                                 spinner_cond_marcas.setAdapter(marcas_cond_adapter);
                                 marcas_cond_adapter.notifyDataSetChanged();
+                                cond_marca_id = marcas_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2049,11 +2135,13 @@ public class FichaActivity extends AppCompatActivity {
                                 btus_id = data_id;
                                 spinner_btus.setAdapter(btu_adapter);
                                 btu_adapter.notifyDataSetChanged();
+                                btu_id = btus_id[0];
 
                                 btu_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 btus_cond_id = data_id;
                                 spinner_cond_btus.setAdapter(btu_cond_adapter);
                                 btu_cond_adapter.notifyDataSetChanged();
+                                cond_btu_id = btus_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2105,6 +2193,7 @@ public class FichaActivity extends AppCompatActivity {
                                 tipos_id = data_id;
                                 spinner_tipos.setAdapter(tipo_adapter);
                                 tipo_adapter.notifyDataSetChanged();
+                                tipo_id = tipos_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2156,6 +2245,7 @@ public class FichaActivity extends AppCompatActivity {
                                 tipos_cond_id = data_id;
                                 spinner_cond_tipos.setAdapter(tipo_cond_adapter);
                                 tipo_cond_adapter.notifyDataSetChanged();
+                                cond_tipo_id = tipos_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2207,11 +2297,13 @@ public class FichaActivity extends AppCompatActivity {
                                 voltajes_id = data_id;
                                 spinner_voltajes.setAdapter(voltaje_adapter);
                                 voltaje_adapter.notifyDataSetChanged();
+                                voltaje_id = voltajes_id[0];
 
                                 voltaje_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 voltajes_cond_id = data_id;
                                 spinner_cond_voltajes.setAdapter(voltaje_adapter);
                                 voltaje_cond_adapter.notifyDataSetChanged();
+                                cond_voltaje_id = voltajes_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2263,11 +2355,13 @@ public class FichaActivity extends AppCompatActivity {
                                 fases_id = data_id;
                                 spinner_fases.setAdapter(fase_adapter);
                                 fase_adapter.notifyDataSetChanged();
+                                fase_id = fases_id[0];
 
                                 fase_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 fases_cond_id = data_id;
                                 spinner_cond_fases.setAdapter(fase_cond_adapter);
                                 fase_cond_adapter.notifyDataSetChanged();
+                                cond_fase_id = fases_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2319,11 +2413,13 @@ public class FichaActivity extends AppCompatActivity {
                                 refrigerantes_id = data_id;
                                 spinner_refrigerantes.setAdapter(refrigerante_adapter);
                                 refrigerante_adapter.notifyDataSetChanged();
+                                refrigerante_id = refrigerantes_id[0];
 
                                 refrigerante_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 refrigerantes_cond_id = data_id;
                                 spinner_cond_refrigerantes.setAdapter(refrigerante_cond_adapter);
                                 refrigerante_cond_adapter.notifyDataSetChanged();
+                                cond_refrigerante_id = refrigerantes_cond_id[0];
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2341,19 +2437,30 @@ public class FichaActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    String marca_id,cond_marca_id = "";
-    String modelo_id,cond_modelo_id = "";
-    String btu_id,cond_btu_id="";
-    String tipo_id,cond_tipo_id="";
-    String voltaje_id,cond_voltaje_id="";
-    String fase_id, cond_fase_id="";
-    String refrigerante_id,cond_refrigerante_id="";
-    String nro_serie,cond_nro_serie="";
-
     private void registrarEquipo()
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
+        if(modelo_id.isEmpty()){
+            spinner_modelos.setError("Debe ingresar un modelo");
+            return;
+        }else{
+            spinner_modelos.setError(null);
+        }
+        if(cond_modelo_id.isEmpty()){
+            spinner_modelos.setError("Debe ingresar un modelo");
+            return;
+        }else{
+            spinner_cond_modelos.setError(null);
+        }
+        if(nro_serie.isEmpty()){
+            et_nro_serie.setError("Debe ingresar un numero de serie");
+            return;
+        }
+        if(cond_nro_serie.isEmpty()){
+            et_cond_nro_serie.setError("Debe ingresar un numero de serie");
+            return;
+        }
         System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
         System.out.println(cond_marca_id+"-"+cond_modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
@@ -2374,7 +2481,7 @@ public class FichaActivity extends AppCompatActivity {
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((UrgenciasActivity)ctx).getEquipos(tienda_id);
+                                getEquipos(tienda_id);
                                 System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
                             }
                         } catch (Exception e) {
@@ -2417,31 +2524,6 @@ public class FichaActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-    }
-
-    private void permisoDeCamaraDenegado() {
-        // Esto se llama cuando el usuario hace click en "Denegar" o
-        // cuando lo denegó anteriormente
-        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
-    }
-
-    private void verificarYPedirPermisosDeCamara() {
-        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
-        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
-            // En caso de que haya dado permisos ponemos la bandera en true
-            // y llamar al método
-            permisoCamaraConcedido = true;
-        } else {
-            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(FichaActivity.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CODIGO_PERMISOS_CAMARA);
-        }
-    }
-
-    private void escanear() {
-        Intent i = new Intent(ctx, LectorActivity.class);
-        startActivityForResult(i, CODIGO_INTENT);
     }
 
     private void showModalRegisterEquipo()
@@ -2497,7 +2579,7 @@ public class FichaActivity extends AppCompatActivity {
             }
         });
 
-        btn_cancelar = dialogView.findViewById(R.id.btn_cancelar);
+//        btn_cancelar = dialogView.findViewById(R.id.btn_cancelar);
         btn_registrar = dialogView.findViewById(R.id.btn_registrar);
         btn_siguiente = dialogView.findViewById(R.id.btn_siguiente);
         btn_atras = dialogView.findViewById(R.id.btn_atras);
@@ -2542,6 +2624,7 @@ public class FichaActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 modelo_id = modelos_ids[position];
                 System.out.println("modelo_id: "+modelo_id);
+                spinner_modelos.setError(null);
             }
         });
         spinner_cond_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
@@ -2676,6 +2759,7 @@ public class FichaActivity extends AppCompatActivity {
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 registrarEquipo();
             }
         });
@@ -2686,7 +2770,7 @@ public class FichaActivity extends AppCompatActivity {
                 linear_condensadora.setVisibility(View.VISIBLE);
                 btn_siguiente.setVisibility(View.GONE);
                 btn_registrar.setVisibility(View.VISIBLE);
-                btn_cancelar.setVisibility(View.GONE);
+//                btn_cancelar.setVisibility(View.GONE);
                 btn_atras.setVisibility(View.VISIBLE);
                 getCondensadoraTipos();
                 getCondensadoraModelos();
@@ -2698,17 +2782,36 @@ public class FichaActivity extends AppCompatActivity {
                 linear_condensadora.setVisibility(View.GONE);
                 linear_evaporadora.setVisibility(View.VISIBLE);
                 btn_atras.setVisibility(View.GONE);
-                btn_cancelar.setVisibility(View.VISIBLE);
+//                btn_cancelar.setVisibility(View.VISIBLE);
                 btn_registrar.setVisibility(View.GONE);
                 btn_siguiente.setVisibility(View.VISIBLE);
             }
         });
-        btn_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+    }
+
+    private void permisoDeCamaraDenegado() {
+        // Esto se llama cuando el usuario hace click en "Denegar" o
+        // cuando lo denegó anteriormente
+        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
+    }
+
+    private void verificarYPedirPermisosDeCamara() {
+        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
+        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+            // En caso de que haya dado permisos ponemos la bandera en true
+            // y llamar al método
+            permisoCamaraConcedido = true;
+        } else {
+            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
+            ActivityCompat.requestPermissions(FichaActivity.this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CODIGO_PERMISOS_CAMARA);
+        }
+    }
+
+    private void escanear() {
+        Intent i = new Intent(ctx, LectorActivity.class);
+        startActivityForResult(i, CODIGO_INTENT);
     }
 
     String equipo_selection_id;

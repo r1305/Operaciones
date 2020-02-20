@@ -226,6 +226,53 @@
 
             </LinearLayout>
 
+            <!-- Lecturas -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lecturas"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <Button
+                        android:id="@+id/btn_antes"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Antes"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+                    <Button
+                        android:id="@+id/btn_despues"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:text="Después"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
@@ -305,53 +352,6 @@
                         android:scrollbarAlwaysDrawVerticalTrack="true"
                         android:paddingEnd="5dp"/>
                 </LinearLayout>
-            </LinearLayout>
-
-            <!-- Lecturas -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Lecturas"
-                    android:gravity="center"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textSize="15sp"
-                    android:background="@color/verdePastel"
-                    android:textColor="@color/blanco"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
-                    <Button
-                        android:id="@+id/btn_antes"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_ingresar"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Antes"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"/>
-                    <Button
-                        android:id="@+id/btn_despues"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_ingresar"
-                        android:text="Después"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"/>
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
