@@ -21,6 +21,7 @@ import com.system.operaciones.R;
 import com.system.operaciones.adapters.ClienteAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +39,7 @@ public class ClientesActivity extends AppCompatActivity {
     RecyclerView recycler;
     List<JSONObject> l=new ArrayList<>();
     ClienteAdapter adapter;
+    ViewDialog viewDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +47,9 @@ public class ClientesActivity extends AppCompatActivity {
 
         ctx = this;
         cred = new Credentials(ctx);
+        viewDialog = new ViewDialog(this);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Clientes");
 
         recycler= findViewById(R.id.recycler_view_clientes);
@@ -57,6 +60,7 @@ public class ClientesActivity extends AppCompatActivity {
 
         String act = cred.getData("key_act");
         Log.e("act",act);
+        viewDialog.showDialog();
         getClientes("");
     }
 
@@ -84,6 +88,7 @@ public class ClientesActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(5);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for (Object o : respuesta) {
@@ -92,14 +97,17 @@ public class ClientesActivity extends AppCompatActivity {
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
+                                viewDialog.hideDialog(5);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(5);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(5);
                 System.out.println("login_error: " + error.getMessage());
             }
         }){

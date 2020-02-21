@@ -91,8 +91,7 @@
                 android:id="@+id/icon_evap_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_cam"
-                android:tint="@color/verdePastel"/>
+                android:src="@drawable/icon_code"/>
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/nro_serie"
                 android:layout_width="match_parent"
@@ -184,7 +183,7 @@
                 android:id="@+id/icon_cond_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_cam"
+                android:src="@drawable/icon_code"
                 android:tint="@color/verdePastel"/>
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/cond_nro_serie"

@@ -22,6 +22,7 @@ import com.system.operaciones.adapters.ClienteAdapter;
 import com.system.operaciones.adapters.TiendaAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,6 +40,7 @@ public class TiendasActivity extends AppCompatActivity {
     RecyclerView recycler;
     List<JSONObject> l=new ArrayList<>();
     TiendaAdapter adapter;
+    ViewDialog viewDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,7 @@ public class TiendasActivity extends AppCompatActivity {
 
         ctx = this;
         cred = new Credentials(ctx);
+        viewDialog = new ViewDialog(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tiendas");
@@ -56,9 +59,9 @@ public class TiendasActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
         l.clear();
 
-        Intent intent = getIntent();
-        String cliente = intent.getStringExtra("cliente_id");
+        String cliente = cred.getData("key_cliente");
         System.out.println(cliente);
+        viewDialog.showDialog();
         getTiendas(cliente,"");
     }
 
@@ -86,6 +89,7 @@ public class TiendasActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(5);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for (Object o : respuesta) {
@@ -94,8 +98,10 @@ public class TiendasActivity extends AppCompatActivity {
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
+                                viewDialog.hideDialog(5);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(5);
                             e.printStackTrace();
                         }
                     }
@@ -103,6 +109,7 @@ public class TiendasActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("login_error: " + error.getMessage());
+                viewDialog.hideDialog(5);
             }
         }){
             @Override

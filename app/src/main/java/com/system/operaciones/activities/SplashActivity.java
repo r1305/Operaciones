@@ -34,6 +34,7 @@ import java.util.Map;
 import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.FOREGROUND_SERVICE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -61,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE , READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION,FOREGROUND_SERVICE,READ_EXTERNAL_STORAGE,ACCESS_BACKGROUND_LOCATION,CAMERA}, 100);
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CALL_PHONE , READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION,FOREGROUND_SERVICE,READ_EXTERNAL_STORAGE,ACCESS_BACKGROUND_LOCATION,CAMERA}, 100);
         }
     }
 
@@ -74,6 +75,7 @@ public class SplashActivity extends AppCompatActivity {
                     ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermission();
             } else {
@@ -119,7 +121,7 @@ public class SplashActivity extends AppCompatActivity {
                                     SplashActivity.this.startActivity(goToLogin);
                                     SplashActivity.this.finish();
                                 } else {
-                                    Intent goToMain = new Intent(ctx, MenuPrincipalActivity.class);
+                                    Intent goToMain = new Intent(ctx, ClientesActivity.class);
                                     SplashActivity.this.startActivity(goToMain);
                                     SplashActivity.this.finish();
                                 }
@@ -141,47 +143,6 @@ public class SplashActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("token", cred.getData("token"));
                 params.put("usuario_id", cred.getData("user_id"));
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    public void getCompanyConfiguration()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.company_settings_url);
-        Log.i("session_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("company_settings_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            System.out.println("company_settings: "+cliente.getRespuesta());
-                            JSONObject ob = (JSONObject)new JSONParser().parse((String)cliente.getRespuesta());
-                            cred.save_data("key_instalacion",ob.get("instalacion").toString());
-                            cred.save_data("key_tipo",ob.get("tipo").toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("catch: "+e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("company_settings_error: " + error.getMessage());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", cred.getData("key_empresa"));
                 return params;
             }
         };

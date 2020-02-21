@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ import com.system.operaciones.adapters.EquipoAdapter;
 import com.system.operaciones.adapters.UrgenciaAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -60,45 +62,47 @@ import java.util.TimeZone;
 
 import jrizani.jrspinner.JRSpinner;
 
-public class UrgenciasActivity extends AppCompatActivity implements View.OnClickListener{
+public class UrgenciasActivity extends AppCompatActivity implements View.OnClickListener {
 
     Context ctx;
     Credentials cred;
-    LinearLayout datos,equipos,servicios;
-    LinearLayout tab_datos,tab_equipos,tab_servicios;
-    ImageView btn_new_urgencia,icon_tuerca,icon_split,icon_check,btn_new_equipo;
-    Spinner equipos_spin,motivos_spin;
-    TextView tv_admin_cel,tv_admin,tv_tienda_tlf,tv_tienda,tv_email,tv_direccion;
-    TextView txt_settings,txt_equipos,txt_datos,observaciones;
-    Button dialog_btn_cancelar,dialog_btn_registrar;
+    LinearLayout datos, equipos, servicios;
+    LinearLayout tab_datos, tab_equipos, tab_servicios;
+    ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
+    Spinner equipos_spin, motivos_spin;
+    TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
+    TextView txt_settings, txt_equipos, txt_datos, observaciones;
+    Button dialog_btn_cancelar, dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
     ArrayAdapter<String> motivo_adapter;
     String[] motivo_id_adapter;
-    private EditText dialog_hora,dialog_fecha;
-    private ImageView icon_calendar,icon_clock;
-    private String str_fecha,str_hora;
-    private int tipo_proveedor=1;
+    private EditText dialog_hora, dialog_fecha;
+    private ImageView icon_calendar, icon_clock;
+    private String str_fecha, str_hora;
+    private int tipo_proveedor = 1;
 
     private String[] personal_ids;
     private JRSpinner personal_spinner;
     private String personal_id;
 
     RecyclerView recycler;
-    List<JSONObject> l=new ArrayList<>();
+    List<JSONObject> l = new ArrayList<>();
     UrgenciaAdapter adapter;
     JRSpinner spinner_equipos;
     RecyclerView equipos_recycler;
-    List<JSONObject> equipos_l=new ArrayList<>();
+    List<JSONObject> equipos_l = new ArrayList<>();
     EquipoAdapter equipos_adapter;
 
     String[] equipos_ids;
     String equipo_id;
 
-    int equipo_count=0;
+    int equipo_count = 0;
     int tipo_nro_serie = 1;
     private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
     private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
+
+    ViewDialog viewDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_urgencias);
         ctx = this;
         cred = new Credentials(ctx);
+        viewDialog = new ViewDialog(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Urgencias");
@@ -136,15 +141,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         txt_equipos = findViewById(R.id.txt_equipos);
         txt_settings = findViewById(R.id.txt_settings);
 
-        recycler= findViewById(R.id.recycler_view_urgencias);
+        recycler = findViewById(R.id.recycler_view_urgencias);
         recycler.setLayoutManager(new LinearLayoutManager(ctx));
-        adapter=new UrgenciaAdapter(l);
+        adapter = new UrgenciaAdapter(l);
         recycler.setAdapter(adapter);
         l.clear();
 
-        equipos_recycler= findViewById(R.id.recycler_view_urgencias_equipos);
+        equipos_recycler = findViewById(R.id.recycler_view_urgencias_equipos);
         equipos_recycler.setLayoutManager(new LinearLayoutManager(ctx));
-        equipos_adapter=new EquipoAdapter(equipos_l);
+        equipos_adapter = new EquipoAdapter(equipos_l);
         equipos_recycler.setAdapter(equipos_adapter);
         equipos_l.clear();
 
@@ -164,7 +169,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         tab_datos.setOnClickListener(this);
         tab_equipos.setOnClickListener(this);
         tab_servicios.setOnClickListener(this);
-        txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco,null));
+        txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco, null));
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_l.add(new JSONObject());
@@ -179,7 +184,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     String codigo = data.getStringExtra("codigo");
-                    if(tipo_nro_serie==1)
+                    if (tipo_nro_serie == 1)
                         et_nro_serie.setText(codigo);
                     else
                         et_cond_nro_serie.setText(codigo);
@@ -269,7 +274,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
 
-        switch (id){
+        switch (id) {
             case R.id.tab_datos:
                 hideTabs();
                 datos.setVisibility(View.VISIBLE);
@@ -298,10 +303,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 Window window = getWindow();
                 window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
                 // inflate and adjust layout
-                LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View dialogView = inflater.inflate(R.layout.dialog_new_urgencia, null);
-                dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
-                dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
+                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.7f));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
                 getEquipos(tienda_id);
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
                 personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
@@ -341,9 +346,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                     public void onDateSet(DatePicker view, int selectedYear,
                                           int selectedMonth, int selectedDay) {
                         String year1 = String.valueOf(selectedYear);
-                        String month1 = ((selectedMonth + 1)<10?"0":"")+(selectedMonth + 1);
-                        String day1 = ((selectedDay<10)?"0":"")+selectedDay;
-                        str_fecha = year1+"-"+ month1+"-"+ day1;
+                        String month1 = ((selectedMonth + 1) < 10 ? "0" : "") + (selectedMonth + 1);
+                        String day1 = ((selectedDay < 10) ? "0" : "") + selectedDay;
+                        str_fecha = year1 + "-" + month1 + "-" + day1;
                         dialog_fecha.setText(str_fecha);
                         dialog_fecha.setError(null);
                     }
@@ -365,9 +370,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String hour = (hourOfDay<10?"0":"")+hourOfDay;
-                        String min = (minute<10?"0":"")+minute;
-                        str_hora = hour+":"+ min;
+                        String hour = (hourOfDay < 10 ? "0" : "") + hourOfDay;
+                        String min = (minute < 10 ? "0" : "") + minute;
+                        str_hora = hour + ":" + min;
                         dialog_hora.setText(str_hora);
                         dialog_hora.setError(null);
                     }
@@ -398,8 +403,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         alertDialog.dismiss();
                         motivos_spin.getSelectedItem();
                         long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
-                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id+"")];
-                        registerUrgencia(item_motivo,observaciones.getText().toString(),equipo_id,str_fecha,str_hora,personal_id);
+                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id + "")];
+                        registerUrgencia(item_motivo, observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
                     }
                 });
                 alertDialog = builder.create();
@@ -411,8 +416,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void hideTabs()
-    {
+    public void hideTabs() {
         datos.setVisibility(View.GONE);
         equipos.setVisibility(View.GONE);
         servicios.setVisibility(View.GONE);
@@ -429,9 +433,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         txt_settings.setTextColor(ctx.getResources().getColor(R.color.negro));
     }
 
-    private void getContratistas()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getContratistas_url);
+    private void getContratistas() {
+        String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getContratistas_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -451,10 +454,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
                                 int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("proveedor");
-                                    String id = (String)ob.get("id");
+                                for (Object o : respuesta) {
+                                    JSONObject ob = (JSONObject) o;
+                                    String motivo = (String) ob.get("proveedor");
+                                    String id = (String) ob.get("id");
                                     data[i] = motivo;
                                     data_id[i] = id;
                                     i++;
@@ -477,10 +480,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    private void getTecnicos()
-    {
-        tipo_proveedor=2;
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTecnicos_url);
+    private void getTecnicos() {
+        tipo_proveedor = 2;
+        String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTecnicos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -500,10 +502,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
                                 int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("tecnico");
-                                    String id = (String)ob.get("id");
+                                for (Object o : respuesta) {
+                                    JSONObject ob = (JSONObject) o;
+                                    String motivo = (String) ob.get("tecnico");
+                                    String id = (String) ob.get("id");
                                     data[i] = motivo;
                                     data_id[i] = id;
                                     i++;
@@ -525,10 +527,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getTienda(final String tienda_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTienda_url);
-        Log.i("getTienda_url",url);
+    public void getTienda(final String tienda_id) {
+        viewDialog.showDialog();
+        String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTienda_url);
+        Log.i("getTienda_url", url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -545,19 +547,72 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String tienda = (String)ob.get("tienda");
-                                    String tienda_tlf = (String)ob.get("tienda_cel");
-                                    String admin = (String)ob.get("administrador");
-                                    String admin_cel = (String)ob.get("admin_cel");
-                                    String direccion = (String)ob.get("direccion");
-                                    String distrito = (String)ob.get("distrito");
+                                for (Object o : respuesta) {
+                                    JSONObject ob = (JSONObject) o;
+                                    String tienda = (String) ob.get("tienda");
+                                    final String tienda_tlf = (String) ob.get("tienda_cel");
+                                    String admin = (String) ob.get("administrador");
+                                    final String admin_cel = (String) ob.get("admin_cel");
+                                    String direccion = (String) ob.get("direccion");
+                                    String distrito = (String) ob.get("distrito");
+                                    final String email = (String)ob.get("email");
 
                                     tv_tienda.setText(tienda);
                                     tv_tienda_tlf.setText(tienda_tlf);
+                                    tv_email.setText(email);
+                                    if(!email.isEmpty()){
+                                        tv_email.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                Uri data = Uri.parse("mailto:"+email+"?subject=" + "" + "&body=" + "");
+                                                intent.setData(data);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+                                    if (!tienda_tlf.isEmpty()) {
+                                        tv_tienda_tlf.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                                callIntent.setData(Uri.parse("tel:+51" + tienda_tlf));
+                                                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                                    // TODO: Consider calling
+                                                    //    Activity#requestPermissions
+                                                    // here to request the missing permissions, and then overriding
+                                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                                    //                                          int[] grantResults)
+                                                    // to handle the case where the user grants the permission. See the documentation
+                                                    // for Activity#requestPermissions for more details.
+                                                    return;
+                                                }
+                                                startActivity(callIntent);
+                                            }
+                                        });
+                                    }
                                     tv_admin.setText(admin);
                                     tv_admin_cel.setText(admin_cel);
+                                    if (!admin_cel.isEmpty()) {
+                                        tv_admin_cel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                                callIntent.setData(Uri.parse("tel:+51" + admin_cel));
+                                                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                                    // TODO: Consider calling
+                                                    //    Activity#requestPermissions
+                                                    // here to request the missing permissions, and then overriding
+                                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                                    //                                          int[] grantResults)
+                                                    // to handle the case where the user grants the permission. See the documentation
+                                                    // for Activity#requestPermissions for more details.
+                                                    return;
+                                                }
+                                                startActivity(callIntent);
+                                            }
+                                        });
+                                    }
                                     tv_direccion.setText(direccion+" - "+distrito);
                                 }
                             }
@@ -652,6 +707,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(5);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] equipos = new String[respuesta.size()];
@@ -669,14 +725,17 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     spinner_equipos.setItems(equipos);
                                     equipos_adapter.notifyDataSetChanged();
                                 }
+                                viewDialog.hideDialog(5);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(5);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(5);
                 System.out.println("getEquipos_error: " + error.getMessage());
             }
         }){

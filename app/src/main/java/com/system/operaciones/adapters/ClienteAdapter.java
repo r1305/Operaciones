@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.system.operaciones.R;
+import com.system.operaciones.activities.MenuPrincipalActivity;
 import com.system.operaciones.activities.TiendasActivity;
 import com.system.operaciones.utils.Credentials;
 
@@ -51,7 +52,8 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ctx.startActivity(new Intent(ctx, TiendasActivity.class).putExtra("cliente_id",id));
+                cred.save_data("key_cliente",id);
+                ctx.startActivity(new Intent(ctx, MenuPrincipalActivity.class));
                 Log.e("position",id);
             }
         });

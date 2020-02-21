@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ import com.system.operaciones.R;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
+import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -94,6 +96,23 @@ public class FichaActivity extends AppCompatActivity {
     private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
     private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
 
+    ViewDialog viewDialog;
+
+    public void showCustomLoadingDialog(View view) {
+
+        //..show gif
+        viewDialog.showDialog();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //...here i'm waiting 5 seconds before hiding the custom dialog
+                //...you can do whenever you want or whenever your work is done
+                viewDialog.hideDialog(5);
+            }
+        }, 5000);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -107,6 +126,8 @@ public class FichaActivity extends AppCompatActivity {
         id = getIntent().getStringExtra("urgencia");
         tienda_id = getIntent().getStringExtra("tienda_id");
         getEquipos(tienda_id);
+        viewDialog = new ViewDialog(this);
+        viewDialog.showDialog();
 
         verificarYPedirPermisosDeCamara();
         cred.save_data("image_type","0");
@@ -1159,16 +1180,13 @@ public class FichaActivity extends AppCompatActivity {
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                int i=0;
+                                equipos.clear();
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     equipos.add((JSONObject)o);
-                                    i++;
-                                    System.out.println("i: "+i);
-                                    if(!ob.get("id").equals("3"))
+                                    if(!ob.get("id").equals("0"))
                                         equipo_count+=1;
                                 }
-                                System.out.println("equipos_contador: "+equipo_count);
                                 getEquipo();
 
                             }
@@ -1447,7 +1465,8 @@ public class FichaActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         if (requestCode == CODIGO_PERMISOS_CAMARA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Escanear directamten solo si fue pedido desde el botón
@@ -1783,7 +1802,7 @@ public class FichaActivity extends AppCompatActivity {
     }
 
     //Dialog New Equipo
-    Button btn_cancelar,btn_registrar,btn_siguiente,btn_atras;
+    Button btn_cancelar,btn_actualizar,btn_registrar,btn_siguiente,btn_atras;
     LinearLayout linear_evaporadora,linear_condensadora;
 
     Spinner spinner_marcas;
@@ -1875,11 +1894,12 @@ public class FichaActivity extends AppCompatActivity {
                                     equipo_id= (String)ob.get("equipo_id");
                                 }
                                 System.out.println("getEquipo_equipo_contador: "+equipo_count);
+                                viewDialog.hideDialog(5);
                                 if(equipo_count==0){
                                     showModalRegisterEquipo();
                                 }else{
                                     System.out.println("equipo_id: "+equipo_id);
-                                    if(equipo_id.equals("3")){
+                                    if(equipo_id.equals("0")){
                                         showModalEquipoSelection();
                                     }else{
                                         for (Object o:respuesta)
@@ -2461,8 +2481,6 @@ public class FichaActivity extends AppCompatActivity {
             et_cond_nro_serie.setError("Debe ingresar un numero de serie");
             return;
         }
-        System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
-        System.out.println(cond_marca_id+"-"+cond_modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -2840,7 +2858,8 @@ public class FichaActivity extends AppCompatActivity {
         selection_equipos_adapter.notifyDataSetChanged();
 
         btn_cancelar = dialogView.findViewById(R.id.btn_cancelar);
-        btn_registrar = dialogView.findViewById(R.id.btn_actualizar);
+        btn_actualizar = dialogView.findViewById(R.id.btn_actualizar);
+        btn_registrar = dialogView.findViewById(R.id.btn_registrar);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -2852,11 +2871,9 @@ public class FichaActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-        btn_registrar.setOnClickListener(new View.OnClickListener() {
+        btn_actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ctx,"Actualizando equipo",Toast.LENGTH_LONG).show();
@@ -2868,6 +2885,12 @@ public class FichaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+            }
+        });
+        btn_registrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showModalRegisterEquipo();
             }
         });
     }

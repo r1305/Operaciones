@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.system.operaciones.activities.ClientesActivity;
 import com.system.operaciones.activities.InstalacionesActivity;
 import com.system.operaciones.activities.MantenimientosActivity;
+import com.system.operaciones.activities.TiendasActivity;
 import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.R;
 import com.system.operaciones.utils.Credentials;
@@ -58,15 +59,15 @@ public class PrincipalFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_instalaciones:
-                startActivity(new Intent(ctx, ClientesActivity.class));
+                startActivity(new Intent(ctx, TiendasActivity.class));
                 cred.save_data("key_act","1");
                 break;
             case R.id.btn_mantenimientos:
-                startActivity(new Intent(ctx, ClientesActivity.class));
+                startActivity(new Intent(ctx, TiendasActivity.class));
                 cred.save_data("key_act","2");
                 break;
             case R.id.btn_urgencias:
-                startActivity(new Intent(ctx, ClientesActivity.class));
+                startActivity(new Intent(ctx, TiendasActivity.class));
                 cred.save_data("key_act","3");
                 break;
         }

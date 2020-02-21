@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.system.operaciones.R;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.response.RespuestaResponse;
+import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,11 +37,13 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_login;
     TextView recover_psw;
     EditText usuario,psw;
+    ViewDialog viewDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ctx = this;
+        viewDialog = new ViewDialog(this);
         usuario = findViewById(R.id.et_login_usuario);
         psw = findViewById(R.id.et_login_psw);
         btn_login = findViewById(R.id.btn_login);
@@ -47,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewDialog.showDialog();
                 login(usuario.getText().toString(),psw.getText().toString(),"","1");
             }
         });
@@ -88,18 +93,27 @@ public class LoginActivity extends AppCompatActivity {
                                     cred.save_credentials(codAuth, user_id, company_id, is_new_password, psw1, name, empresa_name);
                                     cred.save_data("key_email", email);
                                     cred.save_data("key_points",points);
-                                    Intent i = new Intent(ctx, MenuPrincipalActivity.class);
-                                    ctx.startActivity(i);
-                                    ((LoginActivity)ctx).finish();
+                                    final Intent i = new Intent(ctx, ClientesActivity.class);
+                                    viewDialog.hideDialog(5);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ctx.startActivity(i);
+                                            ((LoginActivity)ctx).finish();
+                                        }
+                                    },5000);
+
                                 }
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(5);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(5);
                 System.out.println("login_error: " + error.getMessage());
             }
         }){

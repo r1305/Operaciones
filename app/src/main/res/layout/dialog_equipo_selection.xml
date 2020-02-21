@@ -38,6 +38,14 @@
             android:layout_height="wrap_content"
             android:background="@color/verdePastel"
             android:text="Guardar"/>
+
+        <Button
+            android:id="@+id/btn_registrar"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFBE6C"
+            android:text="Registrar"/>
     </LinearLayout>
 
 </LinearLayout>
