@@ -37,6 +37,7 @@
                     android:textColor="@color/negro"
                     android:gravity="center"/>
                 <ImageView
+                    android:id="@+id/equipo_logo"
                     android:layout_weight="0.5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -59,6 +60,7 @@
                     android:textColor="@color/negro"
                     android:gravity="center"/>
                 <TextView
+                    android:id="@+id/equipo_modelo"
                     android:layout_weight="0.5"
                     android:text="GMV-N28G/A3A-D"
                     android:layout_width="match_parent"
@@ -90,6 +92,7 @@
                     android:textColor="@color/negro"
                     android:gravity="center"/>
                 <TextView
+                    android:id="@+id/equipo_tipo"
                     android:layout_weight="0.5"
                     android:text="Piso Techo"
                     android:layout_width="match_parent"
@@ -113,6 +116,7 @@
                     android:gravity="center"/>
 
                 <TextView
+                    android:id="@+id/equipo_nro_serie"
                     android:layout_weight="0.5"
                     android:text="00247-775"
                     android:layout_width="match_parent"

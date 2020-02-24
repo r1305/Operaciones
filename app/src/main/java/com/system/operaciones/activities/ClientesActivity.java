@@ -88,7 +88,7 @@ public class ClientesActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(2);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for (Object o : respuesta) {
@@ -97,17 +97,17 @@ public class ClientesActivity extends AppCompatActivity {
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(2);
                             }
                         } catch (Exception e) {
-                            viewDialog.hideDialog(5);
+                            viewDialog.hideDialog(2);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(5);
+                viewDialog.hideDialog(2);
                 System.out.println("login_error: " + error.getMessage());
             }
         }){

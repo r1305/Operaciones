@@ -46,8 +46,8 @@ public class ViewDialog {
         //...now load that gif which we put inside the drawble folder here with the help of Glide
 
         Glide.with(activity)
-                .load(R.drawable.loading)
-                .placeholder(R.drawable.loading)
+                .load(R.drawable.preloader)
+                .placeholder(R.drawable.preloader)
                 .centerCrop()
                 .crossFade()
                 .into(imageViewTarget);
@@ -57,13 +57,13 @@ public class ViewDialog {
     }
 
     //..also create a method which will hide the dialog when some work is done
-    public void hideDialog(@NonNull int timer){
+    public void hideDialog(@NonNull double timer){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 dialog.dismiss();
             }
-        },timer*1000);
+        },Integer.parseInt(String.valueOf(timer*1000).split("\\.")[0]));
     }
 
 }

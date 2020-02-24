@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.system.operaciones.R;
 import com.system.operaciones.activities.TiendasActivity;
 import com.system.operaciones.utils.Credentials;
@@ -43,7 +45,19 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
-        Log.e("ob.size",ob.size()+"");
+        final String modelo = (String)ob.get("modelo");
+        final String tipo = (String)ob.get("tipo");
+        final String nro_serie = (String)ob.get("evap_nro_serie");
+        final String logo = (String)ob.get("marca");
+        System.out.println(ob);
+        holder.modelo.setText(modelo);
+        holder.tipo.setText(tipo);
+        holder.nro_serie.setText(nro_serie);
+        Glide.with(ctx)
+                .load(logo)
+//                .centerCrop()
+//                .crossFade()
+                .into(holder.marca);
     }
 
     @Override
@@ -57,10 +71,15 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView codigo,tienda,ruc;
+        TextView modelo,tipo,nro_serie;
+        ImageView marca;
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_urgencia);
+            modelo = itemView.findViewById(R.id.equipo_modelo);
+            tipo = itemView.findViewById(R.id.equipo_tipo);
+            nro_serie = itemView.findViewById(R.id.equipo_nro_serie);
+            marca = itemView.findViewById(R.id.equipo_logo);
         }
     }
 }

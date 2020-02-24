@@ -89,19 +89,21 @@ public class TiendasActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(2.5);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                l.clear();
                             } else {
+                                l.clear();
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
                                     System.out.println(ob);
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(2.5);
                             }
                         } catch (Exception e) {
-                            viewDialog.hideDialog(5);
+                            viewDialog.hideDialog(2.5);
                             e.printStackTrace();
                         }
                     }
@@ -109,7 +111,7 @@ public class TiendasActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("login_error: " + error.getMessage());
-                viewDialog.hideDialog(5);
+                viewDialog.hideDialog(2.5);
             }
         }){
             @Override

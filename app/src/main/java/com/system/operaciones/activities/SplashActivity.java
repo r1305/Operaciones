@@ -82,9 +82,20 @@ public class SplashActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        SplashActivity.this.validateSession();
+//                        SplashActivity.this.validateSession();
+                        final String token = cred.getData("token");
+                        if (token.isEmpty()) {
+                            Intent goToLogin = new Intent(ctx, LoginActivity.class);
+                            SplashActivity.this.startActivity(goToLogin);
+                            SplashActivity.this.finish();
+                        } else {
+                            Intent goToMain = new Intent(ctx, ClientesActivity.class);
+                            SplashActivity.this.startActivity(goToMain);
+                            SplashActivity.this.finish();
+                        }
                     }
                 }, splashTime);
+
             }
         }
     }

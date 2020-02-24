@@ -1482,6 +1482,7 @@ public class FichaActivity extends AppCompatActivity {
 
     private void registrarFicha(final String urgencia_id)
     {
+        viewDialog.showDialog();
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_ficha_urgencia_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -1621,7 +1622,14 @@ public class FichaActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
-                                ((FichaActivity)ctx).finish();
+                                viewDialog.hideDialog(5);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((FichaActivity)ctx).finish();
+                                    }
+                                }, 5000);
+
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2459,6 +2467,7 @@ public class FichaActivity extends AppCompatActivity {
 
     private void registrarEquipo()
     {
+        viewDialog.showDialog();
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
         if(modelo_id.isEmpty()){
@@ -2499,6 +2508,7 @@ public class FichaActivity extends AppCompatActivity {
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                viewDialog.hideDialog(3);
                                 getEquipos(tienda_id);
                                 System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
                             }

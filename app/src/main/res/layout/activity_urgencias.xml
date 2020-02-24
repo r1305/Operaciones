@@ -116,30 +116,28 @@
 
     </LinearLayout>
     <!-- Datos -->
-    <LinearLayout
-        android:id="@+id/linear_datos"
-        android:layout_weight="0.2"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:visibility="visible"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp">
-        <!-- Email contacto -->
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_weight="1"
+            android:id="@+id/linear_datos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp">
+            <!-- Email contacto -->
             <LinearLayout
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:src="@drawable/icon_vineta"
                     android:tint="@color/verdePastel"
@@ -147,25 +145,23 @@
                     />
                 <TextView
                     android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_weight="0.05"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
                     android:text="Datos Contacto"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
                     />
             </LinearLayout>
             <LinearLayout
-                android:layout_weight="1"
+                android:paddingStart="18dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:paddingStart="28dp"
-                android:paddingEnd="0dp">
+                android:orientation="vertical">
 
+                <!-- ADMIN -->
                 <LinearLayout
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -176,16 +172,16 @@
                         android:tint="@color/verdePastel"
                         android:layout_gravity="center"/>
                     <TextView
-                        android:layout_marginStart="5dp"
                         android:id="@+id/admin"
+                        android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="45dp"
                         android:textColor="@color/negro"
                         android:layout_gravity="center"
                         android:gravity="start|center_vertical"
                         android:textSize="18sp"/>
                 </LinearLayout>
-
+                <!-- ADMIN CEL -->
                 <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -199,102 +195,84 @@
                         android:layout_gravity="center"/>
                     <TextView
                         android:id="@+id/admin_cel"
+                        android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="45dp"
                         android:textColor="@color/negro"
                         android:layout_gravity="center"
                         android:gravity="start|center_vertical"
                         android:textSize="18sp"/>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <ImageView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider_linea"/>
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider_linea"/>
 
-        <!-- Emaill -->
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            <!-- Emaill -->
             <LinearLayout
-                android:layout_weight="3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:src="@drawable/icon_vineta"
                     android:tint="@color/verdePastel"
                     android:layout_gravity="center"
                     />
                 <TextView
+                    android:layout_weight="0.05"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
                     android:text="E-mail"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
                     />
             </LinearLayout>
             <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:paddingStart="28dp"
-                android:paddingEnd="0dp">
-                <LinearLayout
-                    android:layout_weight="0.25"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/icon_mail"
-                        android:layout_gravity="center"/>
-                    <TextView
-                        android:id="@+id/email"
-                        android:layout_marginStart="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textColor="@color/verdePastel"
-                        android:layout_gravity="center"
-                        android:gravity="center|start"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider_linea"/>
-        <!--Datos del contacto -->
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_weight="3"
+                android:paddingStart="18dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/icon_mail"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:textColor="@color/verdePastel"
+                    android:layout_gravity="center"
+                    android:gravity="center|start"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider_linea"/>
+            <!--Datos del contacto -->
+            <LinearLayout
+                android:layout_weight="3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:src="@drawable/icon_vineta"
                     android:tint="@color/verdePastel"
@@ -302,9 +280,9 @@
                     />
                 <TextView
                     android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_weight="0.05"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
                     android:text="Datos Tienda"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
@@ -312,13 +290,14 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_weight="1"
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingStart="28dp"
-                android:paddingEnd="0dp">
+                android:orientation="vertical">
 
+                <!--CEL TIENDA -->
                 <LinearLayout
+                    android:paddingStart="18dp"
                     android:layout_weight="0.5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -335,15 +314,16 @@
                         android:id="@+id/tienda_tlf"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:gravity="center|start"
                         android:textColor="@color/negro"
                         android:textSize="18sp"/>
                 </LinearLayout>
-
+                <!-- DIRECCION -->
                 <LinearLayout
                     android:layout_weight="0.5"
+                    android:paddingStart="18dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -357,17 +337,16 @@
                         android:id="@+id/direccion"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="90dp"
                         android:textColor="@color/negro"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|start"
                         android:gravity="center|start"
-                        android:textSize="18sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
     <!--Equipos-->
     <LinearLayout
         android:id="@+id/linear_equipos"

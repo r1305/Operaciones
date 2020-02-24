@@ -162,6 +162,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         getTienda(tienda_id);
         getUrgencias(tienda_id);
         getEquipos(tienda_id);
+        getEquiposTienda(tienda_id);
 
         datos.setVisibility(View.VISIBLE);
         tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -172,8 +173,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco, null));
         icon_check.setImageResource(R.drawable.icon_check_white);
 
-        equipos_l.add(new JSONObject());
-        equipos_l.add(new JSONObject());
         equipos_adapter.notifyDataSetChanged();
     }
 
@@ -229,7 +228,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-
     private void permisoDeCamaraDenegado() {
         // Esto se llama cuando el usuario hace click en "Denegar" o
         // cuando lo denegó anteriormente
@@ -245,18 +243,21 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
         getUrgencias(tienda_id);
     }
 
     @Override
-    protected void onPostResume() {
+    protected void onPostResume()
+    {
         super.onPostResume();
         getUrgencias(tienda_id);
     }
 
-    public String getTienda_id() {
+    public String getTienda_id()
+    {
         return tienda_id;
     }
 
@@ -416,7 +417,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void hideTabs() {
+    public void hideTabs()
+    {
         datos.setVisibility(View.GONE);
         equipos.setVisibility(View.GONE);
         servicios.setVisibility(View.GONE);
@@ -433,7 +435,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         txt_settings.setTextColor(ctx.getResources().getColor(R.color.negro));
     }
 
-    private void getContratistas() {
+    private void getContratistas()
+    {
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getContratistas_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -480,7 +483,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    private void getTecnicos() {
+    private void getTecnicos()
+    {
         tipo_proveedor = 2;
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTecnicos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -527,7 +531,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getTienda(final String tienda_id) {
+    public void getTienda(final String tienda_id)
+    {
         viewDialog.showDialog();
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTienda_url);
         Log.i("getTienda_url", url);
@@ -657,7 +662,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 l.clear();
                                 for(Object o: respuesta){
@@ -674,6 +679,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("getUrgencia_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -707,16 +713,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(5);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                viewDialog.hideDialog(2.5);
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
                                 int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    equipos_l.add(ob);
-                                    equipos[i] = (String)ob.get("evap_nro_serie");
+                                    equipos[i] = (String)ob.get("nro_serie");
                                     equipos_ids[i] = (String)ob.get("id");
                                     i++;
                                     setEquipo_count(i+1);
@@ -735,8 +740,65 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(5);
+                viewDialog.hideDialog(3);
                 System.out.println("getEquipos_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getEquiposTienda(final String tienda_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
+        Log.i("getEquipos_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getEquipos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(5);
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] equipos = new String[respuesta.size()];
+                                equipos_ids = new String[respuesta.size()];
+                                int i=0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    equipos_l.add(ob);
+                                 }
+                                viewDialog.hideDialog(5);
+                            }
+                        } catch (Exception e) {
+                            viewDialog.hideDialog(5);
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(3);
+                System.out.println("getEquipos_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -797,6 +859,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("getMotivos_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -897,6 +960,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("getLastMantenimiento_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
