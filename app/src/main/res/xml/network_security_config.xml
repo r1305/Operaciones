@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">192.168.1.240</domain>
+        <domain includeSubdomains="true">192.168.1.205</domain>
+        <domain includeSubdomains="true">https://uezuperu.com</domain>
+        <domain includeSubdomains="true">http://uezuperu.com</domain>
+        <domain includeSubdomains="true">https://carreto.pt</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

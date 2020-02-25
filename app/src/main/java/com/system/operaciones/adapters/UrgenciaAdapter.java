@@ -188,7 +188,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         str_fecha = dialog_fecha.getText().toString();
                         str_hora = dialog_hora.getText().toString();
 
-                        updateUrgencia(item_motivo,observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,urgencia_id);
+                        updateUrgencia(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,urgencia_id);
                     }
                 });
 
@@ -318,7 +318,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 System.out.println("contratistas_data_ids: "+data_id.length);
                                 personal_ids = data_id;
                                 personal_spinner.setItems(data);
-                                personal_spinner.setHint("Tecnico");
+                                personal_spinner.setHint("Contratista");
                                 getUrgencia(urgencia_id);
                             }
                         } catch (Exception e) {
@@ -405,7 +405,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                getContratistas();
                             } else {
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
@@ -421,12 +422,14 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            getContratistas();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("getLastMantenimiento_error: " + error.getMessage());
+                getContratistas();
             }
         }){
             @Override
@@ -467,8 +470,13 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    equipos[i] = (String)ob.get("equipo");
+                                    if(!ob.get("id").equals("0")){
+                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                    }else{
+                                        equipos[i] = (String)ob.get("evap_nro_serie");
+                                    }
                                     equipos_ids[i] = (String)ob.get("id");
+                                    i++;
                                 }
                                 spinner_equipos.setItems(equipos);
 
@@ -548,7 +556,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
-    public void getUrgencia(final String id)
+    private void getUrgencia(final String id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencia_url);
         Log.i("getMotivos_url",url);
@@ -577,6 +585,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Log.e("getUrgencia_error",e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -598,9 +607,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
-    private void updateUrgencia(final String motivo_id,final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
+    private void updateUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
     {
-        System.out.println("motivo_id: "+motivo_id);
         System.out.println("observaciones: "+observaciones);
         System.out.println("equipo_id: "+equipo_id);
         System.out.println("fecha: "+fecha);
@@ -643,7 +651,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("urgencia_id", id);
-                params.put("motivo_id", motivo_id);
                 params.put("equipo_id", equipo_id);
                 params.put("observaciones", observaciones);
                 params.put("fecha", fecha);

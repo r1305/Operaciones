@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -46,6 +47,7 @@ import com.system.operaciones.adapters.EquipoAdapter;
 import com.system.operaciones.adapters.UrgenciaAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
@@ -67,6 +69,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     Context ctx;
     Credentials cred;
     LinearLayout datos, equipos, servicios;
+    ScrollView scroll_datos;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
     ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
     Spinner equipos_spin, motivos_spin;
@@ -118,6 +121,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         verificarYPedirPermisosDeCamara();
 
         datos = findViewById(R.id.linear_datos);
+        scroll_datos = findViewById(R.id.scroll_datos);
         tab_datos = findViewById(R.id.tab_datos);
         equipos = findViewById(R.id.linear_equipos);
         tab_equipos = findViewById(R.id.tab_equipos);
@@ -272,13 +276,14 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         int id = v.getId();
 
         switch (id) {
             case R.id.tab_datos:
                 hideTabs();
-                datos.setVisibility(View.VISIBLE);
+                scroll_datos.setVisibility(View.VISIBLE);
                 txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco));
                 icon_check.setImageResource(R.drawable.icon_check_white);
                 tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -402,10 +407,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
-                        motivos_spin.getSelectedItem();
-                        long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
-                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id + "")];
-                        registerUrgencia(item_motivo, observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
+                        registerUrgencia(observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
                     }
                 });
                 alertDialog = builder.create();
@@ -419,7 +421,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     public void hideTabs()
     {
-        datos.setVisibility(View.GONE);
+        scroll_datos.setVisibility(View.GONE);
         equipos.setVisibility(View.GONE);
         servicios.setVisibility(View.GONE);
         tab_datos.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
@@ -554,7 +556,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             } else {
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
-                                    String tienda = (String) ob.get("tienda");
+                                    String tienda = ob.get("ceco")+" - "+ob.get("tienda");
                                     final String tienda_tlf = (String) ob.get("tienda_cel");
                                     String admin = (String) ob.get("administrador");
                                     final String admin_cel = (String) ob.get("admin_cel");
@@ -697,6 +699,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     public void getEquipos(final String tienda_id)
     {
+        Log.e("tienda_id",tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
         Log.i("getEquipos_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -721,7 +724,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    equipos[i] = (String)ob.get("nro_serie");
+                                    if(!ob.get("id").equals("0")){
+                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                    }else{
+                                        equipos[i] = (String)ob.get("evap_nro_serie");
+                                    }
                                     equipos_ids[i] = (String)ob.get("id");
                                     i++;
                                     setEquipo_count(i+1);
@@ -730,10 +737,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     spinner_equipos.setItems(equipos);
                                     equipos_adapter.notifyDataSetChanged();
                                 }
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(3);
                             }
                         } catch (Exception e) {
-                            viewDialog.hideDialog(5);
+                            viewDialog.hideDialog(3);
                             e.printStackTrace();
                         }
                     }
@@ -761,7 +768,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     public void getEquiposTienda(final String tienda_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
-        Log.i("getEquipos_url",url);
+        Log.i("getEquiposTienda_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -769,7 +776,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getEquipos_response: " + response);
+                        System.out.println("getEquiposTienda_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -779,9 +786,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 viewDialog.hideDialog(5);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                String[] equipos = new String[respuesta.size()];
-                                equipos_ids = new String[respuesta.size()];
-                                int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     equipos_l.add(ob);
@@ -797,7 +801,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(3);
-                System.out.println("getEquipos_error: " + error.getMessage());
+                System.out.println("getEquiposTienda_error: " + error.getMessage());
                 Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
@@ -867,7 +871,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void registerUrgencia(final String motivo_id,final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
+    public void registerUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_urgencia_url);
         Log.i("create_urgencia_url",url);
@@ -888,9 +892,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 getUrgencias(tienda_id);
+                                new Utils().sendMail(tienda_id,ctx);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Log.e("create_urgencia_error",e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -905,7 +911,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 Map<String, String> params = new HashMap<>();
                 params.put("tienda_id", tienda_id);
                 params.put("usuario_id", cred.getData("user_id"));
-                params.put("motivo_id", motivo_id);
                 params.put("equipo_id", equipo_id);
                 params.put("observaciones", observaciones);
                 params.put("fecha", fecha);
@@ -938,7 +943,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                getContratistas();
                             } else {
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
@@ -954,6 +960,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Log.e("getLastMantenimiento",e.getMessage());
+                            getContratistas();
                         }
                     }
                 }, new Response.ErrorListener() {

@@ -1608,7 +1608,7 @@ public class FichaActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url+"?urgencia_id="+urgencia_id,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1641,7 +1641,15 @@ public class FichaActivity extends AppCompatActivity {
                 error.printStackTrace();
                 System.out.println("create_ficha_urgencia_error: " + error);
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("urgencia_id", urgencia_id);
+                return params;
+            }
+        };
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
