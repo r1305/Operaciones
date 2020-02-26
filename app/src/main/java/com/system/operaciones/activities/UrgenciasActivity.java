@@ -339,6 +339,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
+                        Log.e("position_equipo",position+"");
+                        Log.e("equipo_id",equipos_ids[position]);
                         equipo_id = equipos_ids[position];
                     }
                 });
@@ -724,6 +726,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
+                                    System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
                                         equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
                                     }else{
@@ -1043,6 +1046,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     String[] refrigerantes_cond_id;
 
     EditText et_nro_serie,et_cond_nro_serie;
+    ImageView icon_evap_scan,icon_cond_scan;
 
     private void showModalRegisterEquipo()
     {
@@ -1067,7 +1071,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
 
         et_nro_serie = dialogView.findViewById(R.id.nro_serie);
-        et_nro_serie.setOnClickListener(new View.OnClickListener() {
+        icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
+        et_cond_nro_serie = dialogView.findViewById(R.id.cond_nro_serie);
+        icon_cond_scan = dialogView.findViewById(R.id.icon_cond_scan);
+
+        icon_evap_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=1;
@@ -1080,8 +1088,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 escanear();
             }
         });
-        et_cond_nro_serie = dialogView.findViewById(R.id.cond_nro_serie);
-        et_cond_nro_serie.setOnClickListener(new View.OnClickListener() {
+        icon_cond_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=2;

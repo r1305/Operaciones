@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:layout_gravity="center">
     <TextView
+        android:layout_marginTop="6dp"
         android:text="Nuevo Equipo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,6 +25,7 @@
 
         <TextView
             android:text="Evaporadora"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -32,11 +35,13 @@
 
         <jrizani.jrspinner.JRSpinner
             android:id="@+id/spinner_modelo"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:hint="Modelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:jrs_icon_tint="@color/negro"
+            app:jrs_icon_tint="@color/verdePastel"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="9dp"
             />
 
         <Spinner
@@ -44,6 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+
             />
 
         <Spinner
@@ -51,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -58,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -65,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -72,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -79,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <LinearLayout
@@ -116,6 +128,7 @@
 
         <TextView
             android:text="Condensadora"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -125,17 +138,20 @@
 
         <jrizani.jrspinner.JRSpinner
             android:id="@+id/spinner_cond_modelo"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:hint="Modelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:jrs_icon_tint="@color/negro"/>
+            app:jrs_icon_tint="@color/verdePastel"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="9dp"/>
 
         <Spinner
             android:id="@+id/spinner_cond_marcas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -143,6 +159,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -150,6 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -157,6 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -164,6 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -171,6 +191,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <LinearLayout
@@ -183,8 +204,7 @@
                 android:id="@+id/icon_cond_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_code"
-                android:tint="@color/verdePastel"/>
+                android:src="@drawable/icon_code"/>
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/cond_nro_serie"
                 android:layout_width="match_parent"
@@ -213,13 +233,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!--<Button-->
-            <!--android:id="@+id/btn_cancelar"-->
-            <!--android:text="Cancelar"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/plomoBackground"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
+        <Button
+            android:id="@+id/btn_cancelar"
+            android:text="Cancelar"
+            android:layout_weight="1"
+            android:background="@color/plomoBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_siguiente"

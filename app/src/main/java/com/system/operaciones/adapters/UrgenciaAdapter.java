@@ -247,9 +247,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             }
         });
         if(status.equals("1")){
-            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.plomoBackground,null));
+            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
             holder.icon_status.setImageResource(R.drawable.icon_check);
-            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.plomoBackground,null));
+            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
         }else{
             holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
             holder.icon_status.setImageResource(R.drawable.icon_file);

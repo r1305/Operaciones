@@ -42,6 +42,7 @@ import com.system.operaciones.R;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
+import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
 
 import org.json.simple.JSONArray;
@@ -1626,10 +1627,10 @@ public class FichaActivity extends AppCompatActivity {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
+                                        new Utils().sendFicha(tienda_id,urgencia_id,ctx);
                                         ((FichaActivity)ctx).finish();
                                     }
                                 }, 5000);
-
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
