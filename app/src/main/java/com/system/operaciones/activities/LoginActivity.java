@@ -51,13 +51,23 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewDialog.showDialog();
-                login(usuario.getText().toString(),psw.getText().toString(),"","1");
+                if(!usuario.getText().toString().isEmpty() && !psw.getText().toString().isEmpty()){
+                    viewDialog.showDialog();
+                    login(usuario.getText().toString(),psw.getText().toString(),"","1");
+                }else{
+                    Toast.makeText(ctx,"Debe completar los datos",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    public void login(final String user, final String psw, final String mac,final String company_id)
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    public void login(final String user, final String psw, final String mac, final String company_id)
     {
         Log.e("company_id",company_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.login_url);
@@ -77,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                viewDialog.hideDialog(0);
                             } else {
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
@@ -94,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                                     cred.save_data("key_email", email);
                                     cred.save_data("key_points",points);
                                     final Intent i = new Intent(ctx, ClientesActivity.class);
-                                    viewDialog.hideDialog(5);
+                                    viewDialog.hideDialog(3);
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -106,14 +117,14 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         } catch (Exception e) {
-                            viewDialog.hideDialog(5);
+                            viewDialog.hideDialog(3);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(5);
+                viewDialog.hideDialog(53);
                 System.out.println("login_error: " + error.getMessage());
             }
         }){

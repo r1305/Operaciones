@@ -1,70 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_card_mantenimiento"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_card_urgencia"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="100dp"
     android:layout_gravity="center"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:backgroundTint="@android:color/transparent"
-    android:layout_marginBottom="9dp">
+    android:layout_marginBottom="9dp"
+    android:background="@android:color/transparent">
     <LinearLayout
+        android:id="@+id/linear_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@drawable/fondo_cardview">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginStart="20dp">
-
-            <LinearLayout
-                android:layout_marginTop="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="5dp">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_clock"/>
-                <TextView
-                    android:id="@+id/item_mantenimiento_codigo"
-                    android:layout_marginStart="10dp"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="CODIGO"
-                    android:textColor="@color/blanco"
-                    android:fontFamily="@font/gotham_regular"
-                    android:textSize="20sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_mantenimiento_cliente_proyecto"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@android:color/transparent">
+            <ImageView
+                android:id="@+id/icon_status"
+                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Cliente - Proyecto"
-                android:textColor="@color/blanco"
-                android:fontFamily="@font/gotham_regular"
-                android:textSize="18sp"
-                android:gravity="center_vertical"/>
+                android:src="@drawable/icon_file"/>
         </LinearLayout>
 
-        <ImageView
-            android:layout_marginEnd="20dp"
-            android:layout_weight="7"
+        <LinearLayout
+            android:id="@+id/linear_card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/icon_instalation"
-            android:background="@android:color/transparent"/>
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginStart="2dp">
+                    <!-- Registro-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_weight="0.4"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Registro: "
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="left|center"/>
+
+                        <TextView
+                            android:id="@+id/item_urgencia_registro"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
+                    </LinearLayout>
+
+                    <!-- Atención-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_weight="0.4"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Atención: "
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="left|center"/>
+                        <TextView
+                            android:id="@+id/item_urgencia_atencion"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
+                    </LinearLayout>
+
+                    <!-- Contratista-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_weight="0.4"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Atendido: "
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="left|center"/>
+                        <TextView
+                            android:id="@+id/item_urgencia_contratista"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="start"
+                android:gravity="start|center"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:id="@+id/icon_file"
+                    android:src="@drawable/icon_write"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:src="@drawable/icon_edit"
+                    android:id="@+id/icon_pencil"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

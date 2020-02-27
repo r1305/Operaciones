@@ -8,19 +8,21 @@
     android:layout_gravity="center"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:backgroundTint="@android:color/transparent"
-    android:layout_marginBottom="9dp">
+    android:layout_marginBottom="9dp"
+    android:background="@android:color/transparent">
     <LinearLayout
+        android:id="@+id/linear_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:id="@+id/linear_full_background">
+        android:orientation="horizontal">
+
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:background="@color/verdePastel"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@android:color/transparent">
             <ImageView
                 android:id="@+id/icon_status"
                 android:padding="8dp"
@@ -72,8 +74,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/negro"
-                            android:fontFamily="@font/gotham_regular"
-                            android:textSize="15sp"/>
+                            android:fontFamily="@font/gotham_regular"/>
                     </LinearLayout>
 
                     <!-- Atención-->
@@ -102,8 +103,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/negro"
-                            android:fontFamily="@font/gotham_regular"
-                            android:textSize="15sp"/>
+                            android:fontFamily="@font/gotham_regular"/>
                     </LinearLayout>
 
                     <!-- Contratista-->
@@ -132,8 +132,36 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
+                    </LinearLayout>
+
+                    <!-- Fecha Cierre-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_weight="0.4"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Cierre: "
+                            android:textColor="@color/negro"
                             android:fontFamily="@font/gotham_regular"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="left|center"/>
+                        <TextView
+                            android:id="@+id/item_urgencia_cierre"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -143,25 +171,26 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_gravity="start"
-                android:gravity="start|center">
+                android:gravity="start|center"
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:id="@+id/icon_file"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/icon_subir"
+                    android:src="@drawable/icon_write"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_gravity="center"/>
 
                 <ImageView
+                    android:src="@drawable/icon_edit"
                     android:id="@+id/icon_pencil"
-                    android:layout_width="37dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/icon_write"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:layout_gravity="center"
-                    android:tint="@color/negro2"/>
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

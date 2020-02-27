@@ -1,130 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.UrgenciasActivity"
-    android:orientation="vertical">
-    <ImageView
-        android:paddingTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:src="@drawable/logo_tambo"
-        android:layout_gravity="center"
-        android:background="#62d7c7"/>
-    <TextView
-        android:id="@+id/tienda"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:fontFamily="@font/gotham_medium"
-        android:textSize="25sp"
-        android:textColor="@color/negro"
-        android:background="@color/verdePastel"/>
-    <!-- Tabs-->
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-        <LinearLayout
-            android:id="@+id/tab_datos"
-            android:layout_weight="1"
+        android:layout_height="match_parent"
+        tools:context=".activities.UrgenciasActivity"
+        android:orientation="vertical">
+        <ImageView
+            android:paddingTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="120dp"
+            android:src="@drawable/logo_tambo"
             android:layout_gravity="center"
+            android:background="#62d7c7"/>
+        <TextView
+            android:id="@+id/tienda"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:gravity="center"
-            android:layout_marginEnd="2dp"
-            android:background="@color/plomoBackground">
-            <ImageView
-                android:id="@+id/icon_check"
-                android:src="@drawable/icon_check"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/txt_datos"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Datos"
-                android:textColor="#000" />
-
-        </LinearLayout>
+            android:fontFamily="@font/gotham_medium"
+            android:textSize="25sp"
+            android:textColor="@color/negro"
+            android:background="@color/verdePastel"/>
+        <!-- Tabs-->
         <LinearLayout
-            android:id="@+id/tab_equipos"
-            android:layout_weight="1"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginEnd="2dp"
-            android:background="@color/plomoBackground">
-            <ImageView
-                android:id="@+id/icon_split"
-                android:src="@drawable/icon_split"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                />
-            <TextView
-                android:id="@+id/txt_equipos"
-                android:text="Equipos"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="#000"
-                android:gravity="center"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/tab_servicios"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/plomoBackground">
-
-            <!--Telefono-->
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
             <LinearLayout
+                android:id="@+id/tab_datos"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginEnd="2dp"
+                android:background="@color/plomoBackground">
+                <ImageView
+                    android:id="@+id/icon_check"
+                    android:src="@drawable/icon_check"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/txt_datos"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="Datos"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textColor="@color/negro" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tab_equipos"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginEnd="2dp"
+                android:background="@color/plomoBackground">
+                <ImageView
+                    android:id="@+id/icon_split"
+                    android:src="@drawable/icon_split"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:id="@+id/txt_equipos"
+                    android:text="Equipos"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textColor="@color/negro"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tab_servicios"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginEnd="2dp"
+                android:background="@color/plomoBackground">
 
                 <ImageView
                     android:id="@+id/icon_tuerca"
-                    android:src="@drawable/icon_settings_black"
+                    android:src="@drawable/icon_urgencia"
                     android:layout_marginTop="10dp"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"/>
                 <TextView
                     android:id="@+id/txt_settings"
                     android:text="Urgencias"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/negro"
-                    android:gravity="center"/>
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_regular"
+                    android:textColor="@color/negro"/>
             </LinearLayout>
-        </LinearLayout>
 
-    </LinearLayout>
-    <!-- Datos -->
-    <ScrollView
-        android:id="@+id/scroll_datos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/linear_datos"
             android:layout_width="match_parent"
@@ -133,8 +126,7 @@
             android:visibility="visible"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="10dp">
             <!-- Email contacto -->
             <LinearLayout
                 android:layout_weight="1"
@@ -155,12 +147,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="Datos Contacto"
+                    android:fontFamily="@font/gotham_regular"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
                     />
             </LinearLayout>
             <LinearLayout
                 android:paddingStart="18dp"
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -172,8 +166,8 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_usuario_black"
                         android:tint="@color/verdePastel"
                         android:layout_gravity="center"/>
@@ -181,12 +175,11 @@
                         android:id="@+id/admin"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="30dp"
                         android:textColor="@color/negro"
                         android:layout_gravity="center"
                         android:gravity="start|center_vertical"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"/>
+                        android:fontFamily="@font/gotham_medium"/>
                 </LinearLayout>
                 <!-- ADMIN CEL -->
                 <LinearLayout
@@ -195,8 +188,8 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_cel"
                         android:tint="@color/verdePastel"
                         android:layout_gravity="center"/>
@@ -204,12 +197,11 @@
                         android:id="@+id/admin_cel"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="30dp"
                         android:textColor="@color/negro"
                         android:layout_gravity="center"
                         android:gravity="start|center_vertical"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"/>
+                        android:fontFamily="@font/gotham_medium"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -222,6 +214,7 @@
 
             <!-- Emaill -->
             <LinearLayout
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -239,6 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="E-mail"
+                    android:fontFamily="@font/gotham_regular"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
                     />
@@ -249,20 +243,19 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/icon_mail"
                     android:layout_gravity="center"/>
                 <TextView
                     android:id="@+id/email"
                     android:layout_marginStart="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="30dp"
                     android:textColor="@color/verdePastel"
                     android:layout_gravity="center"
                     android:gravity="center|start"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textSize="18sp"/>
+                    android:fontFamily="@font/gotham_medium"/>
             </LinearLayout>
 
             <ImageView
@@ -274,6 +267,7 @@
             <!--Datos del contacto -->
             <LinearLayout
                 android:layout_weight="3"
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -292,6 +286,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="Datos Tienda"
+                    android:fontFamily="@font/gotham_regular"
                     android:gravity="center|start"
                     android:textColor="@color/negro"
                     />
@@ -312,8 +307,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:src="@drawable/icon_cel"
                         android:tint="@color/verdePastel" />
@@ -322,12 +317,11 @@
                         android:id="@+id/tienda_tlf"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center|start"
                         android:textColor="@color/negro"
-                        android:fontFamily="@font/gotham_medium"
-                        android:textSize="18sp"/>
+                        android:fontFamily="@font/gotham_medium"/>
                 </LinearLayout>
                 <!-- DIRECCION -->
                 <LinearLayout
@@ -337,8 +331,8 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_maps"
                         android:layout_gravity="center"
                         android:tint="@color/verdePastel"/>
@@ -346,60 +340,70 @@
                         android:id="@+id/direccion"
                         android:layout_marginStart="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="wrap_content"
                         android:textColor="@color/negro"
                         android:layout_gravity="center|start"
-                        android:gravity="center|start"
-                        android:textSize="15sp"/>
+                        android:gravity="center|start"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-
-    <!--Equipos-->
-    <LinearLayout
-        android:id="@+id/linear_equipos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginTop="6dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_urgencias_equipos"
-            android:layout_weight="1"
+        <!--Equipos-->
+        <LinearLayout
+            android:id="@+id/linear_equipos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"/>
-        <ImageView
-            android:id="@+id/btn_new_urgencia_equipo"
-            android:layout_width="85dp"
-            android:layout_height="55dp"
-            android:src="@drawable/icon_new"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            />
-    </LinearLayout>
-    <!--Servicios-->
-    <LinearLayout
-        android:id="@+id/linear_servicios"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="6dp"
-        android:visibility="gone">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_urgencias"
-            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="6dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_urgencias_equipos"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"/>
+            <ImageView
+                android:id="@+id/btn_new_urgencia_equipo"
+                android:layout_width="85dp"
+                android:layout_height="55dp"
+                android:src="@drawable/icon_new"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                />
+        </LinearLayout>
+        <!--Servicios-->
+        <LinearLayout
+            android:id="@+id/linear_servicios"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"/>
-        <ImageView
-            android:id="@+id/btn_new_urgencia"
-            android:layout_width="85dp"
-            android:layout_height="55dp"
-            android:src="@drawable/icon_new"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            />
+            android:orientation="vertical"
+            android:layout_marginTop="6dp"
+            android:visibility="gone">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_urgencias"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"/>
+            <ImageView
+                android:id="@+id/btn_new_urgencia"
+                android:layout_width="85dp"
+                android:layout_height="55dp"
+                android:src="@drawable/icon_new"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+    <!-- Datos -->
+    <!--<ScrollView-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/scroll_datos"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="center">-->
+        <!---->
+
+    <!--</ScrollView>-->
+

@@ -116,7 +116,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10"
+                            android:text="0"
                             android:inputType="numberSigned"
                             android:gravity="center"/>
                         <ImageView
@@ -160,7 +160,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10"
+                            android:text="0"
                             android:inputType="numberSigned"
                             android:gravity="center"/>
                         <ImageView
@@ -204,7 +204,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10"
+                            android:text="0"
                             android:inputType="numberSigned"
                             android:gravity="center"/>
                         <ImageView
@@ -280,7 +280,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10"
+                            android:text="0"
                             android:inputType="numberSigned"
                             android:gravity="center"
                             android:textSize="15sp"/>
@@ -327,7 +327,7 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="10"
+                            android:text="0"
                             android:inputType="numberSigned"
                             android:gravity="center"
                             android:textSize="15sp"/>
@@ -425,7 +425,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
                                     <ImageView
@@ -469,7 +469,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
                                     <ImageView
@@ -513,7 +513,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
                                     <ImageView
@@ -582,7 +582,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
                                     <ImageView
@@ -626,7 +626,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
                                     <ImageView
@@ -670,7 +670,7 @@
                                         android:layout_weight="1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:text="10"
+                                        android:text="0"
                                         android:inputType="numberSigned"
                                         android:gravity="center"/>
 

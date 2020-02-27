@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFBE6C"
+            android:background="@color/naranja"
             android:text="Registrar"/>
     </LinearLayout>
 

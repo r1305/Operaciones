@@ -32,7 +32,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_clock"
+                    android:src="@drawable/icon_cliente"
                     android:tint="@color/verdePastel"/>
                 <TextView
                     android:id="@+id/item_cliente_name"
@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Cliente"
-                    android:textColor="@color/verdePastel"
+                    android:textColor="@color/negro"
                     android:fontFamily="@font/gotham_regular"
                     android:textSize="20sp"/>
             </LinearLayout>
@@ -53,7 +53,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/verdePastel"
+                android:textColor="@color/negro"
                 android:fontFamily="@font/gotham_regular"
                 android:textSize="18sp"
                 android:gravity="center_vertical"/>

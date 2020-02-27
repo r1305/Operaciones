@@ -5,16 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_gravity="center"
-    android:layout_marginStart="5dp"
+    android:layout_marginStart="2.5dp"
     android:layout_marginEnd="5dp"
-    android:backgroundTint="@android:color/transparent"
     android:layout_marginBottom="9dp">
     <LinearLayout
-        android:paddingTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/fondo_cardview"
         android:layout_marginEnd="10dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +20,7 @@
             android:layout_marginStart="10dp">
             <LinearLayout
                 android:layout_weight="1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_marginStart="10dp">
@@ -48,7 +45,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
-                                android:gravity="center|start"/>
+                                android:gravity="center|start"
+                                android:fontFamily="@font/gotham_regular"/>
                             <TextView
                                 android:id="@+id/equipo_tipo"
                                 android:layout_weight="0.5"
@@ -56,6 +54,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
                                 android:gravity="start|center"/>
                         </LinearLayout>
                         <!-- Modelo -->
@@ -70,6 +69,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
                                 android:gravity="center|start"/>
                             <TextView
                                 android:id="@+id/equipo_modelo"
@@ -78,6 +78,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
                                 android:gravity="start|center"/>
                         </LinearLayout>
                         <!-- Serie -->
@@ -92,6 +93,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
                                 android:gravity="center|start"/>
 
                             <TextView
@@ -101,6 +103,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
                                 android:gravity="start|center"/>
                         </LinearLayout>
                     </LinearLayout>

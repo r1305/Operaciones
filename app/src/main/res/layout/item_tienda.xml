@@ -45,16 +45,23 @@
                     android:fontFamily="@font/gotham_regular"
                     android:textSize="20sp"
                     android:layout_gravity="start"/>
-                <TextView
-                    android:id="@+id/item_tienda_ceco"
+                <LinearLayout
                     android:gravity="center_vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="match_parent"
-                    android:text=""
-                    android:textColor="@color/negro"
-                    android:fontFamily="@font/gotham_regular"
-                    android:textSize="20sp"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="center">
+                    <TextView
+                        android:id="@+id/item_tienda_ceco"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/blanco"
+                        android:fontFamily="@font/gotham_regular"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:background="@color/verdePastel"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView

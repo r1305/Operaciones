@@ -13,9 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:gravity="center">
         <LinearLayout
             android:layout_weight="2.5"
             android:layout_width="match_parent"
@@ -26,13 +24,13 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_run"
+                android:src="@drawable/icon_mantenimiento_black"
                 android:gravity="end"
                 android:layout_gravity="end"/>
         </LinearLayout>
         <TextView
             android:layout_weight="1"
-            android:text="@string/title_new_urgencia"
+            android:text="Actualizar Mantenimiento"
             android:textColor="@color/negro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,14 +54,14 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/dialog_icon_calendar"
+                android:id="@+id/dialog_edit_icon_calendar"
                 android:layout_width="55dp"
                 android:layout_height="35dp"
                 android:src="@drawable/icon_calendar"
                 android:tint="@color/verdePastel"/>
             <EditText
-                android:id="@+id/dialog_urgencia_fecha"
                 android:layout_weight="0.5"
+                android:id="@+id/dialog_edit_urgencia_fecha"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:outlineAmbientShadowColor="@color/negro"
@@ -82,24 +80,24 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <ImageView
-                android:id="@+id/dialog_icon_clock"
+                android:id="@+id/dialog_edit_icon_clock"
                 android:layout_width="55dp"
                 android:layout_height="35dp"
                 android:src="@drawable/icon_clock"
-                android:tint="@color/verdePastel"
-                />
+                android:tint="@color/verdePastel"/>
             <EditText
-                android:id="@+id/dialog_urgencia_hora"
-                android:layout_weight="0.5"
+                android:id="@+id/dialog_edit_urgencia_hora"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:outlineAmbientShadowColor="@color/negro"
                 android:textColor="@color/negro"
-                android:editable="false"
-                android:focusable="true"
                 android:textSize="15sp"
-                android:layout_gravity="center"
+                android:editable="false"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
                 android:textAlignment="center"/>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -144,65 +142,15 @@
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
                 <jrizani.jrspinner.JRSpinner
-                    android:id="@+id/spinner_contratista"
+                    android:id="@+id/spinner_edit_contratista"
                     android:layout_width="match_parent"
-                    android:textColor="@color/negro"
-                    app:jrs_icon_tint="@color/verdePastel"
-                    app:jrs_title="Seleccione Contratista"
+                    android:layout_height="40dp"
                     android:backgroundTint="@color/verdePastel"
-                    app:jrs_multiple="false"
-                    android:layout_height="40dp"/>
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    app:jrs_icon_tint="@color/verdePastel"
+                    />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:layout_gravity="top">
-
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/icon_check"
-                    android:layout_gravity="top"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Motivo"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/verdePastel"
-                    android:fontFamily="@font/gotham_medium"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"/>
-                <Spinner
-                    android:layout_weight="0.5"
-                    android:id="@+id/urgencia_spinner_motivos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:outlineAmbientShadowColor="@color/celesteClaro"/>
-            </LinearLayout>
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -248,7 +196,7 @@
                     android:textColor="@color/verdePastel" />
 
                 <jrizani.jrspinner.JRSpinner
-                    android:id="@+id/urgencia_spinner_equipos"
+                    android:id="@+id/urgencia_edit_spinner_equipos"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -258,6 +206,54 @@
                     app:jrs_icon_tint="@color/verdePastel" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/icon_check"
+                    android:layout_gravity="top"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Motivo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+                <Spinner
+                    android:layout_weight="0.5"
+                    android:id="@+id/urgencia_edit_spinner_motivos"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:pointerIcon="vertical_double_arrow"/>
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -299,16 +295,17 @@
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
                 <EditText
-                    android:id="@+id/dialog_observaciones"
-                    android:layout_weight="0.8"
+                    android:id="@+id/dialog_edit_observaciones"
+                    android:layout_weight="0.5"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:textAlignment="viewStart"
+                    android:layout_height="match_parent"
+                    android:lines="2"
                     android:outlineSpotShadowColor="@color/celesteClaro"/>
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_weight="1"
@@ -320,15 +317,15 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp">
         <Button
-            android:id="@+id/dialog_btn_cancelar"
+            android:id="@+id/dialog_edit_btn_cancelar"
             android:text="Cancelar"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/plomoBackground"/>
         <Button
-            android:id="@+id/dialog_btn_registrar"
-            android:text="Registrar"
+            android:id="@+id/dialog_btn_actualizar"
+            android:text="Actualizar"
             android:layout_weight="1"
             android:background="@color/verdePastel"
             android:textColor="@color/white"

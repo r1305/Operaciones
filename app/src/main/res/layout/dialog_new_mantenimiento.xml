@@ -26,13 +26,13 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_run"
+                android:src="@drawable/icon_mantenimiento_black"
                 android:gravity="end"
                 android:layout_gravity="end"/>
         </LinearLayout>
         <TextView
             android:layout_weight="1"
-            android:text="@string/title_new_urgencia"
+            android:text="@string/title_new_mantenimiento"
             android:textColor="@color/negro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

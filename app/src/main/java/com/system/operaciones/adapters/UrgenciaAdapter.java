@@ -102,9 +102,10 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
+        holder.cierre.setText((String)ob.get("cierre"));
         if(status.equals("0")){
 
-            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_subir,null));
+            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
             holder.icon_pencil.setVisibility(View.VISIBLE);
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -249,11 +250,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         if(status.equals("1")){
             holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
             holder.icon_status.setImageResource(R.drawable.icon_check);
-            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
+            holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview,null));
         }else{
             holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
             holder.icon_status.setImageResource(R.drawable.icon_file);
-            holder.linear_full.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
+            holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview_naranja,null));
         }
     }
 
@@ -268,7 +269,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView registro,fecha_hora_atencion,contratista;
+        TextView registro,fecha_hora_atencion,contratista,cierre;
         LinearLayout linear_full;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
@@ -278,6 +279,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             registro = itemView.findViewById(R.id.item_urgencia_registro);
             fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
             contratista = itemView.findViewById(R.id.item_urgencia_contratista);
+            cierre = itemView.findViewById(R.id.item_urgencia_cierre);
             icon_file = itemView.findViewById(R.id.icon_file);
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
@@ -318,7 +320,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 System.out.println("contratistas_data_ids: "+data_id.length);
                                 personal_ids = data_id;
                                 personal_spinner.setItems(data);
-                                personal_spinner.setHint("Contratista");
                                 getUrgencia(urgencia_id);
                             }
                         } catch (Exception e) {

@@ -89,7 +89,7 @@ public class TiendasActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(2.5);
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                                 l.clear();
                             } else {
@@ -100,10 +100,10 @@ public class TiendasActivity extends AppCompatActivity {
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
-                                viewDialog.hideDialog(2.5);
+                                viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
-                            viewDialog.hideDialog(2.5);
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -111,7 +111,7 @@ public class TiendasActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("login_error: " + error.getMessage());
-                viewDialog.hideDialog(2.5);
+                viewDialog.hideDialog(1);
             }
         }){
             @Override

@@ -47,4 +47,5 @@
     <string name="equipo_string_serie"><u>N° Serie:</u></string>
     <string name="equipo_string_tipo"><u>Tipo:</u></string>
     <string name="title_new_urgencia"><u>Nueva Urgencia</u></string>
+    <string name="title_new_mantenimiento"><u>Nuevo Mantenimiento</u></string>
 </resources>
