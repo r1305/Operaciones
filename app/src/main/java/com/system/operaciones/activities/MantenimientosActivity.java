@@ -608,7 +608,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getUrgencia_response: " + response);
+                        System.out.println("getMantenimientos_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -625,13 +625,14 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                 adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
+                            System.out.println("getMantenimientos_error: " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("getUrgencia_error: " + error.getMessage());
+                System.out.println("getMantenimientos_error: " + error.getMessage());
                 Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){

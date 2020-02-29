@@ -47,7 +47,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/NoBar"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:requestLegacyExternalStorage="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"

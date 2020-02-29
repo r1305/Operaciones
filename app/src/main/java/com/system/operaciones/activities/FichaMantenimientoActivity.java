@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -26,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -47,6 +52,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,11 +70,13 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     private ImageView icon_camera_falla,icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_temp_l1,icon_camera_temp_l2,icon_camera_temp_l3,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
     private ImageView icon_gallery_falla,icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_temp_l1,icon_gallery_temp_l2,icon_gallery_temp_l3,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
     String image_falla="",image_presion_baja="",image_presion_alta="",image_temp_l1="",image_temp_l2="",image_temp_l3="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
+    String et_temp_l1="0",et_temp_l2="0",et_temp_l3="0",et_presion_baja="0",et_presion_alta="0",et_amp_l1="0",et_amp_l2="0",et_amp_l3="0",et_volt_l1="0",et_volt_l2="0",et_volt_l3="0";
     private EditText presion_baja,presion_alta,temp_l1,temp_l2,temp_l3,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
     //DESPUES
     private ImageView despues_icon_camera_falla,despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_temp_l3,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
     private ImageView despues_icon_gallery_falla,despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_temp_l3,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
     String despues_image_falla="",despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
+    String et_despues_temp_l1="0",et_despues_temp_l2="0",et_despues_temp_l3="0",et_despues_presion_baja="0",et_despues_presion_alta="0",et_despues_amp_l1="0",et_despues_amp_l2="0",et_despues_amp_l3="0",et_despues_volt_l1="0",et_despues_volt_l2="0",et_despues_volt_l3="0";
     private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_temp_l3,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
 
     private Button btn_lectura_cancelar;
@@ -97,32 +106,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     ViewDialog viewDialog;
 
-    public void showCustomLoadingDialog(View view) {
-
-        //..show gif
-        viewDialog.showDialog();
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //...here i'm waiting 5 seconds before hiding the custom dialog
-                //...you can do whenever you want or whenever your work is done
-                viewDialog.hideDialog(1);
-            }
-        }, 5000);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ficha_mantenimiento);
+        setContentView(R.layout.activity_ficha_urgencia);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Ficha Técnica");
 
         ctx = this;
         cred = new Credentials(ctx);
-        id = getIntent().getStringExtra("mantenimiento");
+        id = getIntent().getStringExtra("urgencia");
         tienda_id = getIntent().getStringExtra("tienda_id");
         getEquipos(tienda_id);
         viewDialog = new ViewDialog(this);
@@ -158,6 +152,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         tv_solucion = findViewById(R.id.tv_solucion);
         Button btn_antes = findViewById(R.id.btn_antes);
         Button btn_despues = findViewById(R.id.btn_despues);
+
         btn_antes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,6 +210,21 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
 
+                temp_l1.setText(et_temp_l1);
+                temp_l2.setText(et_temp_l2);
+                temp_l3.setText(et_temp_l3);
+
+                presion_alta.setText(et_presion_alta);
+                presion_baja.setText(et_presion_baja);
+
+                amp_l1.setText(et_amp_l1);
+                amp_l2.setText(et_amp_l2);
+                amp_l3.setText(et_amp_l3);
+
+                volt_l1.setText(et_volt_l1);
+                volt_l2.setText(et_volt_l2);
+                volt_l3.setText(et_volt_l3);
+
                 btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
                 btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
                 btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +236,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        et_temp_l1=temp_l1.getText().toString();
+                        et_temp_l2=temp_l2.getText().toString();
+                        et_temp_l3=temp_l3.getText().toString();
+                        et_presion_baja=presion_baja.getText().toString();
+                        et_presion_alta=presion_alta.getText().toString();
+                        et_amp_l1=amp_l1.getText().toString();
+                        et_amp_l2=amp_l2.getText().toString();
+                        et_amp_l3=amp_l3.getText().toString();
+                        et_volt_l1=volt_l1.getText().toString();
+                        et_volt_l2=volt_l2.getText().toString();
+                        et_volt_l3=volt_l3.getText().toString();
                         alertDialog.dismiss();
                         Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                     }
@@ -237,10 +258,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("falla","23");
-                        cred.save_data("image_type","23");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        Log.e("falla","1");
+                        cred.save_data("image_type","1");
+                        openChooser();
                     }
                 });
 
@@ -254,9 +274,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","9");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","2");
+                        openChooser();
                     }
                 });
 
@@ -270,9 +289,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","10");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","3");
+                        openChooser();
                     }
                 });
 
@@ -286,9 +304,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","11");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","4");
+                        openChooser();
                     }
                 });
 
@@ -303,9 +320,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.e("presion_baja","1");
-                        cred.save_data("image_type","1");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","5");
+                        openChooser();
                     }
                 });
 
@@ -319,9 +335,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","2");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","6");
+                        openChooser();
                     }
                 });
 
@@ -335,9 +350,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","3");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","7");
+                        openChooser();
                     }
                 });
 
@@ -351,9 +365,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","4");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","8");
+                        openChooser();
                     }
                 });
 
@@ -367,9 +380,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","5");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","9");
+                        openChooser();
                     }
                 });
 
@@ -383,9 +395,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","6");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","10");
+                        openChooser();
                     }
                 });
 
@@ -399,9 +410,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","7");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","11");
+                        openChooser();
                     }
                 });
 
@@ -415,9 +425,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","8");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        cred.save_data("image_type","12");
+                        openChooser();
                     }
                 });
 
@@ -428,98 +437,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                //Temperatura
-                if(!image_temp_l1.isEmpty()){
-                    icon_camera_temp_l1.setVisibility(View.GONE);
-                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_temp_l1.setVisibility(View.VISIBLE);
-                    icon_gallery_temp_l1.setVisibility(View.GONE);
-                }
-
-                if(!image_temp_l2.isEmpty()){
-                    icon_camera_temp_l2.setVisibility(View.GONE);
-                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_temp_l2.setVisibility(View.VISIBLE);
-                    icon_gallery_temp_l2.setVisibility(View.GONE);
-                }
-
-                if(!image_temp_l3.isEmpty()){
-                    icon_camera_temp_l3.setVisibility(View.GONE);
-                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_temp_l3.setVisibility(View.VISIBLE);
-                    icon_gallery_temp_l3.setVisibility(View.GONE);
-                }
-
-                //Presión
-
-                if(!image_presion_baja.isEmpty()){
-                    icon_camera_presion_baja.setVisibility(View.GONE);
-                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_presion_baja.setVisibility(View.VISIBLE);
-                    icon_gallery_presion_baja.setVisibility(View.GONE);
-                }
-
-                if(!image_presion_alta.isEmpty()){
-                    icon_camera_presion_alta.setVisibility(View.GONE);
-                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_presion_alta.setVisibility(View.VISIBLE);
-                    icon_gallery_presion_alta.setVisibility(View.GONE);
-                }
-
-                //Amperaje
-                if(!image_amp_l1.isEmpty()){
-                    icon_camera_amp_l1.setVisibility(View.GONE);
-                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_amp_l1.setVisibility(View.VISIBLE);
-                    icon_gallery_amp_l1.setVisibility(View.GONE);
-                }
-
-                if(!image_amp_l2.isEmpty()){
-                    icon_camera_amp_l2.setVisibility(View.GONE);
-                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_amp_l2.setVisibility(View.VISIBLE);
-                    icon_gallery_amp_l2.setVisibility(View.GONE);
-                }
-
-                if(!image_amp_l3.isEmpty()){
-                    icon_camera_amp_l3.setVisibility(View.GONE);
-                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_amp_l3.setVisibility(View.VISIBLE);
-                    icon_gallery_amp_l3.setVisibility(View.GONE);
-                }
-
-                //Voltaje
-                if(!image_volt_l1.isEmpty()){
-                    icon_camera_volt_l1.setVisibility(View.GONE);
-                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_volt_l1.setVisibility(View.VISIBLE);
-                    icon_gallery_volt_l1.setVisibility(View.GONE);
-                }
-
-                if(!image_volt_l2.isEmpty()){
-                    icon_camera_volt_l2.setVisibility(View.GONE);
-                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_volt_l2.setVisibility(View.VISIBLE);
-                    icon_gallery_volt_l2.setVisibility(View.GONE);
-                }
-
-                if(!image_volt_l3.isEmpty()){
-                    icon_camera_volt_l3.setVisibility(View.GONE);
-                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                }else{
-                    icon_camera_volt_l3.setVisibility(View.VISIBLE);
-                    icon_gallery_volt_l3.setVisibility(View.GONE);
-                }
+                validateUpload();
             }
         });
 
@@ -582,6 +500,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 despues_volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 despues_volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
 
+                validateUploadDespues();
+
                 btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
                 btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
                 btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -606,8 +526,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Log.e("falla","13");
                         cred.save_data("image_type","13");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -622,8 +541,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","14");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -638,8 +556,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","15");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -654,8 +571,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","16");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -671,8 +587,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Log.e("presion_baja","17");
                         cred.save_data("image_type","17");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -687,8 +602,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","18");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -703,8 +617,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","19");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -719,8 +632,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","20");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -735,8 +647,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","21");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -751,8 +662,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","22");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -767,8 +677,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","23");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -783,8 +692,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","24");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
+                        openChooser();
                     }
                 });
 
@@ -795,98 +703,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                //Temperatura
-                if(!despues_image_temp_l1.isEmpty()){
-                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_temp_l1.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_temp_l2.isEmpty()){
-                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_temp_l2.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_temp_l3.isEmpty()){
-                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_temp_l3.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_temp_l3.setVisibility(View.GONE);
-                }
-
-                //Presión
-
-                if(!despues_image_presion_baja.isEmpty()){
-                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_presion_baja.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_presion_alta.isEmpty()){
-                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_presion_alta.setVisibility(View.GONE);
-                }
-
-                //Amperaje
-                if(!despues_image_amp_l1.isEmpty()){
-                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_amp_l1.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_amp_l2.isEmpty()){
-                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_amp_l2.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_amp_l3.isEmpty()){
-                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_amp_l3.setVisibility(View.GONE);
-                }
-
-                //Voltaje
-                if(!despues_image_volt_l1.isEmpty()){
-                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_volt_l1.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_volt_l2.isEmpty()){
-                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_volt_l2.setVisibility(View.GONE);
-                }
-
-                if(!despues_image_volt_l3.isEmpty()){
-                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                }else{
-                    despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
-                    despues_icon_gallery_volt_l3.setVisibility(View.GONE);
-                }
             }
         });
 
@@ -1227,6 +1043,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     private void showPreview(String b64,final int element)
     {
+        System.out.println("preview_url: "+b64);
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_preview_photo, null);
@@ -1247,6 +1064,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 cleanPhoto(element);
             }
         });
+
+
         AlertDialog alert_preview = builder.create();
         alert_preview.show();
     }
@@ -1258,7 +1077,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 image_falla="";
                 icon_gallery_falla.setVisibility(View.GONE);
                 icon_camera_falla.setVisibility(View.VISIBLE);
-            break;
+                break;
             case 2:
                 image_temp_l1="";
                 icon_gallery_temp_l1.setVisibility(View.GONE);
@@ -1300,33 +1119,69 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_camera_amp_l3.setVisibility(View.VISIBLE);
                 break;
             case 10:
+                image_volt_l1="";
+                icon_gallery_volt_l1.setVisibility(View.GONE);
+                icon_camera_volt_l1.setVisibility(View.VISIBLE);
+                break;
+            case 11:
+                image_volt_l2="";
+                icon_gallery_volt_l2.setVisibility(View.GONE);
+                icon_camera_volt_l2.setVisibility(View.VISIBLE);
+                break;
+            case 12:
                 image_volt_l3="";
                 icon_gallery_volt_l3.setVisibility(View.GONE);
                 icon_camera_volt_l3.setVisibility(View.VISIBLE);
                 break;
-            case 11:
-                break;
-            case 12:
-                break;
             case 13:
+                despues_image_falla="";
+                despues_icon_gallery_falla.setVisibility(View.GONE);
+                despues_icon_camera_falla.setVisibility(View.VISIBLE);
                 break;
             case 14:
+                despues_image_temp_l1="";
+                despues_icon_gallery_temp_l1.setVisibility(View.GONE);
+                despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
                 break;
             case 15:
+                despues_image_temp_l2="";
+                despues_icon_gallery_temp_l2.setVisibility(View.GONE);
+                despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
                 break;
             case 16:
+                despues_image_temp_l3="";
+                despues_icon_gallery_temp_l3.setVisibility(View.GONE);
+                despues_icon_camera_temp_l3.setVisibility(View.VISIBLE);
                 break;
             case 17:
+                despues_image_amp_l1="";
+                despues_icon_gallery_amp_l1.setVisibility(View.GONE);
+                despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
                 break;
             case 18:
+                despues_image_amp_l2="";
+                despues_icon_gallery_amp_l2.setVisibility(View.GONE);
+                despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
                 break;
             case 19:
+                despues_image_amp_l3="";
+                despues_icon_gallery_amp_l3.setVisibility(View.GONE);
+                despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
                 break;
             case 20:
+                despues_image_volt_l1="";
+                despues_icon_gallery_volt_l1.setVisibility(View.GONE);
+                despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
                 break;
             case 21:
+                despues_image_volt_l2="";
+                despues_icon_gallery_volt_l2.setVisibility(View.GONE);
+                despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
                 break;
             case 22:
+                despues_image_volt_l3="";
+                despues_icon_gallery_volt_l3.setVisibility(View.GONE);
+                despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -1336,227 +1191,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     {
         onBackPressed();
         return true;
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCode: "+requestCode);
-        System.out.println("resultCode: "+resultCode);
-        if (resultCode == RESULT_CANCELED) {
-            return;
-        }
-        if (resultCode  == RESULT_OK) {
-            String image_type = cred.getData("image_type");
-            String b64 = "";
-            if(!image_type.equals("0")){
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                b64= Image.convert(image);
-            }
-            switch (image_type){
-                case "0":
-                    String codigo = data.getStringExtra("codigo");
-                    if(tipo_nro_serie==1)
-                        et_nro_serie.setText(codigo);
-                    else
-                        et_cond_nro_serie.setText(codigo);
-                    break;
-                case "1":
-                    image_falla = b64;
-                    Log.e("image_falla","23");
-                    icon_camera_falla.setVisibility(View.GONE);
-                    icon_gallery_falla.setVisibility(View.VISIBLE);
-                    if(image_falla.isEmpty())
-                        System.out.println("image_falla NULL");
-                    break;
-                case "2":
-                    image_temp_l1 = b64;
-                    Log.e("image_temp_l1","9");
-                    icon_camera_temp_l1.setVisibility(View.GONE);
-                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(image_temp_l1.isEmpty())
-                        System.out.println("image_temp_l1 NULL");
-                    break;
-                case "3":
-                    image_temp_l2 = b64;
-                    Log.e("image_temp_l2","10");
-                    icon_camera_temp_l2.setVisibility(View.GONE);
-                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(image_temp_l2.isEmpty())
-                        System.out.println("image_temp_l2 NULL");
-                    break;
-                case "4":
-                    image_temp_l3 = b64;
-                    Log.e("image_temp_l3","11");
-                    icon_camera_temp_l3.setVisibility(View.GONE);
-                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                    if(image_temp_l3.isEmpty())
-                        System.out.println("image_temp_l3 NULL");
-                    break;
-                case "5":
-                    image_presion_baja = b64;
-                    Log.e("image_presion_baja","1");
-                    icon_camera_presion_baja.setVisibility(View.GONE);
-                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(image_presion_baja.isEmpty())
-                        System.out.println("image_presion_baja NULL");
-                    break;
-                case "6":
-                    image_presion_alta = b64;
-                    Log.e("image_presion_alta","2");
-                    icon_camera_presion_alta.setVisibility(View.GONE);
-                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(image_presion_alta.isEmpty())
-                        System.out.println("image_presion_alta NULL");
-                    break;
-                case "7":
-                    image_amp_l1 = b64;
-                    Log.e("image_amp_l1","3");
-                    icon_camera_amp_l1.setVisibility(View.GONE);
-                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "8":
-                    image_amp_l2 = b64;
-                    Log.e("image_amp_l2","4");
-                    icon_camera_amp_l2.setVisibility(View.GONE);
-                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(image_amp_l2.isEmpty())
-                        System.out.println("image_amp_l2 NULL");
-                    break;
-                case "9":
-                    image_amp_l3 = b64;
-                    Log.e("image_amp_l3","5");
-                    icon_camera_amp_l3.setVisibility(View.GONE);
-                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(image_amp_l3.isEmpty())
-                        System.out.println("image_amp_l3 NULL");
-                    break;
-                case "10":
-                    image_volt_l1 = b64;
-                    Log.e("image_volt_l1","6");
-                    icon_camera_volt_l1.setVisibility(View.GONE);
-                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(image_volt_l1.isEmpty())
-                        System.out.println("image_volt_l1 NULL");
-                    break;
-                case "11":
-                    image_volt_l2 = b64;
-                    Log.e("image_volt_l2","7");
-                    icon_camera_volt_l2.setVisibility(View.GONE);
-                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(image_volt_l2.isEmpty())
-                        System.out.println("image_volt_l2 NULL");
-                    break;
-                case "12":
-                    image_volt_l3 = b64;
-                    Log.e("image_volt_l3","8");
-                    icon_camera_volt_l3.setVisibility(View.GONE);
-                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(image_volt_l3.isEmpty())
-                        System.out.println("image_volt_l3 NULL");
-                    break;
-
-                //despues
-                case "13":
-                    despues_image_falla = b64;
-                    Log.e("despues_image_falla","24");
-                    despues_icon_camera_falla.setVisibility(View.GONE);
-                    despues_icon_gallery_falla.setVisibility(View.VISIBLE);
-                    if(despues_image_falla.isEmpty())
-                        System.out.println("despues_image_falla NULL");
-                    break;
-                case "14":
-                    despues_image_temp_l1 = b64;
-                    Log.e("despues_image_temp_l1","20");
-                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l1.isEmpty())
-                        System.out.println("despues_image_temp_l1 NULL");
-                    break;
-                case "15":
-                    despues_image_temp_l2 = b64;
-                    Log.e("despues_image_temp_l2","21");
-                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l2.isEmpty())
-                        System.out.println("despues_image_temp_l2 NULL");
-                    break;
-                case "16":
-                    despues_image_temp_l3 = b64;
-                    Log.e("despues_image_temp_l3","22");
-                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l3.isEmpty())
-                        System.out.println("despues_image_temp_l3 NULL");
-                    break;
-                case "17":
-                    despues_image_presion_baja = b64;
-                    Log.e("image_presion_baja","12");
-                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_baja.isEmpty())
-                        System.out.println("despues_image_presion_baja NULL");
-                    break;
-                case "18":
-                    despues_image_presion_alta = b64;
-                    Log.e("despues_image_presion_alta","13");
-                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_alta.isEmpty())
-                        System.out.println("despues_image_presion_alta NULL");
-                    break;
-                case "19":
-                    despues_image_amp_l1 = b64;
-                    Log.e("image_amp_l1","14");
-                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "20":
-                    despues_image_amp_l2 = b64;
-                    Log.e("despues_image_amp_l2","15");
-                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l2.isEmpty())
-                        System.out.println("despues_image_amp_l2 NULL");
-                    break;
-                case "21":
-                    despues_image_amp_l3 = b64;
-                    Log.e("despues_image_amp_l3","16");
-                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l3.isEmpty())
-                        System.out.println("despues_image_amp_l3 NULL");
-                    break;
-                case "22":
-                    despues_image_volt_l1 = b64;
-                    Log.e("despues_image_volt_l1","17");
-                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l1.isEmpty())
-                        System.out.println("despues_image_volt_l1 NULL");
-                    break;
-                case "23":
-                    despues_image_volt_l2 = b64;
-                    Log.e("despues_image_volt_l2","18");
-                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l2.isEmpty())
-                        System.out.println("despues_image_volt_l2 NULL");
-                    break;
-                case "24":
-                    despues_image_volt_l3 = b64;
-                    Log.e("despues_image_volt_l3","19");
-                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l3.isEmpty())
-                        System.out.println("despues_image_volt_l3 NULL");
-                    break;
-            }
-        }
     }
 
     @Override
@@ -1593,6 +1227,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Registro correcto",Toast.LENGTH_SHORT).show();
@@ -1622,6 +1257,14 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
                 //ANTES
                 params.put("falla", image_falla);
+
+                params.put("temperatura_l1", temp_l1.getText().toString());
+                params.put("img_temperatura_l1", image_temp_l1);
+                params.put("temperatura_l2", temp_l2.getText().toString());
+                params.put("img_temperatura_l2", image_temp_l2);
+                params.put("temperatura_l3", temp_l3.getText().toString());
+                params.put("img_temperatura_l3", image_temp_l3);
+
                 params.put("presion_baja", presion_baja.getText().toString());
                 params.put("img_presion_baja", image_presion_baja);
                 params.put("presion_alta", presion_alta.getText().toString());
@@ -1641,14 +1284,16 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 params.put("voltaje_l3", volt_l3.getText().toString());
                 params.put("img_voltaje_l3", image_volt_l3);
 
-                params.put("temperatura_l1", temp_l1.getText().toString());
-                params.put("img_temperatura_l1", image_temp_l1);
-                params.put("temperatura_l2", temp_l2.getText().toString());
-                params.put("img_temperatura_l2", image_temp_l2);
-                params.put("temperatura_l3", temp_l3.getText().toString());
-                params.put("img_temperatura_l3", image_temp_l3);
                 //DESPUES
                 params.put("despues_falla", despues_image_falla);
+
+                params.put("despues_temperatura_l1", despues_temp_l1.getText().toString());
+                params.put("despues_img_temperatura_l1", despues_image_temp_l1);
+                params.put("despues_temperatura_l2", despues_temp_l2.getText().toString());
+                params.put("despues_img_temperatura_l2", despues_image_temp_l2);
+                params.put("despues_temperatura_l3", despues_temp_l3.getText().toString());
+                params.put("despues_img_temperatura_l3", despues_image_temp_l3);
+
                 params.put("despues_presion_baja", despues_presion_baja.getText().toString());
                 params.put("despues_img_presion_baja", despues_image_presion_baja);
                 params.put("despues_presion_alta", despues_presion_alta.getText().toString());
@@ -1667,13 +1312,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 params.put("despues_img_voltaje_l2", despues_image_volt_l2);
                 params.put("despues_voltaje_l3", despues_volt_l3.getText().toString());
                 params.put("despues_img_voltaje_l3", despues_image_volt_l3);
-
-                params.put("despues_temperatura_l1", despues_temp_l1.getText().toString());
-                params.put("despues_img_temperatura_l1", despues_image_temp_l1);
-                params.put("despues_temperatura_l2", despues_temp_l2.getText().toString());
-                params.put("despues_img_temperatura_l2", despues_image_temp_l2);
-                params.put("despues_temperatura_l3", despues_temp_l3.getText().toString());
-                params.put("despues_img_temperatura_l3", despues_image_temp_l3);
 
                 //FIRMAS
                 params.put("img_signature_tecnico",image_signature_tecnico);
@@ -1714,6 +1352,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
@@ -1727,6 +1366,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 }, 5000);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1734,6 +1374,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                viewDialog.hideDialog(1);
                 System.out.println("create_ficha_urgencia_error: " + error);
             }
         }){
@@ -3055,5 +2696,788 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    void validateUploadDespues()
+    {
+        despues_temp_l1.setText(et_despues_temp_l1);
+        despues_temp_l2.setText(et_despues_temp_l2);
+        despues_temp_l3.setText(et_despues_temp_l3);
 
+        despues_presion_alta.setText(et_despues_presion_alta);
+        despues_presion_baja.setText(et_despues_presion_baja);
+
+        despues_amp_l1.setText(et_amp_l1);
+        despues_amp_l2.setText(et_amp_l2);
+        despues_amp_l3.setText(et_amp_l3);
+
+        despues_volt_l1.setText(et_volt_l1);
+        despues_volt_l2.setText(et_volt_l2);
+        despues_volt_l3.setText(et_volt_l3);
+
+        //Falla
+        if(!despues_image_falla.isEmpty()){
+            despues_icon_camera_falla.setVisibility(View.GONE);
+            despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_gallery_falla.setVisibility(View.GONE);
+            despues_icon_camera_falla.setVisibility(View.VISIBLE);
+        }
+
+        //Temperatura
+        if(!despues_image_temp_l1.isEmpty()){
+            despues_icon_camera_temp_l1.setVisibility(View.GONE);
+            despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
+            despues_icon_gallery_temp_l1.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_temp_l2.isEmpty()){
+            despues_icon_camera_temp_l2.setVisibility(View.GONE);
+            despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
+            despues_icon_gallery_temp_l2.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_temp_l3.isEmpty()){
+            despues_icon_camera_temp_l3.setVisibility(View.GONE);
+            despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_temp_l3.setVisibility(View.VISIBLE);
+            despues_icon_gallery_temp_l3.setVisibility(View.GONE);
+        }
+
+        //Presión
+
+        if(!despues_image_presion_baja.isEmpty()){
+            despues_icon_camera_presion_baja.setVisibility(View.GONE);
+            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
+            despues_icon_gallery_presion_baja.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_presion_alta.isEmpty()){
+            despues_icon_camera_presion_alta.setVisibility(View.GONE);
+            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
+            despues_icon_gallery_presion_alta.setVisibility(View.GONE);
+        }
+
+        //Amperaje
+        if(!despues_image_amp_l1.isEmpty()){
+            despues_icon_camera_amp_l1.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l1.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_amp_l2.isEmpty()){
+            despues_icon_camera_amp_l2.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l2.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_amp_l3.isEmpty()){
+            despues_icon_camera_amp_l3.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l3.setVisibility(View.GONE);
+        }
+
+        //Voltaje
+        if(!despues_image_volt_l1.isEmpty()){
+            despues_icon_camera_volt_l1.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l1.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_volt_l2.isEmpty()){
+            despues_icon_camera_volt_l2.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l2.setVisibility(View.GONE);
+        }
+
+        if(!despues_image_volt_l3.isEmpty()){
+            despues_icon_camera_volt_l3.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l3.setVisibility(View.GONE);
+        }
+    }
+
+    void validateUpload()
+    {
+        temp_l1.setText(et_temp_l1);
+        temp_l2.setText(et_temp_l2);
+        temp_l3.setText(et_temp_l3);
+
+        presion_alta.setText(et_presion_alta);
+        presion_baja.setText(et_presion_baja);
+
+        amp_l1.setText(et_amp_l1);
+        amp_l2.setText(et_amp_l2);
+        amp_l3.setText(et_amp_l3);
+
+        volt_l1.setText(et_volt_l1);
+        volt_l2.setText(et_volt_l2);
+        volt_l3.setText(et_volt_l3);
+
+        //Falla
+        if(!image_falla.isEmpty()){
+            icon_camera_falla.setVisibility(View.GONE);
+            icon_gallery_falla.setVisibility(View.VISIBLE);
+        }else{
+            icon_gallery_falla.setVisibility(View.GONE);
+            icon_camera_falla.setVisibility(View.VISIBLE);
+        }
+
+        if(!image_falla.isEmpty()){
+            icon_camera_falla.setVisibility(View.GONE);
+            icon_gallery_falla.setVisibility(View.VISIBLE);
+        }else{
+            icon_gallery_falla.setVisibility(View.GONE);
+            icon_camera_falla.setVisibility(View.VISIBLE);
+        }
+
+        //Temperatura
+        if(!image_temp_l1.isEmpty()){
+            icon_camera_temp_l1.setVisibility(View.GONE);
+            icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_temp_l1.setVisibility(View.VISIBLE);
+            icon_gallery_temp_l1.setVisibility(View.GONE);
+        }
+
+        if(!image_temp_l2.isEmpty()){
+            icon_camera_temp_l2.setVisibility(View.GONE);
+            icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_temp_l2.setVisibility(View.VISIBLE);
+            icon_gallery_temp_l2.setVisibility(View.GONE);
+        }
+
+        if(!image_temp_l3.isEmpty()){
+            icon_camera_temp_l3.setVisibility(View.GONE);
+            icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_temp_l3.setVisibility(View.VISIBLE);
+            icon_gallery_temp_l3.setVisibility(View.GONE);
+        }
+
+        //Presión
+
+        if(!image_presion_baja.isEmpty()){
+            icon_camera_presion_baja.setVisibility(View.GONE);
+            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_presion_baja.setVisibility(View.VISIBLE);
+            icon_gallery_presion_baja.setVisibility(View.GONE);
+        }
+
+        if(!image_presion_alta.isEmpty()){
+            icon_camera_presion_alta.setVisibility(View.GONE);
+            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_presion_alta.setVisibility(View.VISIBLE);
+            icon_gallery_presion_alta.setVisibility(View.GONE);
+        }
+
+        //Amperaje
+        if(!image_amp_l1.isEmpty()){
+            icon_camera_amp_l1.setVisibility(View.GONE);
+            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l1.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l1.setVisibility(View.GONE);
+        }
+
+        if(!image_amp_l2.isEmpty()){
+            icon_camera_amp_l2.setVisibility(View.GONE);
+            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l2.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l2.setVisibility(View.GONE);
+        }
+
+        if(!image_amp_l3.isEmpty()){
+            icon_camera_amp_l3.setVisibility(View.GONE);
+            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l3.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l3.setVisibility(View.GONE);
+        }
+
+        //Voltaje
+        if(!image_volt_l1.isEmpty()){
+            icon_camera_volt_l1.setVisibility(View.GONE);
+            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l1.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l1.setVisibility(View.GONE);
+        }
+
+        if(!image_volt_l2.isEmpty()){
+            icon_camera_volt_l2.setVisibility(View.GONE);
+            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l2.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l2.setVisibility(View.GONE);
+        }
+
+        if(!image_volt_l3.isEmpty()){
+            icon_camera_volt_l3.setVisibility(View.GONE);
+            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l3.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l3.setVisibility(View.GONE);
+        }
+    }
+
+    void actionTakePhoto(Intent in)
+    {
+        if (in.resolveActivity(getPackageManager()) != null) {
+
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Toast.makeText(ctx,"Ocurrió  un error al guardar la foto",Toast.LENGTH_SHORT).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(ctx,
+                        "com.system.operaciones.fileprovider",
+                        photoFile);
+                in.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(in, 1);
+            }
+        }
+    }
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        currentPhotoPath = "";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                tienda_id+"-"+cred.getData("image_type")+"_",  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        System.out.println("currentPhotoPath: "+currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        System.out.println("contentUri: "+contentUri);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        try {
+            String image_type = cred.getData("image_type");
+            String b64 = currentPhotoPath;
+            switch (image_type){
+                case "1":
+                    image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_falla","1");
+                    icon_camera_falla.setVisibility(View.GONE);
+                    icon_gallery_falla.setVisibility(View.VISIBLE);
+                    if(image_falla.isEmpty())
+                        System.out.println("image_falla NULL");
+                    break;
+                case "2":
+                    image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_temp_l1","2");
+                    icon_camera_temp_l1.setVisibility(View.GONE);
+                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(image_temp_l1.isEmpty())
+                        System.out.println("image_temp_l1 NULL");
+                    break;
+                case "3":
+                    image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_temp_l2","3");
+                    icon_camera_temp_l2.setVisibility(View.GONE);
+                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(image_temp_l2.isEmpty())
+                        System.out.println("image_temp_l2 NULL");
+                    break;
+                case "4":
+                    image_temp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_temp_l3","4");
+                    icon_camera_temp_l3.setVisibility(View.GONE);
+                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(image_temp_l3.isEmpty())
+                        System.out.println("image_temp_l3 NULL");
+                    break;
+                case "5":
+                    image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_presion_baja","5");
+                    icon_camera_presion_baja.setVisibility(View.GONE);
+                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(image_presion_baja.isEmpty())
+                        System.out.println("image_presion_baja NULL");
+                    break;
+                case "6":
+                    image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_presion_alta","6");
+                    icon_camera_presion_alta.setVisibility(View.GONE);
+                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(image_presion_alta.isEmpty())
+                        System.out.println("image_presion_alta NULL");
+                    break;
+                case "7":
+                    image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_amp_l1","7");
+                    icon_camera_amp_l1.setVisibility(View.GONE);
+                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(image_amp_l1.isEmpty())
+                        System.out.println("image_amp_l1 NULL");
+                    break;
+                case "8":
+                    image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_amp_l2","8");
+                    icon_camera_amp_l2.setVisibility(View.GONE);
+                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(image_amp_l2.isEmpty())
+                        System.out.println("image_amp_l2 NULL");
+                    break;
+                case "9":
+                    image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_amp_l3","9");
+                    icon_camera_amp_l3.setVisibility(View.GONE);
+                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(image_amp_l3.isEmpty())
+                        System.out.println("image_amp_l3 NULL");
+                    break;
+                case "10":
+                    image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_volt_l1","10");
+                    icon_camera_volt_l1.setVisibility(View.GONE);
+                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(image_volt_l1.isEmpty())
+                        System.out.println("image_volt_l1 NULL");
+                    break;
+                case "11":
+                    image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_volt_l2","11");
+                    icon_camera_volt_l2.setVisibility(View.GONE);
+                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(image_volt_l2.isEmpty())
+                        System.out.println("image_volt_l2 NULL");
+                    break;
+                case "12":
+                    image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_volt_l3","12");
+                    icon_camera_volt_l3.setVisibility(View.GONE);
+                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(image_volt_l3.isEmpty())
+                        System.out.println("image_volt_l3 NULL");
+                    break;
+
+                //despues
+                case "13":
+                    despues_image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_falla","13");
+                    despues_icon_camera_falla.setVisibility(View.GONE);
+                    despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+                    if(despues_image_falla.isEmpty())
+                        System.out.println("despues_image_falla NULL");
+                    break;
+                case "14":
+                    despues_image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_temp_l1","14");
+                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l1.isEmpty())
+                        System.out.println("despues_image_temp_l1 NULL");
+                    break;
+                case "15":
+                    despues_image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_temp_l2","15");
+                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l2.isEmpty())
+                        System.out.println("despues_image_temp_l2 NULL");
+                    break;
+                case "16":
+                    despues_image_temp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_temp_l3","16");
+                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l3.isEmpty())
+                        System.out.println("despues_image_temp_l3 NULL");
+                    break;
+                case "17":
+                    despues_image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_presion_baja","17");
+                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_baja.isEmpty())
+                        System.out.println("despues_image_presion_baja NULL");
+                    break;
+                case "18":
+                    despues_image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_presion_alta","18");
+                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_alta.isEmpty())
+                        System.out.println("despues_image_presion_alta NULL");
+                    break;
+                case "19":
+                    despues_image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_amp_l1","19");
+                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l1.isEmpty())
+                        System.out.println("image_amp_l1 NULL");
+                    break;
+                case "20":
+                    despues_image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_amp_l2","20");
+                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l2.isEmpty())
+                        System.out.println("despues_image_amp_l2 NULL");
+                    break;
+                case "21":
+                    despues_image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_amp_l3","21");
+                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l3.isEmpty())
+                        System.out.println("despues_image_amp_l3 NULL");
+                    break;
+                case "22":
+                    despues_image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_volt_l1","22");
+                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l1.isEmpty())
+                        System.out.println("despues_image_volt_l1 NULL");
+                    break;
+                case "23":
+                    despues_image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_volt_l2","23");
+                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l2.isEmpty())
+                        System.out.println("despues_image_volt_l2 NULL");
+                    break;
+                case "24":
+                    despues_image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_volt_l3","24");
+                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l3.isEmpty())
+                        System.out.println("despues_image_volt_l3 NULL");
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    void openChooser()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_chooser_image, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        TextView take_photo = dialogView.findViewById(R.id.take_photo);
+        TextView choose_photo = dialogView.findViewById(R.id.choose_photo);
+        final AlertDialog alertDialogChooser = builder.create();
+        take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogChooser.dismiss();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                actionTakePhoto(intent);
+            }
+        });
+        choose_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogChooser.dismiss();
+                pickFromGallery();
+            }
+        });
+        alertDialogChooser.show();
+    }
+
+    private void pickFromGallery(){
+        //Create an Intent with action as ACTION_PICK
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        // Sets the type as image/*. This ensures only components of type image are selected
+        intent.setType("image/*");
+        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+        // Launching the Intent
+        startActivityForResult(intent,2);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 1://take photo
+                if(cred.getData("image_type").equals("0")){
+                    String codigo = data.getStringExtra("codigo");
+                    if(tipo_nro_serie==1)
+                        et_nro_serie.setText(codigo);
+                    else
+                        et_cond_nro_serie.setText(codigo);
+                }else{
+                    galleryAddPic();
+                }
+                break;
+            case 2://choose from gallery
+                //data.getData return the content URI for the selected Image
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+                //Get the column index of MediaStore.Images.Media.DATA
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                //Gets the String value in the column
+                String imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString,options);
+                try {
+                    String image_type = cred.getData("image_type");
+                    String b64 = selectedImage.toString();
+                    switch (image_type){
+                        case "1":
+                            image_falla = Image.convert(bitmap);
+                            Log.e("image_falla","1");
+                            icon_camera_falla.setVisibility(View.GONE);
+                            icon_gallery_falla.setVisibility(View.VISIBLE);
+                            if(image_falla.isEmpty())
+                                System.out.println("image_falla NULL");
+                            break;
+                        case "2":
+                            image_temp_l1 = Image.convert(bitmap);
+                            Log.e("image_temp_l1","2");
+                            icon_camera_temp_l1.setVisibility(View.GONE);
+                            icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                            if(image_temp_l1.isEmpty())
+                                System.out.println("image_temp_l1 NULL");
+                            break;
+                        case "3":
+                            image_temp_l2 = Image.convert(bitmap);
+                            Log.e("image_temp_l2","3");
+                            icon_camera_temp_l2.setVisibility(View.GONE);
+                            icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                            if(image_temp_l2.isEmpty())
+                                System.out.println("image_temp_l2 NULL");
+                            break;
+                        case "4":
+                            image_temp_l3 = Image.convert(bitmap);
+                            Log.e("image_temp_l3","4");
+                            icon_camera_temp_l3.setVisibility(View.GONE);
+                            icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                            if(image_temp_l3.isEmpty())
+                                System.out.println("image_temp_l3 NULL");
+                            break;
+                        case "5":
+                            image_presion_baja = Image.convert(bitmap);
+                            Log.e("image_presion_baja","5");
+                            icon_camera_presion_baja.setVisibility(View.GONE);
+                            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                            if(image_presion_baja.isEmpty())
+                                System.out.println("image_presion_baja NULL");
+                            break;
+                        case "6":
+                            image_presion_alta = Image.convert(bitmap);
+                            Log.e("image_presion_alta","6");
+                            icon_camera_presion_alta.setVisibility(View.GONE);
+                            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                            if(image_presion_alta.isEmpty())
+                                System.out.println("image_presion_alta NULL");
+                            break;
+                        case "7":
+                            image_amp_l1 = Image.convert(bitmap);
+                            Log.e("image_amp_l1","7");
+                            icon_camera_amp_l1.setVisibility(View.GONE);
+                            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                            if(image_amp_l1.isEmpty())
+                                System.out.println("image_amp_l1 NULL");
+                            break;
+                        case "8":
+                            image_amp_l2 = Image.convert(bitmap);
+                            Log.e("image_amp_l2","8");
+                            icon_camera_amp_l2.setVisibility(View.GONE);
+                            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                            if(image_amp_l2.isEmpty())
+                                System.out.println("image_amp_l2 NULL");
+                            break;
+                        case "9":
+                            image_amp_l3 = Image.convert(bitmap);
+                            Log.e("image_amp_l3","9");
+                            icon_camera_amp_l3.setVisibility(View.GONE);
+                            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                            if(image_amp_l3.isEmpty())
+                                System.out.println("image_amp_l3 NULL");
+                            break;
+                        case "10":
+                            image_volt_l1 = Image.convert(bitmap);
+                            Log.e("image_volt_l1","10");
+                            icon_camera_volt_l1.setVisibility(View.GONE);
+                            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                            if(image_volt_l1.isEmpty())
+                                System.out.println("image_volt_l1 NULL");
+                            break;
+                        case "11":
+                            image_volt_l2 = Image.convert(bitmap);
+                            Log.e("image_volt_l2","11");
+                            icon_camera_volt_l2.setVisibility(View.GONE);
+                            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                            if(image_volt_l2.isEmpty())
+                                System.out.println("image_volt_l2 NULL");
+                            break;
+                        case "12":
+                            image_volt_l3 = Image.convert(bitmap);
+                            Log.e("image_volt_l3","12");
+                            icon_camera_volt_l3.setVisibility(View.GONE);
+                            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                            if(image_volt_l3.isEmpty())
+                                System.out.println("image_volt_l3 NULL");
+                            break;
+
+                        //despues
+                        case "13":
+                            despues_image_falla = Image.convert(bitmap);
+                            Log.e("despues_image_falla","13");
+                            despues_icon_camera_falla.setVisibility(View.GONE);
+                            despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+                            if(despues_image_falla.isEmpty())
+                                System.out.println("despues_image_falla NULL");
+                            break;
+                        case "14":
+                            despues_image_temp_l1 = Image.convert(bitmap);
+                            Log.e("despues_image_temp_l1","14");
+                            despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                            despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                            if(despues_image_temp_l1.isEmpty())
+                                System.out.println("despues_image_temp_l1 NULL");
+                            break;
+                        case "15":
+                            despues_image_temp_l2 = Image.convert(bitmap);
+                            Log.e("despues_image_temp_l2","15");
+                            despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                            despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                            if(despues_image_temp_l2.isEmpty())
+                                System.out.println("despues_image_temp_l2 NULL");
+                            break;
+                        case "16":
+                            despues_image_temp_l3 = Image.convert(bitmap);
+                            Log.e("despues_image_temp_l3","16");
+                            despues_icon_camera_temp_l3.setVisibility(View.GONE);
+                            despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                            if(despues_image_temp_l3.isEmpty())
+                                System.out.println("despues_image_temp_l3 NULL");
+                            break;
+                        case "17":
+                            despues_image_presion_baja = Image.convert(bitmap);
+                            Log.e("image_presion_baja","17");
+                            despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                            if(despues_image_presion_baja.isEmpty())
+                                System.out.println("despues_image_presion_baja NULL");
+                            break;
+                        case "18":
+                            despues_image_presion_alta = Image.convert(bitmap);
+                            Log.e("despues_image_presion_alta","18");
+                            despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                            if(despues_image_presion_alta.isEmpty())
+                                System.out.println("despues_image_presion_alta NULL");
+                            break;
+                        case "19":
+                            despues_image_amp_l1 = Image.convert(bitmap);
+                            Log.e("image_amp_l1","19");
+                            despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                            if(despues_image_amp_l1.isEmpty())
+                                System.out.println("image_amp_l1 NULL");
+                            break;
+                        case "20":
+                            despues_image_amp_l2 = Image.convert(bitmap);
+                            Log.e("despues_image_amp_l2","20");
+                            despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                            if(despues_image_amp_l2.isEmpty())
+                                System.out.println("despues_image_amp_l2 NULL");
+                            break;
+                        case "21":
+                            despues_image_amp_l3 = Image.convert(bitmap);
+                            Log.e("despues_image_amp_l3","21");
+                            despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                            if(despues_image_amp_l3.isEmpty())
+                                System.out.println("despues_image_amp_l3 NULL");
+                            break;
+                        case "22":
+                            despues_image_volt_l1 = Image.convert(bitmap);
+                            Log.e("despues_image_volt_l1","22");
+                            despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                            if(despues_image_volt_l1.isEmpty())
+                                System.out.println("despues_image_volt_l1 NULL");
+                            break;
+                        case "23":
+                            despues_image_volt_l2 = Image.convert(bitmap);
+                            Log.e("despues_image_volt_l2","23");
+                            despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                            if(despues_image_volt_l2.isEmpty())
+                                System.out.println("despues_image_volt_l2 NULL");
+                            break;
+                        case "24":
+                            despues_image_volt_l3 = Image.convert(bitmap);
+                            Log.e("despues_image_volt_l3","24");
+                            despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                            if(despues_image_volt_l3.isEmpty())
+                                System.out.println("despues_image_volt_l3 NULL");
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+
+
+    }
 }
