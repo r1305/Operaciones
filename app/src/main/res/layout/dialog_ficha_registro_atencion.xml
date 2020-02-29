@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="10dp"
-    android:background="@drawable/border_dialog"
     android:layout_gravity="center">
     <com.github.gcacace.signaturepad.views.SignaturePad
         android:id="@+id/dialog_signature"
@@ -29,7 +28,7 @@
         <EditText
             android:id="@+id/dialog_signature_et_name"
             android:paddingStart="6dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:hint="Nombre y Apellido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +51,7 @@
         <EditText
             android:id="@+id/dialog_signature_et_dni"
             android:paddingStart="6dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:hint="DNI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
         <EditText
             android:id="@+id/dialog_signature_et_cargo"
             android:paddingStart="6dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:hint="Cargo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

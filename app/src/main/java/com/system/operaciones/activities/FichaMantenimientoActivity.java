@@ -1,13 +1,6 @@
 package com.system.operaciones.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -57,7 +55,7 @@ import java.util.Objects;
 
 import jrizani.jrspinner.JRSpinner;
 
-public class FichaActivity extends AppCompatActivity {
+public class FichaMantenimientoActivity extends AppCompatActivity {
 
     Context ctx;
     Credentials cred;
@@ -110,7 +108,7 @@ public class FichaActivity extends AppCompatActivity {
             public void run() {
                 //...here i'm waiting 5 seconds before hiding the custom dialog
                 //...you can do whenever you want or whenever your work is done
-                viewDialog.hideDialog(5);
+                viewDialog.hideDialog(1);
             }
         }, 5000);
     }
@@ -118,13 +116,13 @@ public class FichaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ficha);
+        setContentView(R.layout.activity_ficha_mantenimiento);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Ficha Técnica");
 
         ctx = this;
         cred = new Credentials(ctx);
-        id = getIntent().getStringExtra("urgencia");
+        id = getIntent().getStringExtra("mantenimiento");
         tienda_id = getIntent().getStringExtra("tienda_id");
         getEquipos(tienda_id);
         viewDialog = new ViewDialog(this);
@@ -249,7 +247,55 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_falla);
+                        showPreview(image_falla,1);
+                    }
+                });
+
+                icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","9");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l1,2);
+                    }
+                });
+
+                icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","10");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l2,3);
+                    }
+                });
+
+                icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","11");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_temp_l3,4);
                     }
                 });
 
@@ -266,7 +312,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_baja);
+                        showPreview(image_presion_baja,5);
                     }
                 });
 
@@ -282,7 +328,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_alta);
+                        showPreview(image_presion_alta,6);
                     }
                 });
 
@@ -298,7 +344,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l1);
+                        showPreview(image_amp_l1,7);
                     }
                 });
 
@@ -314,7 +360,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l2);
+                        showPreview(image_amp_l2,8);
                     }
                 });
 
@@ -330,7 +376,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l3);
+                        showPreview(image_amp_l3,9);
                     }
                 });
 
@@ -346,7 +392,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l1);
+                        showPreview(image_volt_l1,10);
                     }
                 });
 
@@ -362,7 +408,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l2);
+                        showPreview(image_volt_l2,11);
                     }
                 });
 
@@ -378,55 +424,7 @@ public class FichaActivity extends AppCompatActivity {
                 icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l3);
-                    }
-                });
-
-                icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","9");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_temp_l1);
-                    }
-                });
-
-                icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","10");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_temp_l2);
-                    }
-                });
-
-                icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","11");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_temp_l3);
+                        showPreview(image_volt_l3,12);
                     }
                 });
 
@@ -606,8 +604,8 @@ public class FichaActivity extends AppCompatActivity {
                 despues_icon_camera_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("falla","24");
-                        cred.save_data("image_type","24");
+                        Log.e("falla","13");
+                        cred.save_data("image_type","13");
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, 1);
                     }
@@ -616,44 +614,11 @@ public class FichaActivity extends AppCompatActivity {
                 despues_icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_falla);
+                        showPreview(despues_image_falla,13);
                     }
                 });
 
-                despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.e("presion_baja","12");
-                        cred.save_data("image_type","12");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_presion_baja);
-                    }
-                });
-
-                despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","13");
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_presion_alta);
-                    }
-                });
-
-                despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","14");
@@ -662,14 +627,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l1);
+                        showPreview(despues_image_temp_l1,14);
                     }
                 });
 
-                despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","15");
@@ -678,14 +643,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l2);
+                        showPreview(despues_image_temp_l2,15);
                     }
                 });
 
-                despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","16");
@@ -694,30 +659,31 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l3);
+                        showPreview(despues_image_temp_l3,16);
                     }
                 });
 
-                despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.e("presion_baja","17");
                         cred.save_data("image_type","17");
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, 1);
                     }
                 });
 
-                despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l1);
+                        showPreview(despues_image_presion_baja,17);
                     }
                 });
 
-                despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","18");
@@ -726,14 +692,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l2);
+                        showPreview(despues_image_presion_alta,18);
                     }
                 });
 
-                despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","19");
@@ -742,14 +708,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l3);
+                        showPreview(despues_image_amp_l1,19);
                     }
                 });
 
-                despues_icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","20");
@@ -758,14 +724,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l1);
+                        showPreview(despues_image_amp_l2,20);
                     }
                 });
 
-                despues_icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","21");
@@ -774,14 +740,14 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l2);
+                        showPreview(despues_image_amp_l3,21);
                     }
                 });
 
-                despues_icon_camera_temp_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","22");
@@ -790,10 +756,42 @@ public class FichaActivity extends AppCompatActivity {
                     }
                 });
 
-                despues_icon_gallery_temp_l3.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l3);
+                        showPreview(despues_image_volt_l1,22);
+                    }
+                });
+
+                despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","23");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_volt_l2,23);
+                    }
+                });
+
+                despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cred.save_data("image_type","24");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_image_volt_l3,24);
                     }
                 });
 
@@ -897,7 +895,7 @@ public class FichaActivity extends AppCompatActivity {
         btn_cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FichaActivity)ctx).finish();
+                ((FichaMantenimientoActivity)ctx).finish();
             }
         });
         Button btn_firma_tecnico = findViewById(R.id.btn_firma_tecnico);
@@ -906,6 +904,10 @@ public class FichaActivity extends AppCompatActivity {
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(image_falla.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto de la falla",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(image_temp_l1.isEmpty()){
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T1",Toast.LENGTH_SHORT).show();
                     return;
@@ -941,6 +943,11 @@ public class FichaActivity extends AppCompatActivity {
                 if(image_amp_l3.isEmpty())
                 {
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(despues_image_falla.isEmpty()){
+                    Toast.makeText(ctx,"Debe cargar foto después de la reparación de la falla",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -1218,7 +1225,7 @@ public class FichaActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void showPreview(String b64)
+    private void showPreview(String b64,final int element)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
@@ -1234,8 +1241,94 @@ public class FichaActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+        builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cleanPhoto(element);
+            }
+        });
         AlertDialog alert_preview = builder.create();
         alert_preview.show();
+    }
+
+    void cleanPhoto(int element)
+    {
+        switch (element){
+            case 1:
+                image_falla="";
+                icon_gallery_falla.setVisibility(View.GONE);
+                icon_camera_falla.setVisibility(View.VISIBLE);
+            break;
+            case 2:
+                image_temp_l1="";
+                icon_gallery_temp_l1.setVisibility(View.GONE);
+                icon_camera_temp_l1.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                image_temp_l2="";
+                icon_gallery_temp_l2.setVisibility(View.GONE);
+                icon_camera_temp_l2.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                image_temp_l3="";
+                icon_gallery_temp_l3.setVisibility(View.GONE);
+                icon_camera_temp_l3.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                image_presion_baja="";
+                icon_gallery_presion_baja.setVisibility(View.GONE);
+                icon_camera_presion_baja.setVisibility(View.VISIBLE);
+                break;
+            case 6:
+                image_presion_alta="";
+                icon_gallery_presion_alta.setVisibility(View.GONE);
+                icon_camera_presion_alta.setVisibility(View.VISIBLE);
+                break;
+            case 7:
+                image_amp_l1="";
+                icon_gallery_amp_l1.setVisibility(View.GONE);
+                icon_camera_amp_l1.setVisibility(View.VISIBLE);
+                break;
+            case 8:
+                image_amp_l2="";
+                icon_gallery_amp_l2.setVisibility(View.GONE);
+                icon_camera_amp_l2.setVisibility(View.VISIBLE);
+                break;
+            case 9:
+                image_amp_l3="";
+                icon_gallery_amp_l3.setVisibility(View.GONE);
+                icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                break;
+            case 10:
+                image_volt_l3="";
+                icon_gallery_volt_l3.setVisibility(View.GONE);
+                icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+            case 13:
+                break;
+            case 14:
+                break;
+            case 15:
+                break;
+            case 16:
+                break;
+            case 17:
+                break;
+            case 18:
+                break;
+            case 19:
+                break;
+            case 20:
+                break;
+            case 21:
+                break;
+            case 22:
+                break;
+        }
     }
 
     @Override
@@ -1258,7 +1351,7 @@ public class FichaActivity extends AppCompatActivity {
             String b64 = "";
             if(!image_type.equals("0")){
                 Bitmap image = (Bitmap) data.getExtras().get("data");
-                 b64= Image.convert(image);
+                b64= Image.convert(image);
             }
             switch (image_type){
                 case "0":
@@ -1269,183 +1362,6 @@ public class FichaActivity extends AppCompatActivity {
                         et_cond_nro_serie.setText(codigo);
                     break;
                 case "1":
-                    image_presion_baja = b64;
-                    Log.e("image_presion_baja","1");
-                    icon_camera_presion_baja.setVisibility(View.GONE);
-                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(image_presion_baja.isEmpty())
-                        System.out.println("image_presion_baja NULL");
-                    break;
-                case "2":
-                    image_presion_alta = b64;
-                    Log.e("image_presion_alta","2");
-                    icon_camera_presion_alta.setVisibility(View.GONE);
-                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(image_presion_alta.isEmpty())
-                        System.out.println("image_presion_alta NULL");
-                    break;
-                case "3":
-                    image_amp_l1 = b64;
-                    Log.e("image_amp_l1","3");
-                    icon_camera_amp_l1.setVisibility(View.GONE);
-                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "4":
-                    image_amp_l2 = b64;
-                    Log.e("image_amp_l2","4");
-                    icon_camera_amp_l2.setVisibility(View.GONE);
-                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(image_amp_l2.isEmpty())
-                        System.out.println("image_amp_l2 NULL");
-                    break;
-                case "5":
-                    image_amp_l3 = b64;
-                    Log.e("image_amp_l3","5");
-                    icon_camera_amp_l3.setVisibility(View.GONE);
-                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(image_amp_l3.isEmpty())
-                        System.out.println("image_amp_l3 NULL");
-                    break;
-                case "6":
-                    image_volt_l1 = b64;
-                    Log.e("image_volt_l1","6");
-                    icon_camera_volt_l1.setVisibility(View.GONE);
-                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(image_volt_l1.isEmpty())
-                        System.out.println("image_volt_l1 NULL");
-                    break;
-                case "7":
-                    image_volt_l2 = b64;
-                    Log.e("image_volt_l2","7");
-                    icon_camera_volt_l2.setVisibility(View.GONE);
-                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(image_volt_l2.isEmpty())
-                        System.out.println("image_volt_l2 NULL");
-                    break;
-                case "8":
-                    image_volt_l3 = b64;
-                    Log.e("image_volt_l3","8");
-                    icon_camera_volt_l3.setVisibility(View.GONE);
-                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(image_volt_l3.isEmpty())
-                        System.out.println("image_volt_l3 NULL");
-                    break;
-                case "9":
-                    image_temp_l1 = b64;
-                    Log.e("image_temp_l1","9");
-                    icon_camera_temp_l1.setVisibility(View.GONE);
-                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(image_temp_l1.isEmpty())
-                        System.out.println("image_temp_l1 NULL");
-                    break;
-                case "10":
-                    image_temp_l2 = b64;
-                    Log.e("image_temp_l2","10");
-                    icon_camera_temp_l2.setVisibility(View.GONE);
-                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(image_temp_l2.isEmpty())
-                        System.out.println("image_temp_l2 NULL");
-                    break;
-                case "11":
-                    image_temp_l3 = b64;
-                    Log.e("image_temp_l3","11");
-                    icon_camera_temp_l3.setVisibility(View.GONE);
-                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                    if(image_temp_l3.isEmpty())
-                        System.out.println("image_temp_l3 NULL");
-                    break;
-                    //despues
-                case "12":
-                    despues_image_presion_baja = b64;
-                    Log.e("image_presion_baja","12");
-                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_baja.isEmpty())
-                        System.out.println("despues_image_presion_baja NULL");
-                    break;
-                case "13":
-                    despues_image_presion_alta = b64;
-                    Log.e("despues_image_presion_alta","13");
-                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_alta.isEmpty())
-                        System.out.println("despues_image_presion_alta NULL");
-                    break;
-                case "14":
-                    despues_image_amp_l1 = b64;
-                    Log.e("image_amp_l1","14");
-                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "15":
-                    despues_image_amp_l2 = b64;
-                    Log.e("despues_image_amp_l2","15");
-                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l2.isEmpty())
-                        System.out.println("despues_image_amp_l2 NULL");
-                    break;
-                case "16":
-                    despues_image_amp_l3 = b64;
-                    Log.e("despues_image_amp_l3","16");
-                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l3.isEmpty())
-                        System.out.println("despues_image_amp_l3 NULL");
-                    break;
-                case "17":
-                    despues_image_volt_l1 = b64;
-                    Log.e("despues_image_volt_l1","17");
-                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l1.isEmpty())
-                        System.out.println("despues_image_volt_l1 NULL");
-                    break;
-                case "18":
-                    despues_image_volt_l2 = b64;
-                    Log.e("despues_image_volt_l2","18");
-                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l2.isEmpty())
-                        System.out.println("despues_image_volt_l2 NULL");
-                    break;
-                case "19":
-                    despues_image_volt_l3 = b64;
-                    Log.e("despues_image_volt_l3","19");
-                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l3.isEmpty())
-                        System.out.println("despues_image_volt_l3 NULL");
-                    break;
-                case "20":
-                    despues_image_temp_l1 = b64;
-                    Log.e("despues_image_temp_l1","20");
-                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l1.isEmpty())
-                        System.out.println("despues_image_temp_l1 NULL");
-                    break;
-                case "21":
-                    despues_image_temp_l2 = b64;
-                    Log.e("despues_image_temp_l2","21");
-                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l2.isEmpty())
-                        System.out.println("despues_image_temp_l2 NULL");
-                    break;
-                case "22":
-                    despues_image_temp_l3 = b64;
-                    Log.e("despues_image_temp_l3","22");
-                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l3.isEmpty())
-                        System.out.println("despues_image_temp_l3 NULL");
-                    break;
-                case "23":
                     image_falla = b64;
                     Log.e("image_falla","23");
                     icon_camera_falla.setVisibility(View.GONE);
@@ -1453,13 +1369,191 @@ public class FichaActivity extends AppCompatActivity {
                     if(image_falla.isEmpty())
                         System.out.println("image_falla NULL");
                     break;
-                case "24":
+                case "2":
+                    image_temp_l1 = b64;
+                    Log.e("image_temp_l1","9");
+                    icon_camera_temp_l1.setVisibility(View.GONE);
+                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(image_temp_l1.isEmpty())
+                        System.out.println("image_temp_l1 NULL");
+                    break;
+                case "3":
+                    image_temp_l2 = b64;
+                    Log.e("image_temp_l2","10");
+                    icon_camera_temp_l2.setVisibility(View.GONE);
+                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(image_temp_l2.isEmpty())
+                        System.out.println("image_temp_l2 NULL");
+                    break;
+                case "4":
+                    image_temp_l3 = b64;
+                    Log.e("image_temp_l3","11");
+                    icon_camera_temp_l3.setVisibility(View.GONE);
+                    icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(image_temp_l3.isEmpty())
+                        System.out.println("image_temp_l3 NULL");
+                    break;
+                case "5":
+                    image_presion_baja = b64;
+                    Log.e("image_presion_baja","1");
+                    icon_camera_presion_baja.setVisibility(View.GONE);
+                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(image_presion_baja.isEmpty())
+                        System.out.println("image_presion_baja NULL");
+                    break;
+                case "6":
+                    image_presion_alta = b64;
+                    Log.e("image_presion_alta","2");
+                    icon_camera_presion_alta.setVisibility(View.GONE);
+                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(image_presion_alta.isEmpty())
+                        System.out.println("image_presion_alta NULL");
+                    break;
+                case "7":
+                    image_amp_l1 = b64;
+                    Log.e("image_amp_l1","3");
+                    icon_camera_amp_l1.setVisibility(View.GONE);
+                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(image_amp_l1.isEmpty())
+                        System.out.println("image_amp_l1 NULL");
+                    break;
+                case "8":
+                    image_amp_l2 = b64;
+                    Log.e("image_amp_l2","4");
+                    icon_camera_amp_l2.setVisibility(View.GONE);
+                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(image_amp_l2.isEmpty())
+                        System.out.println("image_amp_l2 NULL");
+                    break;
+                case "9":
+                    image_amp_l3 = b64;
+                    Log.e("image_amp_l3","5");
+                    icon_camera_amp_l3.setVisibility(View.GONE);
+                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(image_amp_l3.isEmpty())
+                        System.out.println("image_amp_l3 NULL");
+                    break;
+                case "10":
+                    image_volt_l1 = b64;
+                    Log.e("image_volt_l1","6");
+                    icon_camera_volt_l1.setVisibility(View.GONE);
+                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(image_volt_l1.isEmpty())
+                        System.out.println("image_volt_l1 NULL");
+                    break;
+                case "11":
+                    image_volt_l2 = b64;
+                    Log.e("image_volt_l2","7");
+                    icon_camera_volt_l2.setVisibility(View.GONE);
+                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(image_volt_l2.isEmpty())
+                        System.out.println("image_volt_l2 NULL");
+                    break;
+                case "12":
+                    image_volt_l3 = b64;
+                    Log.e("image_volt_l3","8");
+                    icon_camera_volt_l3.setVisibility(View.GONE);
+                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(image_volt_l3.isEmpty())
+                        System.out.println("image_volt_l3 NULL");
+                    break;
+
+                //despues
+                case "13":
                     despues_image_falla = b64;
                     Log.e("despues_image_falla","24");
                     despues_icon_camera_falla.setVisibility(View.GONE);
                     despues_icon_gallery_falla.setVisibility(View.VISIBLE);
                     if(despues_image_falla.isEmpty())
                         System.out.println("despues_image_falla NULL");
+                    break;
+                case "14":
+                    despues_image_temp_l1 = b64;
+                    Log.e("despues_image_temp_l1","20");
+                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l1.isEmpty())
+                        System.out.println("despues_image_temp_l1 NULL");
+                    break;
+                case "15":
+                    despues_image_temp_l2 = b64;
+                    Log.e("despues_image_temp_l2","21");
+                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l2.isEmpty())
+                        System.out.println("despues_image_temp_l2 NULL");
+                    break;
+                case "16":
+                    despues_image_temp_l3 = b64;
+                    Log.e("despues_image_temp_l3","22");
+                    despues_icon_camera_temp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_temp_l3.isEmpty())
+                        System.out.println("despues_image_temp_l3 NULL");
+                    break;
+                case "17":
+                    despues_image_presion_baja = b64;
+                    Log.e("image_presion_baja","12");
+                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_baja.isEmpty())
+                        System.out.println("despues_image_presion_baja NULL");
+                    break;
+                case "18":
+                    despues_image_presion_alta = b64;
+                    Log.e("despues_image_presion_alta","13");
+                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(despues_image_presion_alta.isEmpty())
+                        System.out.println("despues_image_presion_alta NULL");
+                    break;
+                case "19":
+                    despues_image_amp_l1 = b64;
+                    Log.e("image_amp_l1","14");
+                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l1.isEmpty())
+                        System.out.println("image_amp_l1 NULL");
+                    break;
+                case "20":
+                    despues_image_amp_l2 = b64;
+                    Log.e("despues_image_amp_l2","15");
+                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l2.isEmpty())
+                        System.out.println("despues_image_amp_l2 NULL");
+                    break;
+                case "21":
+                    despues_image_amp_l3 = b64;
+                    Log.e("despues_image_amp_l3","16");
+                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_amp_l3.isEmpty())
+                        System.out.println("despues_image_amp_l3 NULL");
+                    break;
+                case "22":
+                    despues_image_volt_l1 = b64;
+                    Log.e("despues_image_volt_l1","17");
+                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l1.isEmpty())
+                        System.out.println("despues_image_volt_l1 NULL");
+                    break;
+                case "23":
+                    despues_image_volt_l2 = b64;
+                    Log.e("despues_image_volt_l2","18");
+                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l2.isEmpty())
+                        System.out.println("despues_image_volt_l2 NULL");
+                    break;
+                case "24":
+                    despues_image_volt_l3 = b64;
+                    Log.e("despues_image_volt_l3","19");
+                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(despues_image_volt_l3.isEmpty())
+                        System.out.println("despues_image_volt_l3 NULL");
                     break;
             }
         }
@@ -1623,12 +1717,12 @@ public class FichaActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(1);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         new Utils().sendFicha(tienda_id,urgencia_id,ctx);
-                                        ((FichaActivity)ctx).finish();
+                                        ((FichaMantenimientoActivity)ctx).finish();
                                     }
                                 }, 5000);
                             }
@@ -1911,7 +2005,7 @@ public class FichaActivity extends AppCompatActivity {
                                     equipo_id= (String)ob.get("equipo_id");
                                 }
                                 System.out.println("getEquipo_equipo_contador: "+equipo_count);
-                                viewDialog.hideDialog(5);
+                                viewDialog.hideDialog(1);
                                 if(equipo_count==0){
                                     showModalRegisterEquipo();
                                 }else{
@@ -2840,7 +2934,7 @@ public class FichaActivity extends AppCompatActivity {
             permisoCamaraConcedido = true;
         } else {
             // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(FichaActivity.this,
+            ActivityCompat.requestPermissions(FichaMantenimientoActivity.this,
                     new String[]{Manifest.permission.CAMERA},
                     CODIGO_PERMISOS_CAMARA);
         }

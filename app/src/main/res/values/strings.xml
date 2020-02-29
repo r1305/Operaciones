@@ -40,6 +40,9 @@
     <string name="register_equipo_url">ocupa/urgencia/registerEquipo.php</string>
     <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
 
+    <!-- Mantenimientos -->
+    <string name="getMantenimientos_url">ocupa/mantenimiento/getMantenimientos.php</string>
+
     <string name="pdf_url">https://uezuperu.com/app/files/pdf/urgencias/</string>
 
     <string name="equipo_string_marca"><u>Marca:</u></string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -76,7 +77,7 @@
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
                             android:id="@+id/ficha_modelo"
-                            android:layout_weight="0.6"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="- -"
@@ -114,7 +115,7 @@
                             android:textSize="15sp"/>
                     </LinearLayout>
 
-                    <!-- Numero de Serie -->
+                    <!-- Refrigerante -->
                     <LinearLayout
                         android:layout_weight="0.7"
                         android:layout_width="match_parent"
@@ -124,19 +125,19 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="N° Serie:"
+                            android:text="Refrigerante:"
                             android:gravity="center|start"
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
 
                         <TextView
-                            android:id="@+id/ficha_nro_serie"
+                            android:id="@+id/ficha_refrigerante"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="0.6"
-                            android:gravity="center|start"
                             android:text="- -"
-                            android:textSize="15sp" />
+                            android:gravity="center|start"
+                            android:textSize="15sp"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -184,7 +185,7 @@
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
                             android:id="@+id/ficha_voltaje"
-                            android:layout_weight="0.6"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="- -"
@@ -199,7 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-                    <!-- REFRIGERANTE -->
+                    <!-- NRO SERIE -->
                     <LinearLayout
                         android:layout_weight="1"
                         android:layout_width="match_parent"
@@ -209,18 +210,19 @@
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Refrigerante:"
+                            android:text="Nro. Serie:"
                             android:gravity="center|start"
                             android:textSize="15sp"
                             android:fontFamily="@font/gotham_medium"/>
                         <TextView
-                            android:id="@+id/ficha_refrigerante"
-                            android:layout_weight="0.7"
+                            android:id="@+id/ficha_nro_serie"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="- -"
+                            android:layout_weight="0.4"
                             android:gravity="center|start"
-                            android:textSize="15sp"/>
+                            android:text="- -"
+                            android:textSize="15sp" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -303,7 +305,9 @@
                         android:id="@+id/spinner_motivo"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/verdePastel"
+                        app:jrs_icon_tint="@color/verdePastel"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -319,7 +323,9 @@
                         android:id="@+id/spinner_diagnostico"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/verdePastel"
+                        app:jrs_icon_tint="@color/verdePastel"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

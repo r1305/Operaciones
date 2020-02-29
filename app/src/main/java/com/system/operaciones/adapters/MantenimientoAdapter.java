@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,10 +33,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.system.operaciones.R;
-import com.system.operaciones.activities.FichaActivity;
-import com.system.operaciones.activities.InstalacionDetailActivity;
-import com.system.operaciones.activities.MantenimientoDetailActivity;
-import com.system.operaciones.activities.MantenimientosActivity;
+import com.system.operaciones.activities.FichaMantenimientoActivity;
+import com.system.operaciones.activities.FichaUrgenciaActivity;
 import com.system.operaciones.activities.MantenimientosActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
@@ -74,14 +71,11 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
     String[] equipos_ids;
     String equipo_id;
 
-    ArrayAdapter<String> motivo_adapter;
-    String[] motivo_id_adapter;
-
     private String[] personal_ids;
     private JRSpinner personal_spinner;
     private String personal_id;
 
-    String urgencia_id = "0";
+    String mantenimiento_id = "0";
 
     public MantenimientoAdapter(List<JSONObject> l) {
         this.l = l;
@@ -98,7 +92,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
-        urgencia_id = (String)ob.get("id");
+        mantenimiento_id = (String)ob.get("id");
         final String status = (String)ob.get("status");
         Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
 
@@ -112,8 +106,8 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ctx.startActivity(new Intent(ctx, FichaActivity.class)
-                            .putExtra("urgencia",(String)l.get(position).get("id"))
+                    ctx.startActivity(new Intent(ctx, FichaMantenimientoActivity.class)
+                            .putExtra("mantenimiento",(String)l.get(position).get("id"))
                             .putExtra("tienda_id",((MantenimientosActivity)ctx).getTienda_id()));
                 }
             });
@@ -123,8 +117,8 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    urgencia_id = (String)l.get(position).get("id");
-                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+urgencia_id+".pdf";
+                    mantenimiento_id = (String)l.get(position).get("id");
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+mantenimiento_id+".pdf";
                     System.out.println("pdf_url: "+pdf_url);
                     Utils.openPdf(ctx,pdf_url);
                 }
@@ -135,7 +129,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             @Override
             public void onClick(View v) {
                 JSONObject json = l.get(holder.getAdapterPosition());
-                urgencia_id = (String)json.get("id");
+                mantenimiento_id = (String)json.get("id");
                 System.out.println("holder_id: "+position);
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 Rect displayRectangle = new Rect();
@@ -160,8 +154,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
                 alertDialog = builder.create();
                 getEquipos(((MantenimientosActivity)ctx).getTienda_id());
-                getMotivos();
-                getLastMantenimiento(((MantenimientosActivity)ctx).getTienda_id());
+                getContratistas();
                 alertDialog.show();
                 btn_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -185,13 +178,10 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                     @Override
                     public void onClick(View v) {
                         Log.e("contratista_id",spinner_id+"");
-                        motivos_spin.getSelectedItem();
-                        long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
-                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id+"")];
                         str_fecha = dialog_fecha.getText().toString();
                         str_hora = dialog_hora.getText().toString();
 
-                        updateUrgencia(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,urgencia_id);
+                        updateMantenimiento(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,mantenimiento_id);
                     }
                 });
 
@@ -321,7 +311,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                 System.out.println("contratistas_data_ids: "+data_id.length);
                                 personal_ids = data_id;
                                 personal_spinner.setItems(data);
-                                getUrgencia(urgencia_id);
+                                getMantenimiento(mantenimiento_id);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -333,115 +323,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 System.out.println("getContratistas_error: " + error.getMessage());
             }
         });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getTecnicos()
-    {
-        tipo_proveedor=2;
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTecnicos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getTecnicos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("tecnico");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                personal_ids = data_id;
-                                personal_spinner.setItems(data);
-                                personal_spinner.setHint("Tecnico");
-                                getUrgencia(urgencia_id);
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getTecnicos_error: " + error.getMessage());
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getLastMantenimiento(final String tienda_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
-        Log.i("getLastMantenimiento_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getLastMantenimiento_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                                getContratistas();
-                            } else {
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
-                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
-                                    if(last_mantenimiento<=7)
-                                    {
-                                        getContratistas();
-                                    }else{
-                                        getTecnicos();
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            getContratistas();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getLastMantenimiento_error: " + error.getMessage());
-                getContratistas();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                return params;
-            }
-        };
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -506,62 +387,10 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         queue.add(stringRequest);
     }
 
-    private void getMotivos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        Log.i("getMotivos_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("motivo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-
-                                motivo_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
-                                motivo_id_adapter = data_id;
-                                motivos_spin.setAdapter(motivo_adapter);
-                                motivo_adapter.notifyDataSetChanged();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getUrgencia(final String id)
+    private void getMantenimiento(final String id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencia_url);
-        Log.i("getMotivos_url",url);
+        Log.i("getMantenimiento_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -569,7 +398,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
+                        System.out.println("getMantenimiento_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -587,13 +416,13 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Log.e("getUrgencia_error",e.getMessage());
+                            System.out.println("getMantenimiento_error: "+e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
+                System.out.println("getMantenimiento_error: " + error.getMessage());
             }
         }){
             @Override
@@ -609,7 +438,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         queue.add(stringRequest);
     }
 
-    private void updateUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
+    private void updateMantenimiento(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
     {
         System.out.println("observaciones: "+observaciones);
         System.out.println("equipo_id: "+equipo_id);
@@ -635,7 +464,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((MantenimientosActivity)ctx).getUrgencias(((MantenimientosActivity) ctx).getTienda_id());
+                                ((MantenimientosActivity)ctx).getMantenimientos(((MantenimientosActivity) ctx).getTienda_id());
                                 alertDialog.dismiss();
                             }
                         } catch (Exception e) {
@@ -652,7 +481,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", id);
+                params.put("mantenimiento_id", id);
                 params.put("equipo_id", equipo_id);
                 params.put("observaciones", observaciones);
                 params.put("fecha", fecha);

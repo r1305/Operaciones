@@ -34,7 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.system.operaciones.R;
-import com.system.operaciones.activities.FichaActivity;
+import com.system.operaciones.activities.FichaUrgenciaActivity;
 import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
@@ -110,7 +110,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ctx.startActivity(new Intent(ctx, FichaActivity.class)
+                    ctx.startActivity(new Intent(ctx, FichaUrgenciaActivity.class)
                             .putExtra("urgencia",(String)l.get(position).get("id"))
                             .putExtra("tienda_id",((UrgenciasActivity)ctx).getTienda_id()));
                 }
