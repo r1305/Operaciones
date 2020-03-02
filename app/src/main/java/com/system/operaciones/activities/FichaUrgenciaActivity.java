@@ -81,7 +81,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     //DESPUES
     private ImageView despues_icon_camera_falla,despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_temp_l3,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
     private ImageView despues_icon_gallery_falla,despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_temp_l3,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
-    String despues_image_falla="",despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
+    String despues_image_falla="",despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_temp_l3="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="";
     String et_despues_temp_l1="0",et_despues_temp_l2="0",et_despues_temp_l3="0",et_despues_presion_baja="0",et_despues_presion_alta="0",et_despues_amp_l1="0",et_despues_amp_l2="0",et_despues_amp_l3="0",et_despues_volt_l1="0",et_despues_volt_l2="0",et_despues_volt_l3="0";
     private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_temp_l3,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
 
@@ -519,6 +519,17 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        et_despues_temp_l1=temp_l1.getText().toString();
+                        et_despues_temp_l2=temp_l2.getText().toString();
+                        et_despues_temp_l3=temp_l3.getText().toString();
+                        et_despues_presion_baja=presion_baja.getText().toString();
+                        et_despues_presion_alta=presion_alta.getText().toString();
+                        et_despues_amp_l1=amp_l1.getText().toString();
+                        et_despues_amp_l2=amp_l2.getText().toString();
+                        et_despues_amp_l3=amp_l3.getText().toString();
+                        et_despues_volt_l1=volt_l1.getText().toString();
+                        et_despues_volt_l2=volt_l2.getText().toString();
+                        et_despues_volt_l3=volt_l3.getText().toString();
                         alertDialog.dismiss();
                         Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                     }
@@ -530,7 +541,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_camera_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("falla","13");
+                        Log.e("despues_falla","13");
                         cred.save_data("image_type","13");
                         openChooser();
                     }
@@ -591,7 +602,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("presion_baja","17");
+                        Log.e("despues_presion_baja","17");
                         cred.save_data("image_type","17");
                         openChooser();
                     }
@@ -872,7 +883,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             cargo.setError(null);
                             cargo_cliente = cargo.getText().toString().trim();
                         }
-                        if(!image_signature_cliente.isEmpty() && !name_cliente.isEmpty() && !dni_cliente.isEmpty() && !cargo_cliente.isEmpty())
+                        if(image_signature_cliente!=null && !image_signature_cliente.isEmpty() && !name_cliente.isEmpty() && !dni_cliente.isEmpty() && !cargo_cliente.isEmpty())
                         {
                             Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
@@ -1329,6 +1340,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 params.put("name_cliente",name_cliente);
                 params.put("dni_cliente",dni_cliente);
                 params.put("cargo_cliente",cargo_cliente);
+
+                params.put("txt_diagnostico",et_diagnostico.getText().toString());
                 return params;
             }
         };
@@ -2711,13 +2724,13 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         despues_presion_alta.setText(et_despues_presion_alta);
         despues_presion_baja.setText(et_despues_presion_baja);
 
-        despues_amp_l1.setText(et_amp_l1);
-        despues_amp_l2.setText(et_amp_l2);
-        despues_amp_l3.setText(et_amp_l3);
+        despues_amp_l1.setText(et_despues_amp_l1);
+        despues_amp_l2.setText(et_despues_amp_l2);
+        despues_amp_l3.setText(et_despues_amp_l3);
 
-        despues_volt_l1.setText(et_volt_l1);
-        despues_volt_l2.setText(et_volt_l2);
-        despues_volt_l3.setText(et_volt_l3);
+        despues_volt_l1.setText(et_despues_volt_l1);
+        despues_volt_l2.setText(et_despues_volt_l2);
+        despues_volt_l3.setText(et_despues_volt_l3);
 
         //Falla
         if(!despues_image_falla.isEmpty()){

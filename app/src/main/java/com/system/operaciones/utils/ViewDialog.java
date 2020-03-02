@@ -8,11 +8,9 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.google.auto.value.AutoValue;
 import com.system.operaciones.R;
 
 public class ViewDialog {
@@ -58,6 +56,7 @@ public class ViewDialog {
 
     //..also create a method which will hide the dialog when some work is done
     public void hideDialog(@NonNull double timer){
+        System.out.println("loader "+(timer==5?"edit":"otros"));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

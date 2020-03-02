@@ -19,6 +19,7 @@
     <string name="getDiagnosticos_url">ocupa/urgencia/getDiagnosticos.php</string>
     <string name="getSolucion_url">ocupa/urgencia/getSolucion.php</string>
     <string name="getEquipo_url">ocupa/urgencia/getEquipo.php</string>
+    <string name="getEquipoById_url">ocupa/urgencia/getEquipoById.php</string>
     <string name="getMarcas_url">ocupa/urgencia/getMarcas.php</string>
     <string name="getModelos_url">ocupa/urgencia/getModelos.php</string>
     <string name="getCondensadoraModelos_url">ocupa/urgencia/getCondensadoraModelos.php</string>

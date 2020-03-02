@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:gravity="center"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_marginTop="6dp"
+        android:text="Actualizar Equipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/verdePastel"/>
+    <!-- Evaporadora -->
+    <LinearLayout
+        android:id="@+id/linear_evaporadora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:text="Evaporadora"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:fontFamily="@font/gotham_medium"
+            android:textColor="@color/negro"/>
+
+        <jrizani.jrspinner.JRSpinner
+            android:id="@+id/spinner_modelo"
+            android:textAlignment="textStart"
+            android:hint="Modelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:jrs_icon_tint="@color/verdePastel"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="9dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_marcas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+
+            />
+
+        <Spinner
+            android:id="@+id/spinner_btus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_tipos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_voltajes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_fases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_refrigerantes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+            <ImageView
+                android:id="@+id/icon_evap_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_code"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/nro_serie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Nro. Serie"
+                android:inputType="textCapCharacters"
+                android:gravity="center"
+                android:editable="false"
+                android:clickable="false"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Condensadora -->
+    <LinearLayout
+        android:id="@+id/linear_condensadora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp"
+        android:visibility="gone">
+
+        <TextView
+            android:text="Condensadora"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:fontFamily="@font/gotham_medium"
+            android:textColor="@color/negro"/>
+
+        <jrizani.jrspinner.JRSpinner
+            android:id="@+id/spinner_cond_modelo"
+            android:textAlignment="textStart"
+            android:hint="Modelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:jrs_icon_tint="@color/verdePastel"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="9dp"/>
+
+        <Spinner
+            android:id="@+id/spinner_cond_marcas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_cond_btus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_cond_tipos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_cond_voltajes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_cond_fases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_cond_refrigerantes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:backgroundTint="@color/verdePastel"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+            <ImageView
+                android:id="@+id/icon_cond_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_code"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/cond_nro_serie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Nro. Serie"
+                android:inputType="textCapCharacters"
+                android:editable="false"
+                android:clickable="false"
+                android:gravity="center"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!-- Botones -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_atras"
+            android:text="Atrás"
+            android:layout_weight="1"
+            android:background="@color/plomoBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_cancelar"
+            android:text="Cancelar"
+            android:layout_weight="1"
+            android:background="@color/plomoBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_siguiente"
+            android:text="Siguiente"
+            android:layout_weight="1"
+            android:background="@color/verdePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_registrar"
+            android:visibility="gone"
+            android:text="Actualizar"
+            android:layout_weight="1"
+            android:background="@color/verdePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

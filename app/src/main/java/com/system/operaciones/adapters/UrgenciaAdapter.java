@@ -99,6 +99,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         final String status = (String)ob.get("status");
         Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
 
+        holder.number.setText((String)ob.get("urgencia"));
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
@@ -269,12 +270,13 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView registro,fecha_hora_atencion,contratista,cierre;
+        TextView registro,fecha_hora_atencion,contratista,cierre,number;
         LinearLayout linear_full;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_urgencia);
+            number = itemView.findViewById(R.id.urgencia_number);
             icon_pencil = itemView.findViewById(R.id.icon_pencil);
             registro = itemView.findViewById(R.id.item_urgencia_registro);
             fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
