@@ -39,6 +39,7 @@
     <string name="crear_urgencia_url">ocupa/urgencia/register.php</string>
     <string name="crear_ficha_url">ocupa/urgencia/createFicha.php</string>
     <string name="register_equipo_url">ocupa/urgencia/registerEquipo.php</string>
+    <string name="update_datos_equipo_url">ocupa/urgencia/updateDatosEquipo.php</string>
     <string name="get_last_mantenimiento_url">ocupa/mantenimiento/getLastMantenimiento.php</string>
 
     <!-- Mantenimientos -->

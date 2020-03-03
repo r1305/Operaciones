@@ -165,8 +165,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         setTienda_id(tienda_id);
         getTienda(tienda_id);
         getUrgencias(tienda_id);
-        getEquipos(tienda_id);
-        getEquiposTienda(tienda_id);
+        getEquipos();
+        getEquiposTienda();
 
         datos.setVisibility(View.VISIBLE);
         tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -314,7 +314,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 View dialogView = inflater.inflate(R.layout.dialog_new_urgencia, null);
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
-                getEquipos(tienda_id);
+                getEquipos();
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
                 personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
                     @Override
@@ -700,7 +700,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getEquipos(final String tienda_id)
+    public void getEquipos()
     {
         Log.e("tienda_id",tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
@@ -769,7 +769,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getEquiposTienda(final String tienda_id)
+    public void getEquiposTienda()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
         Log.i("getEquiposTienda_url",url);
@@ -790,10 +790,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                equipos_l.clear();
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     equipos_l.add(ob);
                                  }
+                                equipos_adapter.notifyDataSetChanged();
                                 viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
@@ -1830,7 +1832,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((UrgenciasActivity)ctx).getEquipos(tienda_id);
+                                ((UrgenciasActivity)ctx).getEquipos();
                                 System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
                             }
                         } catch (Exception e) {

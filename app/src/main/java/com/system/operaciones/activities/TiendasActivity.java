@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.system.operaciones.R;
 import com.system.operaciones.adapters.ClienteAdapter;
 import com.system.operaciones.adapters.TiendaAdapter;
@@ -41,6 +46,9 @@ public class TiendasActivity extends AppCompatActivity {
     List<JSONObject> l=new ArrayList<>();
     TiendaAdapter adapter;
     ViewDialog viewDialog;
+    MaterialSearchBar search_bar;
+    String filtro = "";
+    String cliente = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,15 +60,33 @@ public class TiendasActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tiendas");
+        cliente = cred.getData("key_cliente");
 
         recycler= findViewById(R.id.recycler_view_tiendas);
+        search_bar = findViewById(R.id.search_tiendas);
+        search_bar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getTiendas(cliente,s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         recycler.setLayoutManager(new LinearLayoutManager(ctx));
         adapter=new TiendaAdapter(l);
         recycler.setAdapter(adapter);
-        l.clear();
 
-        String cliente = cred.getData("key_cliente");
-        System.out.println(cliente);
+        l.clear();
+        adapter.notifyDataSetChanged();
         viewDialog.showDialog();
         getTiendas(cliente,"");
     }
@@ -73,6 +99,8 @@ public class TiendasActivity extends AppCompatActivity {
 
     public void getTiendas(final String cliente_id,final String filtro)
     {
+        l.clear();
+        adapter.notifyDataSetChanged();
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTiendas_url);
         Log.i("getTiendas_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -92,6 +120,7 @@ public class TiendasActivity extends AppCompatActivity {
                                 viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                                 l.clear();
+                                adapter.notifyDataSetChanged();
                             } else {
                                 l.clear();
                                 for (Object o : respuesta) {

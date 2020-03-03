@@ -40,6 +40,7 @@ import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.ViewDialog;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -58,6 +59,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     Context ctx;
     List<JSONObject> l = new ArrayList<>();
     final String tienda_id = "";
+    JSONObject equipo;
     public EquipoAdapter(List<JSONObject> l) {
         this.l = l;
     }
@@ -133,11 +135,13 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     Spinner spinner_cond_marcas;
     ArrayAdapter<String> marcas_cond_adapter;
     String[] marcas_cond_id;
-
-    JRSpinner spinner_modelos;
+    
+    ArrayAdapter<String> modelo_adapter;
+    SearchableSpinner spinner_modelos;
     String[] modelos_ids;
 
-    JRSpinner spinner_cond_modelos;
+    ArrayAdapter<String>modelo_cond_adapter;
+    SearchableSpinner spinner_cond_modelos;
     String[] modelos_cond_ids;
 
     Spinner spinner_btus;
@@ -192,7 +196,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     {
         viewDialog = new ViewDialog((UrgenciasActivity)ctx);
         viewDialog.showDialog();
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_update_equipo, null);
         builder.setView(dialogView);
@@ -240,13 +244,15 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         linear_evaporadora = dialogView.findViewById(R.id.linear_evaporadora);
         linear_condensadora = dialogView.findViewById(R.id.linear_condensadora);
 
-        getMarcas();
         getModelos();
+        getMarcas();
         getBtus();
         getTipos();
         getVoltajes();
         getFases();
         getRefrigerantes();
+        getCondensadoraModelos();
+        getCondensadoraTipos();
 
         spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -272,20 +278,30 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
             }
         });
-        spinner_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+        spinner_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 modelo_id = modelos_ids[position];
-                System.out.println("modelo_id: "+modelo_id);
             }
-        });
-        spinner_cond_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+
             @Override
-            public void onItemClick(int position) {
-                cond_modelo_id = modelos_cond_ids[position];
-                System.out.println("cond_modelo_id: "+cond_modelo_id);
+            public void onNothingSelected(AdapterView<?> parent) {
+                modelo_id = "-1";
             }
         });
+
+        spinner_cond_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cond_modelo_id = modelos_cond_ids[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                cond_modelo_id = "-1";
+            }
+        });
+
         spinner_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -406,12 +422,12 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             }
         });
 
-        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create();
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateEquipo();
+                updateEquipo(alertDialog);
             }
         });
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
@@ -423,8 +439,10 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                 btn_registrar.setVisibility(View.VISIBLE);
                 btn_cancelar.setVisibility(View.GONE);
                 btn_atras.setVisibility(View.VISIBLE);
-                getCondensadoraTipos();
-                getCondensadoraModelos();
+
+                et_cond_nro_serie.setText((String)equipo.get("cond_nro_serie"));
+                int cond_btu_position = findBtuCond((String)equipo.get("cond_btu_id"));
+                spinner_cond_btus.setSelection(cond_btu_position,true);
             }
         });
         btn_atras.setOnClickListener(new View.OnClickListener() {
@@ -445,13 +463,19 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             }
         });
         viewDialog.hideDialog(2);
-        getEquipo(equipo_id);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 alertDialog.show();
             }
         }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getEquipo(equipo_id);
+            }
+        }, 2000);
+
     }
 
     private void escanear() {
@@ -545,7 +569,10 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_modelos.setItems(data);
+                                System.out.println("data_mpdelos_length: "+data.length);
+                                modelo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_modelos.setAdapter(modelo_adapter);
+                                modelo_adapter.notifyDataSetChanged();
                                 modelos_ids = data_id;
                             }
                         } catch (Exception e) {
@@ -594,7 +621,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_cond_modelos.setItems(data);
+                                modelo_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_cond_modelos.setAdapter(modelo_cond_adapter);
+                                modelo_cond_adapter.notifyDataSetChanged();
                                 modelos_cond_ids = data_id;
                             }
                         } catch (Exception e) {
@@ -693,9 +722,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                                 int i = 0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    String btu = (String)ob.get("tipo");
+                                    String tipo = (String)ob.get("tipo");
                                     String id = (String)ob.get("id");
-                                    data[i] = btu;
+                                    data[i] = tipo;
                                     data_id[i] = id;
                                     i++;
                                 }
@@ -948,11 +977,11 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     String refrigerante_id,cond_refrigerante_id="";
     String nro_serie,cond_nro_serie="";
 
-    private void updateEquipo()
+    private void updateEquipo(final AlertDialog alertDialog)
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_datos_equipo_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -960,7 +989,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("registerEquipo_response: " + response);
+                        System.out.println("updateDatosEquipo_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -969,8 +998,8 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((UrgenciasActivity)ctx).getEquipos(tienda_id);
-                                System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
+                                ((UrgenciasActivity)ctx).getEquiposTienda();
+                                alertDialog.dismiss();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -980,22 +1009,18 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                System.out.println("registerEquipo_error: " + error);
+                System.out.println("updateDatosEquipo_error: " + error);
             }
         }){
             @Override
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
+                params.put("equipo_id", (String)equipo.get("id"));
                 //Evaporadora
                 params.put("marca_id", marca_id);
                 params.put("modelo_id", modelo_id);
-                params.put("btu_id", btu_id);
                 params.put("tipo_id", tipo_id);
-                params.put("voltaje_id", voltaje_id);
-                params.put("fase_id", fase_id);
-                params.put("refrigerante_id", refrigerante_id);
                 params.put("nro_serie", nro_serie);
                 //Condensadora
                 params.put("cond_marca_id", cond_marca_id);
@@ -1016,6 +1041,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     private void getEquipo(final String equipo_id)
     {
+        System.out.println("equipo_id: "+equipo_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipoById_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -1034,15 +1060,34 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for(Object o : respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    System.out.println("equipo; "+ob);
-                                    et_nro_serie.setText((String)ob.get("evap_nro_serie"));
-                                    et_cond_nro_serie.setText((String)ob.get("cond_nro_serie"));
-                                    int evap_btu_position = findBtuEvap((String)ob.get("evap_btu_id"));
+                                    equipo = (JSONObject)o;
+                                    System.out.println("equipo; "+equipo);
+                                    et_nro_serie.setText((String)equipo.get("evap_nro_serie"));
+                                    int evap_modelo_position = findModeloEvap((String)equipo.get("evap_modelo_id"));
+                                    spinner_modelos.setSelection(evap_modelo_position);
+                                    int evap_marca_position = findMarcaEvap((String)equipo.get("evap_marca_id"));
+                                    spinner_marcas.setSelection(evap_marca_position);
+                                    int evap_btu_position = findBtuEvap((String)equipo.get("cond_btu_id"));
                                     spinner_btus.setSelection(evap_btu_position);
-                                    int cond_btu_position = findBtuEvap((String)ob.get("cond_btu_id"));
-                                    spinner_cond_btus.setSelection(cond_btu_position);
+                                    int evap_tipo_position = findTipoEvap((String)equipo.get("evap_tipo_id"));
+                                    spinner_tipos.setSelection(evap_tipo_position);
+                                    int evap_voltaje_position = findVoltajeEvap((String)equipo.get("cond_voltaje_id"));
+                                    spinner_voltajes.setSelection(evap_voltaje_position);
+                                    int evap_fase_position = findFaseEvap((String)equipo.get("cond_fase_id"));
+                                    spinner_fases.setSelection(evap_fase_position);
+                                    int evap_refrigerante_position = findRefrigeranteEvap((String)equipo.get("evap_refrigerante_id"));
+                                    spinner_refrigerantes.setSelection(evap_refrigerante_position);
 
+                                    int cond_modelo_position = findModeloCond((String)equipo.get("cond_modelo_id"));
+                                    spinner_cond_modelos.setSelection(cond_modelo_position);
+                                    int cond_marca_position = findMarcaCond((String)equipo.get("cond_marca_id"));
+                                    spinner_cond_marcas.setSelection(cond_marca_position);
+                                    int cond_voltaje_position = findVoltajeCond((String)equipo.get("cond_voltaje_id"));
+                                    spinner_cond_voltajes.setSelection(cond_voltaje_position);
+                                    int cond_fase_position = findFaseCond((String)equipo.get("cond_fase_id"));
+                                    spinner_cond_fases.setSelection(cond_fase_position);
+                                    int cond_refrigerante_position = findRefrigeranteCond((String)equipo.get("cond_refrigerante_id"));
+                                    spinner_cond_refrigerantes.setSelection(cond_refrigerante_position);
                                 }
                             }
                         } catch (Exception e) {
@@ -1069,14 +1114,107 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         queue.add(stringRequest);
     }
 
-    int findBtuEvap(String btu_id)
+    int findModeloEvap(String modelo)
+    {
+        int position=0;
+        for(int i=0;i<modelos_ids.length;i++)
+        {
+            if(modelos_ids[i].equals(modelo)){
+                position=i;
+                modelo_id = modelo;
+                System.out.println("modelo_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findBtuEvap(String btu)
     {
         int position=0;
         for(int i=0;i<btus_id.length;i++)
         {
-            if(btus_id[i].equals(btu_id)){
+            if(btus_id[i].equals(btu)){
                  position=i;
+                 btu_id = btu;
                 System.out.println("btu_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findMarcaEvap(String marca)
+    {
+        int position=0;
+        for(int i=0;i<marcas_id.length;i++)
+        {
+            if(marcas_id[i].equals(marca)){
+                position=i;
+                marca_id = marca;
+                System.out.println("marca_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findTipoEvap(String tipo)
+    {
+        int position=0;
+        for(int i=0;i<tipos_id.length;i++)
+        {
+            if(tipos_id[i].equals(tipo)){
+                position=i;
+                tipo_id = tipo;
+                System.out.println("tipo_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findVoltajeEvap(String voltaje)
+    {
+        int position=0;
+        for(int i=0;i<voltajes_id.length;i++)
+        {
+            if(voltajes_id[i].equals(voltaje)){
+                position=i;
+                voltaje_id = voltaje;
+                System.out.println("voltaje_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findFaseEvap(String fase)
+    {
+        int position=0;
+        for(int i=0;i<fases_id.length;i++)
+        {
+            if(fases_id[i].equals(fase)){
+                position=i;
+                fase_id = fase;
+                System.out.println("fase_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findRefrigeranteEvap(String refrigerante)
+    {
+        int position=0;
+        for(int i=0;i<refrigerantes_id.length;i++)
+        {
+            if(refrigerantes_id[i].equals(refrigerante)){
+                position=i;
+                refrigerante_id = refrigerante;
+                System.out.println("refrigerante_position_find: "+position);
+            }
+        }
+        return position;
+    }
+
+    int findModeloCond(String modelo)
+    {
+        int position=0;
+        for(int i=0;i<modelos_cond_ids.length;i++)
+        {
+            if(modelos_cond_ids[i].equals(modelo)){
+                position=i;
+                cond_modelo_id = modelo;
+                System.out.println("modelo_cond_position_find: "+position);
             }
         }
         return position;
@@ -1093,28 +1231,54 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         }
         return position;
     }
-
-    int findMarcaEvap(String marca_id)
+    int findMarcaCond(String marca)
     {
         int position=0;
-        for(int i=0;i<marcas_id.length;i++)
+        for(int i=0;i<marcas_cond_id.length;i++)
         {
-            if(btus_id[i].equals(btu_id)){
+            if(marcas_cond_id[i].equals(marca)){
                 position=i;
+                cond_marca_id = marca;
                 System.out.println("marca_position_find: "+position);
             }
         }
         return position;
     }
-
-    int findMarca(String marca_id)
+    int findVoltajeCond(String voltaje)
     {
         int position=0;
-        for(int i=0;i<btus_id.length;i++)
+        for(int i=0;i<voltajes_id.length;i++)
         {
-            if(btus_id[i].equals(btu_id)){
+            if(voltajes_cond_id[i].equals(voltaje)){
                 position=i;
-                System.out.println("marca_position_find: "+position);
+                cond_voltaje_id = voltaje;
+                System.out.println("voltaje_cond_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findFaseCond(String fase)
+    {
+        int position=0;
+        for(int i=0;i<fases_cond_id.length;i++)
+        {
+            if(fases_cond_id[i].equals(fase)){
+                position=i;
+                cond_fase_id = fase;
+                System.out.println("fase_cond_position_find: "+position);
+            }
+        }
+        return position;
+    }
+    int findRefrigeranteCond(String refrigerante)
+    {
+        int position=0;
+        for(int i=0;i<refrigerantes_cond_id.length;i++)
+        {
+            if(refrigerantes_cond_id[i].equals(refrigerante)){
+                position=i;
+                cond_refrigerante_id = refrigerante;
+                System.out.println("refrigerante_cond_position_find: "+position);
             }
         }
         return position;

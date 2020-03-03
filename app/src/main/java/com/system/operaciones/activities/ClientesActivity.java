@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.system.operaciones.R;
 import com.system.operaciones.adapters.ClienteAdapter;
 import com.system.operaciones.response.RespuestaResponse;
@@ -40,6 +45,8 @@ public class ClientesActivity extends AppCompatActivity {
     List<JSONObject> l=new ArrayList<>();
     ClienteAdapter adapter;
     ViewDialog viewDialog;
+    MaterialSearchBar search_bar;
+    String filtro = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +58,30 @@ public class ClientesActivity extends AppCompatActivity {
 
 //        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Clientes");
+        search_bar = findViewById(R.id.search_clientes);
+        search_bar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getClientes(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         recycler= findViewById(R.id.recycler_view_clientes);
         recycler.setLayoutManager(new LinearLayoutManager(ctx));
         adapter=new ClienteAdapter(l);
         recycler.setAdapter(adapter);
         l.clear();
+        adapter.notifyDataSetChanged();
 
         String act = cred.getData("key_act");
         Log.e("act",act);
@@ -86,11 +111,15 @@ public class ClientesActivity extends AppCompatActivity {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
+                            l.clear();
+                            adapter.notifyDataSetChanged();
                             if (cliente.getIde_error() == 0) {
+                                l.clear();
+                                adapter.notifyDataSetChanged();
                                 viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                l.clear();
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
                                     System.out.println(ob);
@@ -100,6 +129,8 @@ public class ClientesActivity extends AppCompatActivity {
                                 viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
+                            l.clear();
+                            adapter.notifyDataSetChanged();
                             viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
@@ -108,6 +139,8 @@ public class ClientesActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(1);
+                l.clear();
+                adapter.notifyDataSetChanged();
                 System.out.println("login_error: " + error.getMessage());
             }
         }){

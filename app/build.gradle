@@ -53,6 +53,9 @@ dependencies {
     //JRSpinner
     implementation 'com.github.jrizani:JRSpinner:androidx-SNAPSHOT'
 
+    //SearchableSpinner
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+
     //Signature Pag
     implementation 'com.github.gcacace:signature-pad:1.2.1'
 
