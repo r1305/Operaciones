@@ -10,7 +10,6 @@
     android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_instalaciones"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -54,7 +53,6 @@
 
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_mantenimiento"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -96,7 +94,6 @@
 
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_urgencias"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">

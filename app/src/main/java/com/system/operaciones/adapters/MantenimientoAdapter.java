@@ -107,7 +107,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 @Override
                 public void onClick(View v) {
                     ctx.startActivity(new Intent(ctx, FichaMantenimientoActivity.class)
-                            .putExtra("mantenimiento",(String)l.get(position).get("id"))
+                            .putExtra("id",(String)l.get(position).get("id"))
                             .putExtra("tienda_id",((MantenimientosActivity)ctx).getTienda_id()));
                 }
             });
@@ -118,7 +118,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 @Override
                 public void onClick(View v) {
                     mantenimiento_id = (String)l.get(position).get("id");
-                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+mantenimiento_id+".pdf";
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url_mantenimiento)+mantenimiento_id+".pdf";
                     System.out.println("pdf_url: "+pdf_url);
                     Utils.openPdf(ctx,pdf_url);
                 }
@@ -447,7 +447,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         System.out.println("contratista_id: "+contratista_id);
         System.out.println("tipo_proveedor: "+tipo_proveedor);
         System.out.println("id: "+id);
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_urgencia_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_mantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -455,7 +455,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("update_urgencia_response: " + response);
+                        System.out.println("update_mantenimiento_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -469,12 +469,13 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            System.out.println("update_mantenimiento_error: " + e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("update_urgencia_error: " + error.getMessage());
+                System.out.println("update_mantenimiento_error: " + error.getMessage());
             }
         }){
             @Override

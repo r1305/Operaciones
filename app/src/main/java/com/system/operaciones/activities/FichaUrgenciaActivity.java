@@ -118,11 +118,11 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ficha_urgencia);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Ficha Técnica");
+        getSupportActionBar().setTitle("Ficha Urgencia");
 
         ctx = this;
         cred = new Credentials(ctx);
-        id = getIntent().getStringExtra("urgencia");
+        id = getIntent().getStringExtra("id");
         tienda_id = getIntent().getStringExtra("tienda_id");
         getEquipos(tienda_id);
         viewDialog = new ViewDialog(this);
@@ -1019,6 +1019,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 equipos.clear();
@@ -1032,6 +1033,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1251,6 +1253,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 createFicha(urgencia_id);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1379,7 +1382,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        new Utils().sendFicha(tienda_id,urgencia_id,ctx);
+                                        new Utils().sendFichaUrgencia(tienda_id,urgencia_id,ctx);
                                         ((FichaUrgenciaActivity)ctx).finish();
                                     }
                                 }, 5000);
@@ -1431,6 +1434,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] motivos = new String[respuesta.size()];
@@ -1449,6 +1453,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1482,6 +1487,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] diagnosticos = new String[respuesta.size()];
@@ -1499,6 +1505,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1539,6 +1546,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for(Object o : respuesta)
@@ -1549,6 +1557,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 tv_solucion.setText(solucion);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -1656,6 +1665,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 equipo_id="";
@@ -1704,12 +1714,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 }
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getEquipo_error: " + error);
             }
@@ -1753,6 +1765,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1779,12 +1792,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_marca_id = marcas_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getMarcas_error: " + error);
             }
@@ -1811,6 +1826,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1828,12 +1844,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 modelos_ids = data_id;
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getModelos_error: " + error);
             }
@@ -1860,6 +1878,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1877,12 +1896,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 modelos_cond_ids = data_id;
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getCondensadoraModelos_error: " + error);
             }
@@ -1909,6 +1930,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1935,12 +1957,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_btu_id = btus_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getBtus_error: " + error);
             }
@@ -1967,6 +1991,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1987,12 +2012,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 tipo_id = tipos_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getTipos_error: " + error);
             }
@@ -2019,6 +2046,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2039,12 +2067,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_tipo_id = tipos_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getCondensadoraTipos_error: " + error);
             }
@@ -2071,6 +2101,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2097,12 +2128,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_voltaje_id = voltajes_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getTipos_error: " + error);
             }
@@ -2129,6 +2162,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2155,12 +2189,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_fase_id = fases_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getFases_error: " + error);
             }
@@ -2187,6 +2223,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2213,12 +2250,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 cond_refrigerante_id = refrigerantes_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getFases_error: " + error);
             }
@@ -2269,6 +2308,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 viewDialog.hideDialog(3);
@@ -2276,6 +2316,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                 System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -2685,12 +2726,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 getEquipo();
                                 Toast.makeText(ctx,"Equipo actualizado",Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
@@ -3209,6 +3252,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
             }
         } catch (Exception e) {
+            viewDialog.hideDialog(1);
             e.printStackTrace();
         }
         mediaScanIntent.setData(contentUri);
@@ -3492,6 +3536,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                             break;
                     }
                 } catch (Exception e) {
+                    viewDialog.hideDialog(1);
                     e.printStackTrace();
                 }
                 break;

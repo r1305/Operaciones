@@ -112,7 +112,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     ctx.startActivity(new Intent(ctx, FichaUrgenciaActivity.class)
-                            .putExtra("urgencia",(String)l.get(position).get("id"))
+                            .putExtra("id",(String)l.get(position).get("id"))
                             .putExtra("tienda_id",((UrgenciasActivity)ctx).getTienda_id()));
                 }
             });
@@ -123,7 +123,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     urgencia_id = (String)l.get(position).get("id");
-                    String pdf_url = ctx.getResources().getString(R.string.pdf_url)+urgencia_id+".pdf";
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url_urgencia)+urgencia_id+".pdf";
                     System.out.println("pdf_url: "+pdf_url);
                     Utils.openPdf(ctx,pdf_url);
                 }

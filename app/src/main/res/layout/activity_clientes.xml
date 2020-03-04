@@ -13,6 +13,14 @@
         app:mt_placeholder="Buscar cliente">
 
     </com.mancj.materialsearchbar.MaterialSearchBar>
+    <TextView
+        android:id="@+id/not_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No se encontraron resultados"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginStart="5dp"

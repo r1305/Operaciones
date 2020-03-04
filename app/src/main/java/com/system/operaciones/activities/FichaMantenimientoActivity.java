@@ -112,13 +112,13 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ficha_urgencia);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Ficha Técnica");
+        getSupportActionBar().setTitle("Ficha Mantenimiento");
 
         ctx = this;
         cred = new Credentials(ctx);
-        id = getIntent().getStringExtra("urgencia");
+        id = getIntent().getStringExtra("id");
         tienda_id = getIntent().getStringExtra("tienda_id");
-        getEquipos(tienda_id);
+        getEquipos();
         viewDialog = new ViewDialog(this);
         viewDialog.showDialog();
 
@@ -983,7 +983,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     }
 
     List<JSONObject> equipos = new ArrayList<>();
-    public void getEquipos(final String tienda_id)
+    public void getEquipos()
     {
         System.out.println("tienda_id: "+tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
@@ -1002,6 +1002,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 equipos.clear();
@@ -1015,7 +1016,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -1212,7 +1215,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     private void registrarFicha(final String urgencia_id)
     {
         viewDialog.showDialog();
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_ficha_urgencia_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_ficha_mantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -1220,7 +1223,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("register_ficha_urgencia_response: " + response);
+                        System.out.println("register_ficha_mantenimiento_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -1234,14 +1237,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 createFicha(urgencia_id);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("register_ficha_mantenimiento_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
-                System.out.println("register_ficha_urgencia_error: " + error);
+                System.out.println("register_ficha_mantenimiento_error: " + error);
             }
         }){
             @Override
@@ -1337,7 +1343,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     private void createFicha(final String urgencia_id)
     {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_ficha_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_ficha_mantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -1345,13 +1351,14 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("create_ficha_urgencia_response: " + response);
+                        System.out.println("create_ficha_mantenimiento_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
@@ -1360,7 +1367,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        new Utils().sendFicha(tienda_id,urgencia_id,ctx);
+                                        new Utils().sendFichaMantenimiento(tienda_id,urgencia_id,ctx);
                                         ((FichaMantenimientoActivity)ctx).finish();
                                     }
                                 }, 5000);
@@ -1368,14 +1375,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("create_ficha_mantenimiento_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
                 viewDialog.hideDialog(1);
-                System.out.println("create_ficha_urgencia_error: " + error);
+                error.printStackTrace();
+                System.out.println("create_ficha_mantenimiento_error: " + error);
             }
         }){
             @Override
@@ -1412,6 +1420,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] motivos = new String[respuesta.size()];
@@ -1430,12 +1439,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getMotivos_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getMotivos_error: " + error);
             }
@@ -1463,6 +1475,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] diagnosticos = new String[respuesta.size()];
@@ -1480,12 +1493,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getDiagnosticos_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getDiagnosticos_error: " + error);
             }
@@ -1520,6 +1536,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 for(Object o : respuesta)
@@ -1530,14 +1547,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 tv_solucion.setText(solucion);
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getSolucion_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
-                System.out.println("getDiagnosticos_error: " + error);
+                System.out.println("getSolucion_error: " + error);
             }
         }){
             @Override
@@ -1622,7 +1642,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     String equipo_id;
     private void getEquipo()
     {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipo_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipoMantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -1635,8 +1655,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
+                            System.out.println("json_equipo"+respuesta);
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 equipo_id="";
@@ -1685,12 +1706,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 }
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getEquipo_error: " + error);
             }
@@ -1699,7 +1723,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", id);
+                params.put("mantenimiento_id", id);
                 return params;
             }
         };
@@ -1734,6 +1758,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1760,12 +1785,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_marca_id = marcas_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getMarcas_error: " + error);
             }
@@ -1792,6 +1820,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1809,12 +1838,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 modelos_ids = data_id;
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getModelos_error: " + error);
             }
@@ -1841,6 +1873,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1858,12 +1891,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 modelos_cond_ids = data_id;
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getCondensadoraModelos_error: " + error);
             }
@@ -1890,6 +1926,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1916,12 +1953,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_btu_id = btus_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getBtus_error: " + error);
             }
@@ -1948,6 +1988,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -1968,12 +2009,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 tipo_id = tipos_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getTipos_error: " + error);
             }
@@ -2000,6 +2044,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2020,12 +2065,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_tipo_id = tipos_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getCondensadoraTipos_error: " + error);
             }
@@ -2052,6 +2100,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2078,12 +2127,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_voltaje_id = voltajes_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getTipos_error: " + error);
             }
@@ -2110,6 +2162,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2136,12 +2189,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_fase_id = fases_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getFases_error: " + error);
             }
@@ -2168,6 +2224,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
@@ -2194,12 +2251,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 cond_refrigerante_id = refrigerantes_cond_id[0];
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("getFases_error: " + error);
             }
@@ -2250,19 +2310,23 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 viewDialog.hideDialog(3);
-                                getEquipos(tienda_id);
+                                getEquipos();
                                 System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("registerEquipo_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("registerEquipo_error: " + error);
             }
@@ -2666,18 +2730,22 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 getEquipo();
                                 Toast.makeText(ctx,"Equipo actualizado",Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
+                            System.out.println("getFases_error: " + e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
                 error.printStackTrace();
                 System.out.println("update_equipo_error: " + error);
             }
@@ -3190,7 +3258,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     break;
             }
         } catch (Exception e) {
+            viewDialog.hideDialog(1);
             e.printStackTrace();
+            System.out.println("getFases_error: " + e);
         }
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
@@ -3473,7 +3543,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             break;
                     }
                 } catch (Exception e) {
+                    viewDialog.hideDialog(1);
                     e.printStackTrace();
+                    System.out.println("getFases_error: " + e);
                 }
                 break;
         }

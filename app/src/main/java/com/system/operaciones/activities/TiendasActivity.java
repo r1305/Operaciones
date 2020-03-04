@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -72,7 +73,7 @@ public class TiendasActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                getTiendas(cliente,s.toString());
+                getTiendas(cliente,s.toString(),2);
             }
 
             @Override
@@ -88,7 +89,7 @@ public class TiendasActivity extends AppCompatActivity {
         l.clear();
         adapter.notifyDataSetChanged();
         viewDialog.showDialog();
-        getTiendas(cliente,"");
+        getTiendas(cliente,"",1);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class TiendasActivity extends AppCompatActivity {
         return true;
     }
 
-    public void getTiendas(final String cliente_id,final String filtro)
+    public void getTiendas(final String cliente_id,final String filtro,final int from)
     {
         l.clear();
         adapter.notifyDataSetChanged();
@@ -115,14 +116,20 @@ public class TiendasActivity extends AppCompatActivity {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
+                            TextView not_found = findViewById(R.id.not_found);
                             if (cliente.getIde_error() == 0) {
                                 viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                                 l.clear();
                                 adapter.notifyDataSetChanged();
+                                if(from==1) {
+                                    Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                }
+                                recycler.setVisibility(View.GONE);
+                                not_found.setVisibility(View.VISIBLE);
                             } else {
                                 l.clear();
+                                not_found.setVisibility(View.GONE);
+                                recycler.setVisibility(View.VISIBLE);
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
                                     System.out.println(ob);

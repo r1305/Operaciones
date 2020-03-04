@@ -69,10 +69,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     Context ctx;
     Credentials cred;
     LinearLayout datos, equipos, servicios;
-    ScrollView scroll_datos;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
     ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
-    Spinner equipos_spin, motivos_spin;
+    Spinner motivos_spin;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
     TextView txt_settings, txt_equipos, txt_datos, observaciones;
     Button dialog_btn_cancelar, dialog_btn_registrar;
@@ -117,11 +116,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Urgencias");
-
         verificarYPedirPermisosDeCamara();
 
         datos = findViewById(R.id.linear_datos);
-//        scroll_datos = findViewById(R.id.scroll_datos);
         tab_datos = findViewById(R.id.tab_datos);
         equipos = findViewById(R.id.linear_equipos);
         tab_equipos = findViewById(R.id.tab_equipos);
@@ -898,7 +895,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 getUrgencias(tienda_id);
-                                new Utils().sendMail(tienda_id,ctx);
+                                new Utils().sendMailUrgencia(tienda_id,ctx);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

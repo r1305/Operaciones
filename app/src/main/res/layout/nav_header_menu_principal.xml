@@ -16,7 +16,6 @@
 
     <TextView
         android:text="Usuario"
-        android:id="@+id/NavDNombreUsuario"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +29,6 @@
         android:layout_gravity="center"
         android:gravity="center">
         <TextView
-            android:id="@+id/nav_points"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -46,7 +44,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/NavVersion"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

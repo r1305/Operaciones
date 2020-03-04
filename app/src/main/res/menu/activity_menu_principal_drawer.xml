@@ -9,7 +9,6 @@
             android:title="Inicio"
             android:iconTint="@color/blanco"/>
         <item
-            android:id="@+id/navPerfil"
             android:title="Perfil"
             android:iconTint="@color/blanco"/>
 

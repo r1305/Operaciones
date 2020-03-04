@@ -1,10 +1,9 @@
 package com.system.operaciones.adapters;
 
-import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -35,8 +33,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.system.operaciones.R;
 import com.system.operaciones.activities.LectorActivity;
-import com.system.operaciones.activities.TiendasActivity;
-import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.ViewDialog;
@@ -50,8 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import jrizani.jrspinner.JRSpinner;
 
 public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder> {
 
@@ -194,10 +188,10 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     private void showModalUpdateEquipo(final String equipo_id)
     {
-        viewDialog = new ViewDialog((UrgenciasActivity)ctx);
+        viewDialog = new ViewDialog((Activity)ctx);
         viewDialog.showDialog();
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        LayoutInflater inflater = ((UrgenciasActivity)ctx).getLayoutInflater();
+        LayoutInflater inflater = ((Activity)ctx).getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_update_equipo, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
@@ -480,7 +474,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     private void escanear() {
         Intent i = new Intent(ctx, LectorActivity.class);
-        ((UrgenciasActivity)ctx).startActivityForResult(i, CODIGO_INTENT);
+        ((Activity)ctx).startActivityForResult(i, CODIGO_INTENT);
     }
 
     private void getMarcas()
@@ -998,7 +992,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((UrgenciasActivity)ctx).getEquiposTienda();
+                                getEquiposTienda();
                                 alertDialog.dismiss();
                             }
                         } catch (Exception e) {
@@ -1106,6 +1100,61 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("equipo_id", equipo_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getEquiposTienda()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
+        Log.i("getEquiposTienda_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getEquiposTienda_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                l.clear();
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    l.add(ob);
+                                }
+                                notifyDataSetChanged();
+                                viewDialog.hideDialog(1);
+                            }
+                        } catch (Exception e) {
+                            viewDialog.hideDialog(1);
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
+                System.out.println("getEquiposTienda_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
                 return params;
             }
         };

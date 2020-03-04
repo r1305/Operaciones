@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -67,7 +68,7 @@ public class ClientesActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                getClientes(s.toString());
+                getClientes(s.toString(),2);
             }
 
             @Override
@@ -86,7 +87,7 @@ public class ClientesActivity extends AppCompatActivity {
         String act = cred.getData("key_act");
         Log.e("act",act);
         viewDialog.showDialog();
-        getClientes("");
+        getClientes("",1);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class ClientesActivity extends AppCompatActivity {
         return true;
     }
 
-    public void getClientes(final String filtro)
+    public void getClientes(final String filtro,final int from)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getClientes_url);
         Log.i("login_url",url);
@@ -113,13 +114,20 @@ public class ClientesActivity extends AppCompatActivity {
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
                             l.clear();
                             adapter.notifyDataSetChanged();
+                            TextView not_found = findViewById(R.id.not_found);
                             if (cliente.getIde_error() == 0) {
                                 l.clear();
                                 adapter.notifyDataSetChanged();
                                 viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                if(from==1) {
+                                    Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                }
+                                recycler.setVisibility(View.GONE);
+                                not_found.setVisibility(View.VISIBLE);
                             } else {
                                 l.clear();
+                                not_found.setVisibility(View.GONE);
+                                recycler.setVisibility(View.VISIBLE);
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
                                     System.out.println(ob);
