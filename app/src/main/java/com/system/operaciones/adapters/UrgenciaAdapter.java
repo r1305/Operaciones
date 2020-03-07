@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -39,6 +40,7 @@ import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Utils;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -67,7 +69,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private int tipo_proveedor=1;
     private Spinner motivos_spin;
 
-    JRSpinner spinner_equipos;
+    SearchableSpinner spinner_equipos;
     String[] equipos_ids;
     String equipo_id;
 
@@ -75,7 +77,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     String[] motivo_id_adapter;
 
     private String[] personal_ids;
-    private JRSpinner personal_spinner;
+    private SearchableSpinner personal_spinner;
     private String personal_id;
 
     String urgencia_id = "0";
@@ -168,18 +170,30 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         alertDialog.dismiss();
                     }
                 });
-                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         equipo_id = equipos_ids[position];
                     }
-                });
-                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+
                     @Override
-                    public void onItemClick(int position) {
-                        personal_id = personal_ids[position];
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
+
+                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        personal_id = personal_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -320,8 +334,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     i++;
                                 }
                                 System.out.println("contratistas_data_ids: "+data_id.length);
+                                ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                dialog_personal_adapter.notifyDataSetChanged();
+
                                 getUrgencia(urgencia_id);
                             }
                         } catch (Exception e) {
@@ -370,9 +387,10 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     data_id[i] = id;
                                     i++;
                                 }
+                                ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
-                                personal_spinner.setHint("Tecnico");
+                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                dialog_personal_adapter.notifyDataSetChanged();
                                 getUrgencia(urgencia_id);
 
                             }
@@ -481,7 +499,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     equipos_ids[i] = (String)ob.get("id");
                                     i++;
                                 }
-                                spinner_equipos.setItems(equipos);
+
+                                ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
+                                motivo_id_adapter = equipos_ids;
+                                spinner_equipos.setAdapter(dialog_equipos_adapter);
+                                dialog_equipos_adapter.notifyDataSetChanged();
 
                             }
                         } catch (Exception e) {
@@ -581,6 +603,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             } else {
                                 for (Object ob : respuesta){
                                     JSONObject o = (JSONObject)ob;
+                                    spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
+                                    personal_spinner.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
                                     dialog_fecha.setText((String)o.get("fecha_atencion"));
                                     dialog_hora.setText((String)o.get("hora_atencion"));
                                     observaciones.setText((String)o.get("observaciones"));
@@ -610,6 +634,30 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
+    int findPersonalPosition(String personal)
+    {
+        int position = 0;
+        for(int i=0;i<personal_ids.length;i++){
+            if(personal_ids[i].equals(personal)){
+                position=i;
+                personal_id = personal_ids[i];
+            }
+        }
+        return position;
+    }
+
+    int findEquipoPosition(String equipo)
+    {
+        int position = 0;
+        for(int i=0;i<equipos_ids.length;i++){
+            if(equipos_ids[i].equals(equipo)){
+                position=i;
+                equipo_id = equipos_ids[i];
+            }
+        }
+        return position;
+    }
+
     private void updateUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
     {
         System.out.println("observaciones: "+observaciones);
@@ -630,12 +678,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         System.out.println("update_urgencia_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                new Utils().sendMailUpdateUrgencia(id,ctx);
                                 ((UrgenciasActivity)ctx).getUrgencias(((UrgenciasActivity) ctx).getTienda_id());
                                 alertDialog.dismiss();
                             }

@@ -33,15 +33,14 @@
             android:fontFamily="@font/gotham_medium"
             android:textColor="@color/negro"/>
 
-        <jrizani.jrspinner.JRSpinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_modelo"
             android:textAlignment="textStart"
             android:hint="Modelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:jrs_icon_tint="@color/verdePastel"
-            android:layout_marginStart="11dp"
-            android:layout_marginEnd="9dp"
+            android:backgroundTint="@color/verdePastel"
             />
 
         <Spinner
@@ -136,7 +135,7 @@
             android:fontFamily="@font/gotham_medium"
             android:textColor="@color/negro"/>
 
-        <jrizani.jrspinner.JRSpinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_cond_modelo"
             android:textAlignment="textStart"
             android:hint="Modelo"

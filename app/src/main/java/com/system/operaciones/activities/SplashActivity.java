@@ -1,5 +1,6 @@
 package com.system.operaciones.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -19,9 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.system.operaciones.BuildConfig;
 import com.system.operaciones.R;
+import com.system.operaciones.conexiones.Conexion;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.response.RespuestaResponse;
 
@@ -50,6 +56,24 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splah);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("fcm_instance", "getInstanceId failed", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+
+                // Log and toast
+                String msg = token;
+                Log.e("fcm_token", msg);
+                //Toast.makeText(MenuPrincipal.this, msg, Toast.LENGTH_SHORT).show();
+                new Conexion().newInstance(ctx).updateToken(token);
+            }
+        });
         ctx = this;
         cred = new Credentials(ctx);
         cred.save_data("key_tmp","");

@@ -51,6 +51,7 @@
     <!-- Mantenimientos -->
     <string name="pdf_url_mantenimiento">https://uezuperu.com/app/files/pdf/mantenimientos/</string>
     <string name="getMantenimientos_url">ocupa/mantenimiento/getMantenimientos.php</string>
+    <string name="getMantenimiento_url">ocupa/mantenimiento/getMantenimiento.php</string>
     <string name="update_mantenimiento_url">ocupa/mantenimiento/updateMantenimiento.php</string>
     <string name="crear_mantenimiento_url">ocupa/mantenimiento/register.php</string>
     <string name="getEquipoMantenimiento_url">ocupa/mantenimiento/getEquipo.php</string>
@@ -61,6 +62,10 @@
     <string name="equipo_string_modelo"><u>Modelo:</u></string>
     <string name="equipo_string_serie"><u>N° Serie:</u></string>
     <string name="equipo_string_tipo"><u>Tipo:</u></string>
+    <string name="equipo_string_voltaje"><u>Voltaje:</u></string>
     <string name="title_new_urgencia"><u>Nueva Urgencia</u></string>
     <string name="title_new_mantenimiento"><u>Nuevo Mantenimiento</u></string>
+
+    <!-- User -->
+    <string name="update_user_fcm">user/updateFcm.php</string>
 </resources>

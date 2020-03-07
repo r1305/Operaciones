@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -85,13 +87,13 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     private int tipo_proveedor = 1;
 
     private String[] personal_ids;
-    private JRSpinner personal_spinner;
+    private SearchableSpinner personal_spinner;
     private String personal_id;
 
     RecyclerView recycler;
     List<JSONObject> l = new ArrayList<>();
     UrgenciaAdapter adapter;
-    JRSpinner spinner_equipos;
+    SearchableSpinner spinner_equipos;
     RecyclerView equipos_recycler;
     List<JSONObject> equipos_l = new ArrayList<>();
     EquipoAdapter equipos_adapter;
@@ -313,10 +315,16 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
                 getEquipos();
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
-                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                personal_spinner.setPositiveButton("Cerrar");
+                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         personal_id = personal_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
                 getLastMantenimiento(tienda_id);
@@ -324,6 +332,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 builder.setView(dialogView);
 
                 spinner_equipos = dialogView.findViewById(R.id.urgencia_spinner_equipos);
+                spinner_equipos.setPositiveButton("Cerrar");
                 motivos_spin = dialogView.findViewById(R.id.urgencia_spinner_motivos);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
@@ -334,12 +343,17 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
 
-                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Log.e("position_equipo",position+"");
                         Log.e("equipo_id",equipos_ids[position]);
                         equipo_id = equipos_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
 
@@ -467,8 +481,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
+                                ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                dialog_personal_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -516,8 +532,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
+
+                                ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                dialog_personal_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -734,10 +753,13 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     i++;
                                     setEquipo_count(i+1);
                                 }
-                                if(spinner_equipos!=null && equipos_adapter!=null) {
-                                    spinner_equipos.setItems(equipos);
-                                    equipos_adapter.notifyDataSetChanged();
+                                ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
+                                motivo_id_adapter = equipos_ids;
+                                if(spinner_equipos!=null){
+                                    spinner_equipos.setAdapter(dialog_equipos_adapter);
+                                    dialog_equipos_adapter.notifyDataSetChanged();
                                 }
+
                                 viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
@@ -999,10 +1021,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     ArrayAdapter<String> marcas_cond_adapter;
     String[] marcas_cond_id;
 
-    JRSpinner spinner_modelos;
+    SearchableSpinner spinner_modelos;
     String[] modelos_ids;
 
-    JRSpinner spinner_cond_modelos;
+    SearchableSpinner  spinner_cond_modelos;
     String[] modelos_cond_ids;
 
     Spinner spinner_btus;
@@ -1050,6 +1072,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     private void showModalRegisterEquipo()
     {
+        viewDialog.showDialog();
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
@@ -1069,6 +1092,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
+
+        spinner_modelos.setPositiveButton("Cerrar");
 
         et_nro_serie = dialogView.findViewById(R.id.nro_serie);
         icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
@@ -1142,20 +1167,19 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             }
         });
-        spinner_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+        spinner_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 modelo_id = modelos_ids[position];
                 System.out.println("modelo_id: "+modelo_id);
             }
-        });
-        spinner_cond_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+
             @Override
-            public void onItemClick(int position) {
-                cond_modelo_id = modelos_cond_ids[position];
-                System.out.println("cond_modelo_id: "+cond_modelo_id);
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
         spinner_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1277,7 +1301,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         });
 
         final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1314,6 +1338,14 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 alertDialog.dismiss();
             }
         });
+        viewDialog.hideDialog(1.5);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog.show();
+            }
+        }, 1500);
     }
 
     private void getMarcas()
@@ -1402,7 +1434,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_modelos.setItems(data);
+                                ArrayAdapter<String> modelos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_modelos.setAdapter(modelos_adapter);
+                                modelos_adapter.notifyDataSetChanged();
                                 modelos_ids = data_id;
                             }
                         } catch (Exception e) {
@@ -1451,8 +1485,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_cond_modelos.setItems(data);
+                                ArrayAdapter<String> cond_modelos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_cond_modelos.setAdapter(cond_modelos_adapter);
                                 modelos_cond_ids = data_id;
+                                cond_modelos_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

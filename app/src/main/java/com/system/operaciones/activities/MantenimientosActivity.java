@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -84,13 +86,13 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     private int tipo_proveedor = 1;
 
     private String[] personal_ids;
-    private JRSpinner personal_spinner;
+    private SearchableSpinner personal_spinner;
     private String personal_id;
 
     RecyclerView recycler;
     List<JSONObject> l = new ArrayList<>();
     MantenimientoAdapter adapter;
-    JRSpinner spinner_equipos;
+    SearchableSpinner spinner_equipos;
     RecyclerView equipos_recycler;
     List<JSONObject> equipos_l = new ArrayList<>();
     EquipoAdapter equipos_adapter;
@@ -118,7 +120,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         verificarYPedirPermisosDeCamara();
 
         datos = findViewById(R.id.linear_datos);
-//        scroll_datos = findViewById(R.id.scroll_datos);
         tab_datos = findViewById(R.id.tab_datos);
         equipos = findViewById(R.id.linear_equipos);
         tab_equipos = findViewById(R.id.tab_equipos);
@@ -161,7 +162,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         tienda_id = intent.getStringExtra("tienda_id");
         setTienda_id(tienda_id);
         getTienda(tienda_id);
-        getMantenimientos(tienda_id);
+        getMantenimientos();
         getEquipos();
         getEquiposTienda();
 
@@ -247,14 +248,14 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     protected void onStart()
     {
         super.onStart();
-        getMantenimientos(tienda_id);
+        getMantenimientos();
     }
 
     @Override
     protected void onPostResume()
     {
         super.onPostResume();
-        getMantenimientos(tienda_id);
+        getMantenimientos();
     }
 
     public String getTienda_id()
@@ -280,7 +281,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         switch (id) {
             case R.id.tab_datos:
                 hideTabs();
-//                scroll_datos.setVisibility(View.VISIBLE);
                 datos.setVisibility(View.VISIBLE);
                 txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco));
                 icon_check.setImageResource(R.drawable.icon_check_white);
@@ -313,12 +313,18 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
                 getEquipos();
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
-                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         personal_id = personal_ids[position];
                     }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
                 });
+
                 getLastMantenimiento(tienda_id);
 
                 builder.setView(dialogView);
@@ -334,12 +340,18 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
 
-                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                personal_spinner.setPositiveButton("Cerrar");
+                spinner_equipos.setPositiveButton("Cerrar");
+
+                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
-                        Log.e("position_equipo",position+"");
-                        Log.e("equipo_id",equipos_ids[position]);
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         equipo_id = equipos_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
 
@@ -468,7 +480,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     i++;
                                 }
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                ArrayAdapter<String> personal_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                personal_spinner.setAdapter(personal_adapter);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -517,7 +530,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     i++;
                                 }
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                ArrayAdapter<String> personal_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                personal_spinner.setAdapter(personal_adapter);
+                                personal_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -683,9 +698,11 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     i++;
                                     setEquipo_count(i+1);
                                 }
+                                equipos_adapter.notifyDataSetChanged();
                                 if(spinner_equipos!=null && equipos_adapter!=null) {
-                                    spinner_equipos.setItems(equipos);
-                                    equipos_adapter.notifyDataSetChanged();
+                                    ArrayAdapter<String> equipo_spinner_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,equipos);
+                                    spinner_equipos.setAdapter(equipo_spinner_adapter);
+                                    equipo_spinner_adapter.notifyDataSetChanged();
                                 }
                                 viewDialog.hideDialog(1);
                             }
@@ -843,7 +860,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                getMantenimientos(tienda_id);
+                                getMantenimientos();
                                 new Utils().sendMailMantenimiento(tienda_id,ctx);
                             }
                         } catch (Exception e) {
@@ -948,10 +965,10 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     ArrayAdapter<String> marcas_cond_adapter;
     String[] marcas_cond_id;
 
-    JRSpinner spinner_modelos;
+    SearchableSpinner spinner_modelos;
     String[] modelos_ids;
 
-    JRSpinner spinner_cond_modelos;
+    SearchableSpinner spinner_cond_modelos;
     String[] modelos_cond_ids;
 
     Spinner spinner_btus;
@@ -999,6 +1016,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
     private void showModalRegisterEquipo()
     {
+        viewDialog.showDialog();
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
@@ -1091,20 +1109,31 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
             }
         });
-        spinner_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+        spinner_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 modelo_id = modelos_ids[position];
                 System.out.println("modelo_id: "+modelo_id);
             }
-        });
-        spinner_cond_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+
             @Override
-            public void onItemClick(int position) {
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinner_cond_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cond_modelo_id = modelos_cond_ids[position];
                 System.out.println("cond_modelo_id: "+cond_modelo_id);
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+
         spinner_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1226,7 +1255,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         });
 
         final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
-        alertDialog.show();
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1263,6 +1291,14 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 alertDialog.dismiss();
             }
         });
+        viewDialog.hideDialog(1.5);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog.show();
+            }
+        }, 1500);
+
     }
 
     private void getMarcas()
@@ -1351,7 +1387,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_modelos.setItems(data);
+                                ArrayAdapter<String> modelo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_modelos.setAdapter(modelo_adapter);
                                 modelos_ids = data_id;
                             }
                         } catch (Exception e) {
@@ -1400,7 +1437,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     data_id[i] = id;
                                     i++;
                                 }
-                                spinner_cond_modelos.setItems(data);
+                                ArrayAdapter<String> cond_modelo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                spinner_cond_modelos.setAdapter(cond_modelo_adapter);
+                                cond_modelo_adapter.notifyDataSetChanged();
                                 modelos_cond_ids = data_id;
                             }
                         } catch (Exception e) {
@@ -1823,7 +1862,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         queue.add(stringRequest);
     }
 
-    public void getMantenimientos(final String tienda_id)
+    public void getMantenimientos()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMantenimientos_url);
         Log.i("getUrgencia_url",url);

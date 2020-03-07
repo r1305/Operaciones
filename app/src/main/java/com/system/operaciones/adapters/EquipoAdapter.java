@@ -74,6 +74,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         final String tipo = (String)ob.get("tipo");
         final String nro_serie = (String)ob.get("evap_nro_serie");
         final String logo = (String)ob.get("marca");
+        final String voltaje = (String)ob.get("voltaje");
+
+        holder.voltaje.setText(voltaje);
         System.out.println(ob);
         holder.modelo.setText(modelo);
         holder.tipo.setText(tipo);
@@ -104,7 +107,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView modelo,tipo,nro_serie;
+        TextView modelo,tipo,nro_serie,voltaje;
         ImageView marca,edit;
 
         private ViewHolder(View itemView) {
@@ -115,6 +118,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             nro_serie = itemView.findViewById(R.id.equipo_nro_serie);
             marca = itemView.findViewById(R.id.equipo_logo);
             edit = itemView.findViewById(R.id.edit_equipo);
+            voltaje = itemView.findViewById(R.id.equipo_voltaje);
         }
     }
 

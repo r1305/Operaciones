@@ -14,8 +14,8 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
         <LinearLayout
             android:layout_weight="2.5"
             android:layout_width="match_parent"
@@ -46,8 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
 
         <LinearLayout
             android:layout_weight="1"
@@ -109,8 +109,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -143,15 +143,13 @@
                     android:fontFamily="@font/gotham_medium"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
-                <jrizani.jrspinner.JRSpinner
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                     android:id="@+id/spinner_contratista"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:textColor="@color/negro"
-                    app:jrs_icon_tint="@color/verdePastel"
-                    app:jrs_title="Seleccione Contratista"
-                    android:backgroundTint="@color/verdePastel"
-                    app:jrs_multiple="false"
-                    android:layout_height="40dp"/>
+                    android:backgroundTint="@color/verdePastel"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -162,8 +160,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -210,8 +208,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -247,15 +245,15 @@
                     android:text="Equipo"
                     android:textColor="@color/verdePastel" />
 
-                <jrizani.jrspinner.JRSpinner
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                     android:id="@+id/urgencia_spinner_equipos"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
+                    android:layout_height="0dp"
+                    android:textColor="@color/negro"
+
                     android:backgroundTint="@color/verdePastel"
-                    android:gravity="center"
-                    android:outlineAmbientShadowColor="@color/celesteClaro"
-                    app:jrs_icon_tint="@color/verdePastel" />
+                     />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -265,8 +263,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -300,11 +298,11 @@
                     android:layout_gravity="center_vertical"/>
                 <EditText
                     android:id="@+id/dialog_observaciones"
-                    android:layout_weight="0.8"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:textAlignment="viewStart"
-                    android:outlineSpotShadowColor="@color/celesteClaro"/>
+                    android:textColor="@color/negro"
+                    android:backgroundTint="@color/verdePastel"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -317,8 +315,8 @@
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
         <Button
             android:id="@+id/dialog_btn_cancelar"
             android:text="Cancelar"

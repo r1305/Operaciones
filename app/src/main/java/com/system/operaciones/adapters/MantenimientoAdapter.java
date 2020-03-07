@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,6 +41,7 @@ import com.system.operaciones.activities.MantenimientosActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Utils;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -65,15 +68,14 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
     private String str_fecha,str_hora;
     private String spinner_id;
     private int tipo_proveedor=1;
-    private Spinner motivos_spin;
 
-    JRSpinner spinner_equipos;
+    SearchableSpinner spinner_equipos;
     String[] equipos_ids;
-    String equipo_id;
+    String equipo_id="0";
 
     private String[] personal_ids;
-    private JRSpinner personal_spinner;
-    private String personal_id;
+    private SearchableSpinner personal_spinner;
+    private String personal_id="0";
 
     String mantenimiento_id = "0";
 
@@ -141,7 +143,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
                 builder.setView(dialogView);
                 personal_spinner = dialogView.findViewById(R.id.spinner_edit_contratista);
-                motivos_spin = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
                 spinner_equipos = dialogView.findViewById(R.id.urgencia_edit_spinner_equipos);
                 btn_cancelar = dialogView.findViewById(R.id.dialog_edit_btn_cancelar);
                 btn_update = dialogView.findViewById(R.id.dialog_btn_actualizar);
@@ -162,18 +163,30 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                         alertDialog.dismiss();
                     }
                 });
-                spinner_equipos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(int position) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         equipo_id = equipos_ids[position];
                     }
-                });
-                personal_spinner.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+
                     @Override
-                    public void onItemClick(int position) {
-                        personal_id = personal_ids[position];
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
+
+                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        personal_id = personal_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -309,8 +322,10 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     i++;
                                 }
                                 System.out.println("contratistas_data_ids: "+data_id.length);
+                                ArrayAdapter<String> personal_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                personal_spinner.setAdapter(personal_adapter);
                                 personal_ids = data_id;
-                                personal_spinner.setItems(data);
+                                personal_adapter.notifyDataSetChanged();
                                 getMantenimiento(mantenimiento_id);
                             }
                         } catch (Exception e) {
@@ -361,7 +376,12 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     equipos_ids[i] = (String)ob.get("id");
                                     i++;
                                 }
-                                spinner_equipos.setItems(equipos);
+                                if(spinner_equipos!=null)
+                                {
+                                    ArrayAdapter<String> equipos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,equipos);
+                                    spinner_equipos.setAdapter(equipos_adapter);
+                                    equipos_adapter.notifyDataSetChanged();
+                                }
 
                             }
                         } catch (Exception e) {
@@ -389,7 +409,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
     private void getMantenimiento(final String id)
     {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencia_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMantenimiento_url);
         Log.i("getMantenimiento_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -412,6 +432,8 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     dialog_fecha.setText((String)o.get("fecha_atencion"));
                                     dialog_hora.setText((String)o.get("hora_atencion"));
                                     observaciones.setText((String)o.get("observaciones"));
+                                    personal_spinner.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
+                                    spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
                                 }
                             }
                         } catch (Exception e) {
@@ -464,8 +486,9 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                ((MantenimientosActivity)ctx).getMantenimientos(((MantenimientosActivity) ctx).getTienda_id());
+                                ((MantenimientosActivity)ctx).getMantenimientos();
                                 alertDialog.dismiss();
+                                new Utils().sendMailUpdateMantenimiento(id,ctx);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -495,5 +518,29 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    int findPersonalPosition(String personal)
+    {
+        int position = 0;
+        for(int i=0;i<personal_ids.length;i++){
+            if(personal_ids[i].equals(personal)){
+                position=i;
+                personal_id = personal_ids[i];
+            }
+        }
+        return position;
+    }
+
+    int findEquipoPosition(String equipo)
+    {
+        int position = 0;
+        for(int i=0;i<equipos_ids.length;i++){
+            if(equipos_ids[i].equals(equipo)){
+                position=i;
+                equipo_id = equipos_ids[i];
+            }
+        }
+        return position;
     }
 }

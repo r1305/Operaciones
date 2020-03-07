@@ -107,6 +107,31 @@
                                 android:fontFamily="@font/gotham_regular"
                                 android:gravity="start|center"/>
                         </LinearLayout>
+                        <!-- Serie -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_weight="1"
+                                android:text="@string/equipo_string_voltaje"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
+                                android:gravity="center|start"/>
+
+                            <TextView
+                                android:id="@+id/equipo_voltaje"
+                                android:layout_weight="0.5"
+                                android:text="220/1F"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/negro"
+                                android:fontFamily="@font/gotham_regular"
+                                android:gravity="start|center"/>
+                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>

@@ -134,9 +134,57 @@ public class Utils {
         queue.add(stringRequest);
     }
 
+    public void sendMailUpdateUrgencia(final String urgencia_id,final Context ctx)
+    {
+        String url = "http://161.132.108.154:8083/WebService/SendUpdateUrgencia";
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("sendMailUpdateUrgencia_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+                            System.out.println("sendMailUpdateUrgencia_error1: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("sendMailUpdateUrgencia_error2: " + error.getMessage());
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("urgencia_id",urgencia_id);
+                return params;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
     public void sendMailMantenimiento(final String tienda_id,final Context ctx)
     {
-        final Credentials cred = new Credentials(ctx);
         String url = "http://161.132.108.154:8083/WebService/SendNewMantenimiento";
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -184,7 +232,56 @@ public class Utils {
         queue.add(stringRequest);
     }
 
-    public void sendFichaMantenimiento(final String tienda_id,final String urgencia_id,final Context ctx)
+    public void sendMailUpdateMantenimiento(final String mantenimiento_id,final Context ctx)
+    {
+        String url = "http://161.132.108.154:8083/WebService/SendUpdateMantenimiento";
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("sendMailUpdateMantenimiento_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+                            System.out.println("sendMailUpdateMantenimiento_error1: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("sendMailUpdateMantenimiento_error2: " + error.getMessage());
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("mantenimiento_id",mantenimiento_id);
+                return params;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void sendFichaMantenimiento(final String tienda_id,final String mantenimiento_id,final Context ctx)
     {
         final Credentials cred = new Credentials(ctx);
         String url = "http://161.132.108.154:8083/WebService/SendFichaMantenimiento";
@@ -220,7 +317,7 @@ public class Utils {
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("tienda_id",tienda_id);
-                params.put("urgencia_id",urgencia_id);
+                params.put("mantenimiento_id",mantenimiento_id);
                 return params;
             }
         };
