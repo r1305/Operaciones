@@ -107,6 +107,10 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
     ViewDialog viewDialog;
 
+    SearchableSpinner spinner_motivos;
+    String[] motivos_id;
+    String motivo_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +180,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -325,6 +330,21 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     }
                 });
 
+                spinner_motivos = dialogView.findViewById(R.id.spinner_motivo);
+
+                getMotivos();
+                spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        motivo_id = motivos_id[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
                 getLastMantenimiento(tienda_id);
 
                 builder.setView(dialogView);
@@ -382,7 +402,13 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                         datePicker.show();
                     }
                 });
-
+                dialog_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            datePicker.show();
+                    }
+                });
                 // Create the DatePickerDialog instance
                 final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
 
@@ -405,6 +431,13 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(View v) {
                         timePicker.show();
+                    }
+                });
+                dialog_hora.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            timePicker.show();
                     }
                 });
 
@@ -787,10 +820,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         queue.add(stringRequest);
     }
 
-    public void getMotivos()
+    private void getMotivos()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        Log.i("getMotivos_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -805,34 +837,33 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
+                                String[] motivos = new String[respuesta.size()];
+                                motivos_id = new String[respuesta.size()];
+                                int i=0;
+                                for (Object o : respuesta)
+                                {
                                     JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("motivo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
+                                    motivos[i] = (String)ob.get("motivo");
+                                    motivos_id[i] = (String)ob.get("id");
                                     i++;
                                 }
-
-                                motivo_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
-                                motivo_id_adapter = data_id;
-                                motivos_spin.setAdapter(motivo_adapter);
-                                motivo_adapter.notifyDataSetChanged();
+                                ArrayAdapter<String> adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
+                                spinner_motivos.setAdapter(adapter_motivos);;
+                                adapter_motivos.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
+                            viewDialog.hideDialog(1);
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+                System.out.println("getMotivos_error: " + error);
             }
         });
 
@@ -886,6 +917,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", tipo_proveedor+"");
+                params.put("motivo_id", motivo_id);
                 return params;
             }
         };

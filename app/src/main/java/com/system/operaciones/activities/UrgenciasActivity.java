@@ -108,6 +108,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     ViewDialog viewDialog;
 
+    SearchableSpinner spinner_motivos;
+    String[] motivos_id;
+    String motivo_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +181,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -312,7 +317,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View dialogView = inflater.inflate(R.layout.dialog_new_urgencia, null);
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.9f));
                 getEquipos();
                 personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
                 personal_spinner.setPositiveButton("Cerrar");
@@ -342,6 +347,20 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
+                spinner_motivos = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
+
+                getMotivos();
+                spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        motivo_id = motivos_id[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -384,6 +403,19 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         datePicker.show();
                     }
                 });
+                dialog_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            datePicker.show();
+                    }
+                });
+                dialog_fecha.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datePicker.show();
+                    }
+                });
 
                 // Create the DatePickerDialog instance
                 final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
@@ -404,6 +436,19 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 datePicker.setTitle("Seleccione la hora");
 
                 icon_clock.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timePicker.show();
+                    }
+                });
+                dialog_hora.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            timePicker.show();
+                    }
+                });
+                dialog_hora.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         timePicker.show();
@@ -843,59 +888,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getMotivos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        Log.i("getMotivos_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("motivo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-
-                                motivo_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
-                                motivo_id_adapter = data_id;
-                                motivos_spin.setAdapter(motivo_adapter);
-                                motivo_adapter.notifyDataSetChanged();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     public void registerUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_urgencia_url);
@@ -942,6 +934,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", tipo_proveedor+"");
+                params.put("motivo_id", motivo_id);
                 return params;
             }
         };
@@ -1905,6 +1898,57 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 return params;
             }
         };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getMotivos()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMotivos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] motivos = new String[respuesta.size()];
+                                motivos_id = new String[respuesta.size()];
+                                int i=0;
+                                for (Object o : respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    motivos[i] = (String)ob.get("motivo");
+                                    motivos_id[i] = (String)ob.get("id");
+                                    i++;
+                                }
+                                ArrayAdapter<String> adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
+                                spinner_motivos.setAdapter(adapter_motivos);;
+                                adapter_motivos.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            viewDialog.hideDialog(1);
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("getMotivos_error: " + error);
+            }
+        });
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);

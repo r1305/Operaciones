@@ -18,7 +18,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -53,8 +52,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import jrizani.jrspinner.JRSpinner;
-
 public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHolder> {
 
     private Credentials cred;
@@ -67,12 +64,12 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private String str_fecha,str_hora;
     private String spinner_id;
     private int tipo_proveedor=1;
-    private Spinner motivos_spin;
 
     SearchableSpinner spinner_equipos;
     String[] equipos_ids;
     String equipo_id;
 
+    SearchableSpinner motivos_spin;
     ArrayAdapter<String> motivo_adapter;
     String[] motivo_id_adapter;
 
@@ -199,12 +196,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                     public void onClick(View v) {
                         Log.e("contratista_id",spinner_id+"");
                         motivos_spin.getSelectedItem();
-                        long motivo_id = motivo_adapter.getItemId(motivos_spin.getSelectedItemPosition());
-                        String item_motivo = motivo_id_adapter[Integer.parseInt(motivo_id+"")];
+                        String motivo_id = motivo_id_adapter[motivos_spin.getSelectedItemPosition()];
                         str_fecha = dialog_fecha.getText().toString();
                         str_hora = dialog_hora.getText().toString();
 
-                        updateUrgencia(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,urgencia_id);
+                        updateUrgencia(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor,motivo_id,urgencia_id);
                     }
                 });
 
@@ -235,6 +231,13 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                         datePicker.show();
                     }
                 });
+                dialog_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            datePicker.show();
+                    }
+                });
 
                 // Create the DatePickerDialog instance
                 final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
@@ -258,6 +261,13 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                         timePicker.show();
+                    }
+                });
+                dialog_hora.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus)
+                            timePicker.show();
                     }
                 });
             }
@@ -561,13 +571,14 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     i++;
                                 }
 
-                                motivo_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
+                                motivo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 motivo_id_adapter = data_id;
                                 motivos_spin.setAdapter(motivo_adapter);
                                 motivo_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            System.out.println(e);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -584,7 +595,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private void getUrgencia(final String id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencia_url);
-        Log.i("getMotivos_url",url);
+        Log.i("getUrgencia_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -592,7 +603,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
+                        System.out.println("getUrgencia_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -618,7 +629,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
+                System.out.println("getUrgencia_error: " + error.getMessage());
             }
         }){
             @Override
@@ -658,7 +669,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         return position;
     }
 
-    private void updateUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String id)
+    private void updateUrgencia(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id,final int tipo_proveedor,final String motivo_id,final String id)
     {
         System.out.println("observaciones: "+observaciones);
         System.out.println("equipo_id: "+equipo_id);
@@ -707,6 +718,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", String.valueOf(tipo_proveedor));
+                params.put("motivo_id", motivo_id);
                 return params;
             }
         };

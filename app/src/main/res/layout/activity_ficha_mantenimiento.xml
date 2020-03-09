@@ -263,7 +263,7 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <!--Motivo-->
         <LinearLayout
             android:layout_weight="1"
             android:layout_marginTop="6dp"
@@ -360,7 +360,7 @@
                     android:paddingEnd="5dp"/>
             </LinearLayout>
         </LinearLayout>
-
+        <!--Diagnóstico-->
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -406,7 +406,7 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <!--Solución-->
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"

@@ -7,7 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,6 +71,12 @@ public class MenuPrincipalActivity extends AppCompatActivity implements View.OnC
         int id = menuItem.getItemId();
         if(id==R.id.navLogOut){
             cred.logout();
+        }
+        if(id==R.id.navInicio)
+        {
+            Intent i = new Intent(ctx,ClientesActivity.class);
+            startActivity(i);
+            ((MenuPrincipalActivity)ctx).finish();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

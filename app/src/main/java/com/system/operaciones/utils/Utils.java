@@ -33,7 +33,6 @@ public class Utils {
 
     public void sendMailUrgencia(final String tienda_id,final Context ctx)
     {
-        final Credentials cred = new Credentials(ctx);
         String url = "http://161.132.108.154:8083/WebService/SendNewUrgencia";
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -45,12 +44,8 @@ public class Utils {
                         System.out.println("sendMail_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-//                        JSONArray respuesta = (JSONArray)parser.parse((String)cliente.getRespuesta());
-//                        System.out.println("sendMail_response: "+respuesta);
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
                             }
                         } catch (Exception e) {
                             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -61,7 +56,6 @@ public class Utils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("sendMail_error2: " + error.getMessage());
-
             }
         }){
             @Override
@@ -150,7 +144,6 @@ public class Utils {
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
                             }
                         } catch (Exception e) {
                             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -199,7 +192,6 @@ public class Utils {
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
                             }
                         } catch (Exception e) {
                             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -248,7 +240,6 @@ public class Utils {
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
                             }
                         } catch (Exception e) {
                             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -297,7 +288,6 @@ public class Utils {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
                             }
                         } catch (Exception e) {
                             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();

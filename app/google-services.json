@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "400388317697",
+    "firebase_url": "https://uezuoperaciones-f3c9e.firebaseio.com",
+    "project_id": "uezuoperaciones-f3c9e",
+    "storage_bucket": "uezuoperaciones-f3c9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400388317697:android:f61f3d29a8049f5085d600",
+        "android_client_info": {
+          "package_name": "com.system.operaciones"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400388317697-0a3mda5un8dmdk69vhu1cqgfniolg0mv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.system.operaciones",
+            "certificate_hash": "f9d7475e49f349b88e02a2a4d32032431716cca2"
+          }
+        },
+        {
+          "client_id": "400388317697-k4olepuhi18js06lurrgu48bv2icm8m1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBInsIUWXCPpFFz9fryFsgJHMGUwYYr8_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400388317697-k4olepuhi18js06lurrgu48bv2icm8m1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

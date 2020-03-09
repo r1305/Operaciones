@@ -73,6 +73,11 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
     String[] equipos_ids;
     String equipo_id="0";
 
+    SearchableSpinner motivos_spin;
+    ArrayAdapter<String> motivo_adapter;
+    String[] motivos_ids;
+    String motivo_id="0";
+
     private String[] personal_ids;
     private SearchableSpinner personal_spinner;
     private String personal_id="0";
@@ -144,6 +149,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 builder.setView(dialogView);
                 personal_spinner = dialogView.findViewById(R.id.spinner_edit_contratista);
                 spinner_equipos = dialogView.findViewById(R.id.urgencia_edit_spinner_equipos);
+                motivos_spin = dialogView.findViewById(R.id.mantenimiento_edit_spinner_motivos);
                 btn_cancelar = dialogView.findViewById(R.id.dialog_edit_btn_cancelar);
                 btn_update = dialogView.findViewById(R.id.dialog_btn_actualizar);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_edit_urgencia_fecha);
@@ -154,6 +160,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 observaciones = dialogView.findViewById(R.id.dialog_edit_observaciones);
 
                 alertDialog = builder.create();
+                getMotivos();
                 getEquipos(((MantenimientosActivity)ctx).getTienda_id());
                 getContratistas();
                 alertDialog.show();
@@ -161,6 +168,17 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
+                    }
+                });
+                motivos_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        motivo_id = motivos_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
                 spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -434,6 +452,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     observaciones.setText((String)o.get("observaciones"));
                                     personal_spinner.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
                                     spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
+                                    motivos_spin.setSelection(findMotivoPosition((String)o.get("motivo_id")));
                                 }
                             }
                         } catch (Exception e) {
@@ -468,6 +487,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         System.out.println("hora: "+hora);
         System.out.println("contratista_id: "+contratista_id);
         System.out.println("tipo_proveedor: "+tipo_proveedor);
+        System.out.println("mantenimiento_id: "+mantenimiento_id);
         System.out.println("id: "+id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_mantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -512,6 +532,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", String.valueOf(tipo_proveedor));
+                params.put("motivo_id", motivo_id);
                 return params;
             }
         };
@@ -542,5 +563,70 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             }
         }
         return position;
+    }
+
+    int findMotivoPosition(String motivo)
+    {
+        int position = 0;
+        for(int i=0;i<motivos_ids.length;i++){
+            if(motivos_ids[i].equals(motivo)){
+                position=i;
+                motivo_id = equipos_ids[i];
+            }
+        }
+        return position;
+    }
+
+    private void getMotivos()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
+        Log.i("getMotivos_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getMotivos_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                String[] data = new String[respuesta.size()];
+                                String[] data_id = new String[respuesta.size()];
+                                int i = 0;
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    String motivo = (String)ob.get("motivo");
+                                    String id = (String)ob.get("id");
+                                    data[i] = motivo;
+                                    data_id[i] = id;
+                                    i++;
+                                }
+
+                                motivo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
+                                motivos_ids = data_id;
+                                motivos_spin.setAdapter(motivo_adapter);
+                                motivo_adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getMotivos_error: " + error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }

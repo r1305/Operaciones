@@ -43,7 +43,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingStart="15dp"
         android:paddingEnd="15dp">
 
@@ -53,50 +53,103 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/dialog_edit_icon_calendar"
+            <LinearLayout
                 android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:src="@drawable/icon_calendar"
-                android:tint="@color/verdePastel"/>
-            <EditText
-                android:layout_weight="0.5"
-                android:id="@+id/dialog_edit_urgencia_fecha"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:outlineAmbientShadowColor="@color/negro"
-                android:textColor="@color/negro"
-                android:editable="false"
-                android:focusable="true"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/dialog_edit_icon_calendar"
+                    android:src="@drawable/icon_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Fecha Atención"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_weight="0.5"
+                    android:id="@+id/dialog_edit_urgencia_fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:outlineAmbientShadowColor="@color/negro"
+                    android:textColor="@color/negro"
+                    android:editable="false"
+                    android:focusable="true"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"/>
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_weight="1"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/dialog_edit_icon_clock"
+
+            <LinearLayout
                 android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:src="@drawable/icon_clock"
-                android:tint="@color/verdePastel"/>
-            <EditText
-                android:id="@+id/dialog_edit_urgencia_hora"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:outlineAmbientShadowColor="@color/negro"
-                android:textColor="@color/negro"
-                android:textSize="15sp"
-                android:editable="false"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:textAlignment="center"/>
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/dialog_edit_icon_clock"
+                    android:src="@drawable/icon_clock"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Hora Atención"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/dialog_edit_urgencia_hora"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:outlineAmbientShadowColor="@color/negro"
+                    android:textColor="@color/negro"
+                    android:textSize="15sp"
+                    android:editable="false"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+
 
         </LinearLayout>
     </LinearLayout>
@@ -120,9 +173,9 @@
                 android:layout_gravity="top">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
                     android:src="@drawable/icon_casco"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
                     android:gravity="center"
                     android:tint="@color/negro"
                     />
@@ -173,10 +226,10 @@
                 android:gravity="top">
 
                 <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="top"
                     android:src="@drawable/icon_split"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
                     android:tint="@color/negro" />
             </LinearLayout>
 
@@ -196,10 +249,10 @@
                     android:textColor="@color/verdePastel" />
 
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:layout_weight="1"
+
                     android:id="@+id/urgencia_edit_spinner_equipos"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/verdePastel"
                     android:outlineAmbientShadowColor="@color/celesteClaro"
@@ -230,30 +283,41 @@
                     android:src="@drawable/icon_check"
                     android:layout_gravity="top"/>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Motivo"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/verdePastel"
-                    android:fontFamily="@font/gotham_medium"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"/>
-                <Spinner
-                    android:layout_weight="0.5"
-                    android:id="@+id/urgencia_edit_spinner_motivos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:outlineAmbientShadowColor="@color/celesteClaro"
-                    android:pointerIcon="vertical_double_arrow"/>
-            </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
+    <!--Motivo-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Motivos"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="center_vertical"
+                android:textColor="@color/verdePastel"/>
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/urgencia_edit_spinner_motivos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/verdePastel"
+                android:outlineAmbientShadowColor="@color/celesteClaro"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -274,10 +338,10 @@
                 android:layout_gravity="top">
 
                 <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="35dp"
                     android:src="@drawable/icon_alert"
-                    android:layout_gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
                     android:tint="@color/negro"/>
             </LinearLayout>
             <LinearLayout
