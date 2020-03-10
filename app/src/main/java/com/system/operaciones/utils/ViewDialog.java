@@ -60,7 +60,8 @@ public class ViewDialog {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                dialog.dismiss();
+                if(dialog!=null)
+                    dialog.dismiss();
             }
         },Integer.parseInt(String.valueOf(timer*1000).split("\\.")[0]));
     }

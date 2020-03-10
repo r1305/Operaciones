@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +9,7 @@
     android:layout_gravity="center">
     <TextView
         android:layout_marginTop="6dp"
-        android:text="Actualizar Equipo"
+        android:text="Nuevo Equipo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -33,6 +34,7 @@
             android:textSize="15sp"
             android:fontFamily="@font/gotham_medium"
             android:textColor="@color/negro"/>
+
         <!-- Modelo -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,8 +51,10 @@
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/spinner_modelo"
                 android:textAlignment="textStart"
+                android:hint="Modelo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:jrs_icon_tint="@color/verdePastel"
                 android:backgroundTint="@color/verdePastel"
                 />
         </LinearLayout>
@@ -489,7 +493,7 @@
         <Button
             android:id="@+id/btn_registrar"
             android:visibility="gone"
-            android:text="Actualizar"
+            android:text="Registrar"
             android:layout_weight="1"
             android:background="@color/verdePastel"
             android:layout_width="match_parent"

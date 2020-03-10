@@ -64,7 +64,9 @@
     <string name="equipo_string_tipo"><u>Tipo:</u></string>
     <string name="equipo_string_voltaje"><u>Voltaje:</u></string>
     <string name="title_new_urgencia"><u>Nueva Urgencia</u></string>
+    <string name="title_update_urgencia"><u>Actualizar Urgencia</u></string>
     <string name="title_new_mantenimiento"><u>Nuevo Mantenimiento</u></string>
+    <string name="title_update_mantenimiento"><u>Actualizar Mantenimiento</u></string>
 
     <!-- User -->
     <string name="update_user_fcm">user/updateFcm.php</string>

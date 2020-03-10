@@ -23,7 +23,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -64,8 +65,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import jrizani.jrspinner.JRSpinner;
-
 public class UrgenciasActivity extends AppCompatActivity implements View.OnClickListener {
 
     Context ctx;
@@ -73,14 +72,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     LinearLayout datos, equipos, servicios;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
     ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
-    Spinner motivos_spin;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
     TextView txt_settings, txt_equipos, txt_datos, observaciones;
     Button dialog_btn_cancelar, dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
-    ArrayAdapter<String> motivo_adapter;
-    String[] motivo_id_adapter;
+
     private EditText dialog_hora, dialog_fecha;
     private ImageView icon_calendar, icon_clock;
     private String str_fecha, str_hora;
@@ -122,7 +119,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Urgencias");
-        verificarYPedirPermisosDeCamara();
 
         datos = findViewById(R.id.linear_datos);
         tab_datos = findViewById(R.id.tab_datos);
@@ -197,20 +193,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         et_cond_nro_serie.setText(codigo);
                 }
             }
-        }
-    }
-
-    private void verificarYPedirPermisosDeCamara() {
-        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
-        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
-            // En caso de que haya dado permisos ponemos la bandera en true
-            // y llamar al método
-            permisoCamaraConcedido = true;
-        } else {
-            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(UrgenciasActivity.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CODIGO_PERMISOS_CAMARA);
         }
     }
 
@@ -332,13 +314,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     }
                 });
-                getLastMantenimiento(tienda_id);
-
                 builder.setView(dialogView);
 
                 spinner_equipos = dialogView.findViewById(R.id.urgencia_spinner_equipos);
                 spinner_equipos.setPositiveButton("Cerrar");
-                motivos_spin = dialogView.findViewById(R.id.urgencia_spinner_motivos);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
                 icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
@@ -347,8 +326,26 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
-                spinner_motivos = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
-
+                spinner_motivos = dialogView.findViewById(R.id.new_urgencia_spinner_motivos);
+                final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
+                final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+                radioUezu.setChecked(true);
+                tipo_proveedor=1;
+                getTecnicos();
+                radioUezu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tipo_proveedor=1;
+                        getTecnicos();
+                    }
+                });
+                radioContratistas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tipo_proveedor=2;
+                        getContratistas();
+                    }
+                });
                 getMotivos();
                 spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -361,6 +358,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     }
                 });
+                spinner_motivos.setPositiveButton("Cerrar");
 
                 spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -375,6 +373,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     }
                 });
+                spinner_equipos.setPositiveButton("Cerrar");
+
 
                 Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
 
@@ -799,7 +799,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     setEquipo_count(i+1);
                                 }
                                 ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
-                                motivo_id_adapter = equipos_ids;
                                 if(spinner_equipos!=null){
                                     spinner_equipos.setAdapter(dialog_equipos_adapter);
                                     dialog_equipos_adapter.notifyDataSetChanged();
@@ -943,65 +942,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getLastMantenimiento(final String tienda_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
-        Log.i("getLastMantenimiento_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getLastMantenimiento_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                                getContratistas();
-                            } else {
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
-                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
-                                    if(last_mantenimiento<=7)
-                                    {
-                                        getContratistas();
-                                    }else{
-                                        getTecnicos();
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.e("getLastMantenimiento",e.getMessage());
-                            getContratistas();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getLastMantenimiento_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     //Dialog New Equipo
     Button btn_cancelar,btn_registrar,btn_siguiente,btn_atras;
     LinearLayout linear_evaporadora,linear_condensadora;
@@ -1068,7 +1008,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         viewDialog.showDialog();
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
         spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);
@@ -1097,12 +1037,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=1;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -1110,12 +1044,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=2;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -1934,12 +1862,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     i++;
                                 }
                                 ArrayAdapter<String> adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
-                                spinner_motivos.setAdapter(adapter_motivos);;
+                                spinner_motivos.setAdapter(adapter_motivos);
                                 adapter_motivos.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
-                            e.printStackTrace();
+                            System.out.println("getMotivos_error: "+e);
                         }
                     }
                 }, new Response.ErrorListener() {

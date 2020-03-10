@@ -30,7 +30,7 @@
         </LinearLayout>
         <TextView
             android:layout_weight="1"
-            android:text="Actualizar Urgencia"
+            android:text="@string/title_update_urgencia"
             android:textColor="@color/negro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -84,17 +84,13 @@
                     android:layout_gravity="center_vertical"/>
 
                 <EditText
-                    android:layout_weight="0.5"
                     android:id="@+id/dialog_edit_urgencia_fecha"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:outlineAmbientShadowColor="@color/negro"
-                    android:textColor="@color/negro"
-                    android:editable="false"
-                    android:focusable="true"
-                    android:textSize="15sp"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"/>
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -136,18 +132,13 @@
                     android:layout_gravity="center_vertical"/>
 
                 <EditText
-                    android:layout_weight="1"
                     android:id="@+id/dialog_edit_urgencia_hora"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:outlineAmbientShadowColor="@color/negro"
-                    android:textColor="@color/negro"
-                    android:textSize="15sp"
-                    android:editable="false"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:textAlignment="center"/>
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
             </LinearLayout>
 
 
@@ -162,6 +153,7 @@
         android:orientation="vertical"
         android:paddingStart="15dp"
         android:paddingEnd="15dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -184,9 +176,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+                <RadioGroup
+                    android:id="@+id/dialog_proveedor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_uezu"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Uezu"/>
 
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_contratistas"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contratistas"/>
+                </RadioGroup>
                 <TextView
-                    android:text="Contratista"
+                    android:id="@+id/label_personal"
+                    android:text="Técnicos"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -195,12 +206,13 @@
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:layout_weight="1"
                     android:id="@+id/spinner_edit_contratista"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/verdePastel"
                     android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -249,13 +261,13 @@
                     android:textColor="@color/verdePastel" />
 
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-
                     android:id="@+id/urgencia_edit_spinner_equipos"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_height="0dp"
                     android:backgroundTint="@color/verdePastel"
                     android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"
                      />
             </LinearLayout>
         </LinearLayout>
@@ -312,14 +324,16 @@
 
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/urgencia_edit_spinner_motivos"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="0dp"
                 android:backgroundTint="@color/verdePastel"
-                android:outlineAmbientShadowColor="@color/celesteClaro"/>
+                android:outlineAmbientShadowColor="@color/celesteClaro"
+                android:layout_marginStart="10dp"/>
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Observaciones -->
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -360,17 +374,19 @@
                     android:layout_gravity="center_vertical"/>
                 <EditText
                     android:id="@+id/dialog_edit_observaciones"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:lines="2"
-                    android:outlineSpotShadowColor="@color/celesteClaro"/>
+                    android:layout_height="0dp"
+                    android:maxLines="5"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
 
-
+    <!-- Botones -->
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"

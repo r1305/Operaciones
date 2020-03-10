@@ -7,26 +7,31 @@
     android:layout_margin="25dp">
 
     <LinearLayout
-        android:layout_weight="1.5"
-        android:layout_marginStart="15dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
         <LinearLayout
-            android:layout_width="32dp"
+            android:layout_weight="2.5"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end|center">
+            android:gravity="end">
 
             <ImageView
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_mantenimiento_black"
+                android:src="@drawable/icon_run"
+                android:gravity="end"
                 android:layout_gravity="end"/>
         </LinearLayout>
         <TextView
+            android:layout_weight="1"
             android:text="@string/title_new_mantenimiento"
             android:textColor="@color/negro"
             android:layout_width="match_parent"
@@ -37,7 +42,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -49,25 +54,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/dialog_icon_calendar"
+            <LinearLayout
                 android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:src="@drawable/icon_calendar"/>
-            <EditText
-                android:id="@+id/dialog_urgencia_fecha"
-                android:layout_weight="0.5"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:outlineAmbientShadowColor="@color/negro"
-                android:textColor="@color/negro"
-                android:editable="false"
-                android:focusable="true"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
 
+                <ImageView
+                    android:id="@+id/dialog_icon_calendar"
+                    android:src="@drawable/icon_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Fecha Atención"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:id="@+id/dialog_urgencia_fecha"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -75,24 +100,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/dialog_icon_clock"
+            <LinearLayout
                 android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:src="@drawable/icon_clock"
-                />
-            <EditText
-                android:id="@+id/dialog_urgencia_hora"
-                android:layout_weight="0.5"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:outlineAmbientShadowColor="@color/negro"
-                android:textColor="@color/negro"
-                android:editable="false"
-                android:focusable="true"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/dialog_icon_clock"
+                    android:src="@drawable/icon_clock"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Hora Atención"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:id="@+id/dialog_urgencia_hora"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -116,19 +162,39 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:src="@drawable/icon_casco"
                     android:gravity="center"
-                    android:tint="@color/negro"
-                    />
+                    android:tint="@color/negro"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <RadioGroup
+                    android:id="@+id/dialog_proveedor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_uezu"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Uezu"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_contratistas"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contratistas"/>
+                </RadioGroup>
+
                 <TextView
-                    android:text="Contratista"
+                    android:id="@+id/label_personal"
+                    android:text="Técnicos"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -136,66 +202,20 @@
                     android:fontFamily="@font/gotham_medium"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"/>
+
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/spinner_contratista"
+                    android:id="@+id/dialog_spinner_contratistas"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:textColor="@color/negro"
+                    android:layout_height="0dp"
                     android:backgroundTint="@color/verdePastel"
-                    android:layout_height="0dp"/>
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:layout_gravity="top">
-
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/icon_check"
-                    android:layout_gravity="top"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Motivo"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/verdePastel"
-                    android:fontFamily="@font/gotham_medium"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"/>
-                <Spinner
-                    android:layout_weight="0.5"
-                    android:id="@+id/urgencia_spinner_motivos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:outlineAmbientShadowColor="@color/celesteClaro"/>
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
+    <!-- Equipos -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -229,25 +249,24 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:text="Equipo"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/gotham_medium"
                     android:gravity="center_vertical"
-                    android:text="Equipo"
                     android:textColor="@color/verdePastel" />
 
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/urgencia_spinner_equipos"
+                    android:id="@+id/dialog_spinner_equipos"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_gravity="center"
                     android:backgroundTint="@color/verdePastel"
-                    android:gravity="center"
                     android:outlineAmbientShadowColor="@color/celesteClaro"
-                     />
+                    android:layout_marginStart="10dp"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -257,9 +276,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingStart="15dp"
         android:paddingEnd="15dp">
+
+        <LinearLayout
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:gravity="top">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                android:layout_gravity="top"
+                android:src="@drawable/icon_motivo"
+                android:tint="@color/negro" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -277,15 +310,16 @@
                 android:textColor="@color/verdePastel"/>
 
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/spinner_motivo"
+                android:id="@+id/dialog_spinner_motivos"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:textColor="@color/negro"
-                android:backgroundTint="@color/verdePastel"/>
+                android:backgroundTint="@color/verdePastel"
+                android:layout_marginStart="10dp"/>
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Observaciones -->
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -326,16 +360,18 @@
                     android:layout_gravity="center_vertical"/>
                 <EditText
                     android:id="@+id/dialog_observaciones"
-                    android:layout_weight="0.8"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:textAlignment="viewStart"
-                    android:outlineSpotShadowColor="@color/celesteClaro"/>
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
 
+    <!-- Botones -->
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"

@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -63,8 +64,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import jrizani.jrspinner.JRSpinner;
-
 public class MantenimientosActivity extends AppCompatActivity implements View.OnClickListener{
 
     Context ctx;
@@ -72,14 +71,11 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     LinearLayout datos, equipos, servicios;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
     ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
-    Spinner motivos_spin;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
     TextView txt_settings, txt_equipos, txt_datos, observaciones;
     Button dialog_btn_cancelar, dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
-    ArrayAdapter<String> motivo_adapter;
-    String[] motivo_id_adapter;
     private EditText dialog_hora, dialog_fecha;
     private ImageView icon_calendar, icon_clock;
     private String str_fecha, str_hora;
@@ -103,7 +99,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     int equipo_count = 0;
     int tipo_nro_serie = 1;
     private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
-    private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
+    private boolean permisoSolicitadoDesdeBoton = false;
 
     ViewDialog viewDialog;
 
@@ -121,7 +117,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Mantenimientos");
-        verificarYPedirPermisosDeCamara();
 
         datos = findViewById(R.id.linear_datos);
         tab_datos = findViewById(R.id.tab_datos);
@@ -199,46 +194,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void verificarYPedirPermisosDeCamara() {
-        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
-        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
-            // En caso de que haya dado permisos ponemos la bandera en true
-            // y llamar al método
-            permisoCamaraConcedido = true;
-        } else {
-            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(MantenimientosActivity.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CODIGO_PERMISOS_CAMARA);
-        }
-    }
-
     private void escanear() {
         Intent i = new Intent(ctx, LectorActivity.class);
         startActivityForResult(i, CODIGO_INTENT);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CODIGO_PERMISOS_CAMARA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Escanear directamten solo si fue pedido desde el botón
-                    if (permisoSolicitadoDesdeBoton) {
-                        escanear();
-                    }
-                    permisoCamaraConcedido = true;
-                } else {
-                    permisoDeCamaraDenegado();
-                }
-                break;
-        }
-    }
-
-    private void permisoDeCamaraDenegado() {
-        // Esto se llama cuando el usuario hace click en "Denegar" o
-        // cuando lo denegó anteriormente
-        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
     }
 
     public int getEquipo_count() {
@@ -300,7 +258,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tab_servicios:
                 hideTabs();
-                icon_tuerca.setImageResource(R.drawable.icon_urgencia_white);
+                icon_tuerca.setImageResource(R.drawable.icon_mantenimiento);
                 txt_settings.setTextColor(ctx.getResources().getColor(R.color.blanco));
                 servicios.setVisibility(View.VISIBLE);
                 tab_servicios.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -317,7 +275,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
                 getEquipos();
-                personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
+                personal_spinner = dialogView.findViewById(R.id.dialog_spinner_contratistas);
                 personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -330,7 +288,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     }
                 });
 
-                spinner_motivos = dialogView.findViewById(R.id.spinner_motivo);
+                spinner_motivos = dialogView.findViewById(R.id.dialog_spinner_motivos);
 
                 getMotivos();
                 spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -345,12 +303,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     }
                 });
 
-                getLastMantenimiento(tienda_id);
-
                 builder.setView(dialogView);
 
-                spinner_equipos = dialogView.findViewById(R.id.urgencia_spinner_equipos);
-                motivos_spin = dialogView.findViewById(R.id.urgencia_spinner_motivos);
+                spinner_equipos = dialogView.findViewById(R.id.dialog_spinner_equipos);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
                 icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
@@ -359,6 +314,28 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
+                RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
+                RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+                final TextView label_personal = dialogView.findViewById(R.id.label_personal);
+                tipo_proveedor = 1;
+                getTecnicos();
+                radioUezu.setChecked(true);
+                radioUezu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        label_personal.setText("Técnicos");
+                        tipo_proveedor=1;
+                        getTecnicos();
+                    }
+                });
+                radioContratistas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        label_personal.setText("Contratistas");
+                        tipo_proveedor=2;
+                        getContratistas();
+                    }
+                });
 
                 personal_spinner.setPositiveButton("Cerrar");
                 spinner_equipos.setPositiveButton("Cerrar");
@@ -473,7 +450,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         tab_equipos.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
         tab_servicios.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
 
-        icon_tuerca.setImageResource(R.drawable.icon_urgencia);
+        icon_tuerca.setImageResource(R.drawable.icon_mantenimiento_black);
         icon_split.setImageResource(R.drawable.icon_split);
         icon_check.setImageResource(R.drawable.icon_check);
 
@@ -926,65 +903,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         queue.add(stringRequest);
     }
 
-    public void getLastMantenimiento(final String tienda_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
-        Log.i("getLastMantenimiento_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getLastMantenimiento_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                                getContratistas();
-                            } else {
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
-                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
-                                    if(last_mantenimiento<=7)
-                                    {
-                                        getContratistas();
-                                    }else{
-                                        getTecnicos();
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.e("getLastMantenimiento",e.getMessage());
-                            getContratistas();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getLastMantenimiento_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     //Dialog New Equipo
     Button btn_cancelar,btn_registrar,btn_siguiente,btn_atras;
     LinearLayout linear_evaporadora,linear_condensadora;
@@ -1051,7 +969,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         viewDialog.showDialog();
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
         spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);
@@ -1078,12 +996,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=1;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -1091,12 +1003,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=2;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });

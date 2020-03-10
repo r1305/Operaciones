@@ -2370,7 +2370,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
         spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);

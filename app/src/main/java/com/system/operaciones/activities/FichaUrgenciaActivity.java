@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +18,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,17 +54,13 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import jrizani.jrspinner.JRSpinner;
-
-import static androidx.core.graphics.TypefaceCompatUtil.getTempFile;
 
 public class FichaUrgenciaActivity extends AppCompatActivity {
 
@@ -2362,7 +2356,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_register_equipo, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
         spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);

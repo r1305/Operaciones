@@ -18,6 +18,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -78,6 +80,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private String personal_id;
 
     String urgencia_id = "0";
+    String tienda_id = "0";
 
     public UrgenciaAdapter(List<JSONObject> l) {
         this.l = l;
@@ -95,6 +98,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
         urgencia_id = (String)ob.get("id");
+        tienda_id = (String)ob.get("tienda_id");
         final String status = (String)ob.get("status");
         Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
 
@@ -132,6 +136,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 JSONObject json = l.get(holder.getAdapterPosition());
                 urgencia_id = (String)json.get("id");
                 System.out.println("holder_id: "+position);
@@ -144,6 +149,31 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
                 dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
                 builder.setView(dialogView);
+                final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
+                final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+                final TextView proveedor_label = dialogView.findViewById(R.id.label_personal);
+
+
+                radioUezu.setChecked(true);
+                tipo_proveedor = 1;
+                getTecnicos();
+                radioUezu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tipo_proveedor=1;
+                        getTecnicos();
+                        proveedor_label.setText("Técnicos");
+                    }
+                });
+                radioContratistas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tipo_proveedor=2;
+                        getContratistas();
+                        proveedor_label.setText("Contratistas");
+                    }
+                });
+
                 personal_spinner = dialogView.findViewById(R.id.spinner_edit_contratista);
                 motivos_spin = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
                 spinner_equipos = dialogView.findViewById(R.id.urgencia_edit_spinner_equipos);
@@ -157,9 +187,6 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 observaciones = dialogView.findViewById(R.id.dialog_edit_observaciones);
 
                 alertDialog = builder.create();
-                getEquipos(((UrgenciasActivity)ctx).getTienda_id());
-                getMotivos();
-                getLastMantenimiento(((UrgenciasActivity)ctx).getTienda_id());
                 alertDialog.show();
                 btn_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -314,7 +341,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     private void getContratistas()
     {
-        tipo_proveedor=1;
+        tipo_proveedor=2;
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getContratistas_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -368,7 +395,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     private void getTecnicos()
     {
-        tipo_proveedor=2;
+        tipo_proveedor=1;
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTecnicos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -418,65 +445,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
-    private void getLastMantenimiento(final String tienda_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.get_last_mantenimiento_url);
-        Log.i("getLastMantenimiento_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getLastMantenimiento_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-//                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                                getContratistas();
-                            } else {
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    int last_mantenimiento = Integer.parseInt((String)ob.get("last_mantenimiento"));
-                                    System.out.println("last_mantenimiento:"+last_mantenimiento);
-                                    if(last_mantenimiento<=7)
-                                    {
-                                        getContratistas();
-                                    }else{
-                                        getTecnicos();
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            getContratistas();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getLastMantenimiento_error: " + error.getMessage());
-                getContratistas();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getEquipos(final String tienda_id)
+    private void getEquipos()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
         Log.i("getEquipos_url",url);
@@ -612,6 +581,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
+                                getMotivos();
+                                getEquipos();
                                 for (Object ob : respuesta){
                                     JSONObject o = (JSONObject)ob;
                                     spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
