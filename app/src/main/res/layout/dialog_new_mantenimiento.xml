@@ -42,6 +42,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_fecha"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -143,6 +144,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_personal"
         android:layout_weight="1"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

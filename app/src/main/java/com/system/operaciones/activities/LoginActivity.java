@@ -98,12 +98,13 @@ public class LoginActivity extends AppCompatActivity {
                                     String name = (String) ob.get("name");
                                     String empresa_name = (String) ob.get("company_name");
                                     String email = (String) ob.get("email");
-                                    String points = ob.get("puntaje").toString();
+                                    String user_type = (String) ob.get("user_type");
                                     System.out.println("login_user_email: " + email);
                                     Credentials cred = new Credentials(ctx);
                                     cred.save_credentials(codAuth, user_id, company_id, is_new_password, psw1, name, empresa_name);
                                     cred.save_data("key_email", email);
-                                    cred.save_data("key_points",points);
+                                    cred.save_data("key_points","0");
+                                    cred.save_data("key_user_type",user_type);
                                     final Intent i = new Intent(ctx, ClientesActivity.class);
                                     viewDialog.hideDialog(3);
                                     new Handler().postDelayed(new Runnable() {

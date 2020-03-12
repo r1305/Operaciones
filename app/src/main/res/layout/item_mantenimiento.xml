@@ -47,6 +47,26 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginStart="2dp">
+                    <!-- Mantenimiento NUMBER-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/mantenimiento_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="N° "
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="center"/>
+                    </LinearLayout>
                     <!-- Registro-->
                     <LinearLayout
                         android:layout_weight="1"
@@ -68,7 +88,7 @@
                             android:gravity="left|center"/>
 
                         <TextView
-                            android:id="@+id/item_urgencia_registro"
+                            android:id="@+id/item_mantenimiento_registro"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -108,6 +128,37 @@
 
                     <!-- Contratista-->
                     <LinearLayout
+                        android:id="@+id/linear_contratista"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.4"
+                            android:fontFamily="@font/gotham_regular"
+                            android:gravity="left|center"
+                            android:text="Atendido: "
+                            android:textColor="@color/negro"
+                            android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/item_urgencia_contratista"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_regular"/>
+                    </LinearLayout>
+
+                    <!-- Fecha Cierre-->
+                    <LinearLayout
                         android:layout_weight="1"
                         android:layout_marginStart="6dp"
                         android:layout_width="match_parent"
@@ -119,14 +170,14 @@
                             android:layout_weight="0.4"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Atendido: "
+                            android:text="Cierre: "
                             android:textColor="@color/negro"
                             android:fontFamily="@font/gotham_regular"
                             android:textSize="15sp"
                             android:layout_gravity="center"
                             android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_contratista"
+                            android:id="@+id/item_mantenimiento_cierre"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"

@@ -52,7 +52,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     Credentials cred;
     Context ctx;
     List<JSONObject> l = new ArrayList<>();
-    final String tienda_id = "";
+    String tienda_id;
     JSONObject equipo;
     public EquipoAdapter(List<JSONObject> l) {
         this.l = l;
@@ -75,7 +75,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         final String nro_serie = (String)ob.get("evap_nro_serie");
         final String logo = (String)ob.get("marca");
         final String voltaje = (String)ob.get("voltaje");
+        final String nro_equipo = (String)ob.get("nro_equipo");
 
+        holder.nro_equipo.setText(nro_equipo);
         holder.voltaje.setText(voltaje);
         System.out.println(ob);
         holder.modelo.setText(modelo);
@@ -94,6 +96,10 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                 showModalUpdateEquipo(equipo_id);
             }
         });
+        if(cred.getData("key_user_type").equals("2"))
+        {
+            holder.edit.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -107,8 +113,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView modelo,tipo,nro_serie,voltaje;
+        TextView modelo,tipo,nro_serie,voltaje,nro_equipo;
         ImageView marca,edit;
+        LinearLayout linear_contratista;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -119,6 +126,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
             marca = itemView.findViewById(R.id.equipo_logo);
             edit = itemView.findViewById(R.id.edit_equipo);
             voltaje = itemView.findViewById(R.id.equipo_voltaje);
+            nro_equipo = itemView.findViewById(R.id.tv_nro_equipo);
         }
     }
 
@@ -185,6 +193,8 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
+    SearchableSpinner spinner_nro_equipo;
+
     int tipo_nro_serie = 1;
     private static final int CODIGO_INTENT = 2;
 
@@ -213,6 +223,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
         spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
+        spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
 
         et_nro_serie = dialogView.findViewById(R.id.nro_serie);
         icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
@@ -979,6 +990,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
+        Log.e("nro_equipo",spinner_nro_equipo.getSelectedItem().toString());
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_datos_equipo_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -1029,6 +1041,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                 params.put("cond_fase_id", cond_fase_id);
                 params.put("cond_refrigerante_id", cond_refrigerante_id);
                 params.put("cond_nro_serie", cond_nro_serie);
+                params.put("nro_equipo", spinner_nro_equipo.getSelectedItem().toString());
                 return params;
             }
         };
@@ -1059,7 +1072,9 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
                             } else {
                                 for(Object o : respuesta){
                                     equipo = (JSONObject)o;
-                                    System.out.println("equipo; "+equipo);
+                                    tienda_id = (String)equipo.get("tienda_id");
+                                    int nro_equipo_position = Integer.parseInt((String)equipo.get("nro_equipo"))-1;
+                                    spinner_nro_equipo.setSelection(nro_equipo_position);
                                     et_nro_serie.setText((String)equipo.get("evap_nro_serie"));
                                     int evap_modelo_position = findModeloEvap((String)equipo.get("evap_modelo_id"));
                                     spinner_modelos.setSelection(evap_modelo_position);
@@ -1114,6 +1129,7 @@ public class EquipoAdapter extends RecyclerView.Adapter<EquipoAdapter.ViewHolder
 
     public void getEquiposTienda()
     {
+        System.out.println("tienda_id: "+tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
         Log.i("getEquiposTienda_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);

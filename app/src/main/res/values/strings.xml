@@ -6,7 +6,7 @@
 
     <string name="base_url">https://www.uezuperu.com/app/connection/</string>
     <string name="session_url">user/session.php</string>
-    <string name="login_url">user/login.php</string>
+    <string name="login_url">ocupa/user/login.php</string>
 
     <!-- Cliente -->
     <string name="getClientes_url">ocupa/cliente/getClientes.php</string>
@@ -70,4 +70,12 @@
 
     <!-- User -->
     <string name="update_user_fcm">user/updateFcm.php</string>
+
+    <array name="equipo_number">
+        <item>Equipo 1</item>
+        <item>Equipo 2</item>
+        <item>Equipo 3</item>
+        <item>Equipo 4</item>
+        <item>Equipo 5</item>
+    </array>
 </resources>

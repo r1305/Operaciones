@@ -29,10 +29,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,12 +76,12 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     String tienda_id;
     private EditText dialog_hora, dialog_fecha;
     private ImageView icon_calendar, icon_clock;
-    private String str_fecha, str_hora;
+    private String str_fecha = "", str_hora = "";
     private int tipo_proveedor = 1;
 
     private String[] personal_ids;
     private SearchableSpinner personal_spinner;
-    private String personal_id;
+    private String personal_id = "0";
 
     RecyclerView recycler;
     List<JSONObject> l = new ArrayList<>();
@@ -94,12 +92,11 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     EquipoAdapter equipos_adapter;
 
     String[] equipos_ids;
-    String equipo_id;
+    String equipo_id = "0";
 
     int equipo_count = 0;
     int tipo_nro_serie = 1;
-    private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
-    private boolean permisoSolicitadoDesdeBoton = false;
+    private static final int CODIGO_INTENT = 2;
 
     ViewDialog viewDialog;
 
@@ -166,7 +163,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         getEquiposTienda();
 
         datos.setVisibility(View.VISIBLE);
-        tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
+        tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel,null));
 
         tab_datos.setOnClickListener(this);
         tab_equipos.setOnClickListener(this);
@@ -175,6 +172,10 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_adapter.notifyDataSetChanged();
+        if(cred.getData("key_user_type").equals("2"))
+            btn_new_equipo.setVisibility(View.GONE);
+        else
+            btn_new_equipo.setVisibility(View.VISIBLE);
 
     }
 
@@ -245,23 +246,23 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             case R.id.tab_datos:
                 hideTabs();
                 datos.setVisibility(View.VISIBLE);
-                txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco));
+                txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco,null));
                 icon_check.setImageResource(R.drawable.icon_check_white);
-                tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
+                tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel,null));
                 break;
             case R.id.tab_equipos:
                 hideTabs();
                 equipos.setVisibility(View.VISIBLE);
-                txt_equipos.setTextColor(ctx.getResources().getColor(R.color.blanco));
+                txt_equipos.setTextColor(ctx.getResources().getColor(R.color.blanco,null));
                 icon_split.setImageResource(R.drawable.icon_split_white);
-                tab_equipos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
+                tab_equipos.setBackgroundColor(getResources().getColor(R.color.verdePastel,null));
                 break;
             case R.id.tab_servicios:
                 hideTabs();
                 icon_tuerca.setImageResource(R.drawable.icon_mantenimiento);
-                txt_settings.setTextColor(ctx.getResources().getColor(R.color.blanco));
+                txt_settings.setTextColor(ctx.getResources().getColor(R.color.blanco,null));
                 servicios.setVisibility(View.VISIBLE);
-                tab_servicios.setBackgroundColor(getResources().getColor(R.color.verdePastel));
+                tab_servicios.setBackgroundColor(getResources().getColor(R.color.verdePastel,null));
                 break;
             case R.id.btn_new_urgencia:
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -317,6 +318,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
                 RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
                 final TextView label_personal = dialogView.findViewById(R.id.label_personal);
+
                 tipo_proveedor = 1;
                 getTecnicos();
                 radioUezu.setChecked(true);
@@ -386,6 +388,12 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                             datePicker.show();
                     }
                 });
+                dialog_fecha.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datePicker.show();
+                    }
+                });
                 // Create the DatePickerDialog instance
                 final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
 
@@ -417,6 +425,12 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                             timePicker.show();
                     }
                 });
+                dialog_hora.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timePicker.show();
+                    }
+                });
 
                 getMotivos();
                 dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +446,15 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                         registerMantenimiento(observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
                     }
                 });
+                LinearLayout linear_fecha = dialogView.findViewById(R.id.linear_fecha);
+                LinearLayout linear_personal = dialogView.findViewById(R.id.linear_personal);
+                if(cred.getData("key_user_type").equals("2")){
+                    linear_fecha.setVisibility(View.GONE);
+                    linear_personal.setVisibility(View.GONE);
+                }else{
+                    linear_fecha.setVisibility(View.VISIBLE);
+                    linear_personal.setVisibility(View.VISIBLE);
+                }
                 alertDialog = builder.create();
                 alertDialog.show();
                 break;
@@ -446,17 +469,17 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         equipos.setVisibility(View.GONE);
         servicios.setVisibility(View.GONE);
         datos.setVisibility(View.GONE);
-        tab_datos.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
-        tab_equipos.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
-        tab_servicios.setBackgroundColor(getResources().getColor(R.color.plomoBackground));
+        tab_datos.setBackgroundColor(getResources().getColor(R.color.plomoBackground,null));
+        tab_equipos.setBackgroundColor(getResources().getColor(R.color.plomoBackground,null));
+        tab_servicios.setBackgroundColor(getResources().getColor(R.color.plomoBackground,null));
 
         icon_tuerca.setImageResource(R.drawable.icon_mantenimiento_black);
         icon_split.setImageResource(R.drawable.icon_split);
         icon_check.setImageResource(R.drawable.icon_check);
 
-        txt_datos.setTextColor(ctx.getResources().getColor(R.color.negro));
-        txt_equipos.setTextColor(ctx.getResources().getColor(R.color.negro));
-        txt_settings.setTextColor(ctx.getResources().getColor(R.color.negro));
+        txt_datos.setTextColor(ctx.getResources().getColor(R.color.negro,null));
+        txt_equipos.setTextColor(ctx.getResources().getColor(R.color.negro,null));
+        txt_settings.setTextColor(ctx.getResources().getColor(R.color.negro,null));
     }
 
     private void getContratistas()
@@ -700,7 +723,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     JSONObject ob = (JSONObject)o;
                                     System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
@@ -737,7 +760,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 return params;
             }
         };
-
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
@@ -828,7 +850,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     i++;
                                 }
                                 ArrayAdapter<String> adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
-                                spinner_motivos.setAdapter(adapter_motivos);;
+                                spinner_motivos.setAdapter(adapter_motivos);
                                 adapter_motivos.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -862,8 +884,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                         System.out.println("create_mantenimiento_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
@@ -964,6 +984,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
+    SearchableSpinner spinner_nro_equipo;
+
     private void showModalRegisterEquipo()
     {
         viewDialog.showDialog();
@@ -986,6 +1008,18 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
+
+        spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
+        ArrayAdapter<String> nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
+        spinner_nro_equipo.setAdapter(nro_equipo_adapter);
+        nro_equipo_adapter.notifyDataSetChanged();
+
+        spinner_nro_equipo.setPositiveButton("Cerrar");
+        spinner_nro_equipo.setTitle("Seleccione el Nro de equipo");
+        spinner_modelos.setPositiveButton("Cerrar");
+        spinner_modelos.setTitle("Seleccione un modelo");
+        spinner_cond_modelos.setPositiveButton("Cerrar");
+        spinner_cond_modelos.setTitle("Seleccione un modelo");
 
         et_nro_serie = dialogView.findViewById(R.id.nro_serie);
         icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
@@ -1223,6 +1257,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 btn_siguiente.setVisibility(View.VISIBLE);
             }
         });
+
         btn_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1735,6 +1770,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
+        System.out.println("nro_equipo: "+spinner_nro_equipo.getSelectedItem().toString());
         System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
         System.out.println(cond_marca_id+"-"+cond_modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
@@ -1749,8 +1785,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                         System.out.println("registerEquipo_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
@@ -1792,6 +1826,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("cond_fase_id", cond_fase_id);
                 params.put("cond_refrigerante_id", cond_refrigerante_id);
                 params.put("cond_nro_serie", cond_nro_serie);
+                params.put("nro_equipo", spinner_nro_equipo.getSelectedItem().toString());
                 return params;
             }
         };

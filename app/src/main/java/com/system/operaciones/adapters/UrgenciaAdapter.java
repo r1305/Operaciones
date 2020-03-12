@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -37,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.system.operaciones.R;
 import com.system.operaciones.activities.FichaUrgenciaActivity;
+import com.system.operaciones.activities.MantenimientosActivity;
 import com.system.operaciones.activities.UrgenciasActivity;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
@@ -71,16 +73,19 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     String[] equipos_ids;
     String equipo_id;
 
-    SearchableSpinner motivos_spin;
+    SearchableSpinner spinner_motivos;
     ArrayAdapter<String> motivo_adapter;
-    String[] motivo_id_adapter;
+    String[] motivos_ids;
 
     private String[] personal_ids;
-    private SearchableSpinner personal_spinner;
+    private SearchableSpinner spinner_personal;
     private String personal_id;
 
     String urgencia_id = "0";
     String tienda_id = "0";
+    TextView label_personal;
+
+    RadioButton radioUezu,radioContratistas;
 
     public UrgenciaAdapter(List<JSONObject> l) {
         this.l = l;
@@ -133,6 +138,16 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             });
         }
 
+        if(cred.getData("key_user_type").equals("2"))
+        {
+            if(status.equals("0")){
+                holder.icon_pencil.setVisibility(View.GONE);
+                holder.icon_status.setVisibility(View.GONE);
+                holder.icon_file.setVisibility(View.GONE);
+            }
+            holder.linear_contratista.setVisibility(View.GONE);
+        }
+
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,20 +164,19 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 dialogView.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
                 dialogView.setMinimumHeight((int)(displayRectangle.height() * 0.7f));
                 builder.setView(dialogView);
-                final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
-                final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
-                final TextView proveedor_label = dialogView.findViewById(R.id.label_personal);
-
+                radioUezu = dialogView.findViewById(R.id.radio_uezu);
+                radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+                label_personal = dialogView.findViewById(R.id.label_personal);
+                getUrgencia(urgencia_id);
 
                 radioUezu.setChecked(true);
                 tipo_proveedor = 1;
-                getTecnicos();
                 radioUezu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         tipo_proveedor=1;
                         getTecnicos();
-                        proveedor_label.setText("Técnicos");
+                        label_personal.setText("Técnicos");
                     }
                 });
                 radioContratistas.setOnClickListener(new View.OnClickListener() {
@@ -170,13 +184,13 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                     public void onClick(View v) {
                         tipo_proveedor=2;
                         getContratistas();
-                        proveedor_label.setText("Contratistas");
+                        label_personal.setText("Contratistas");
                     }
                 });
 
-                personal_spinner = dialogView.findViewById(R.id.spinner_edit_contratista);
-                motivos_spin = dialogView.findViewById(R.id.urgencia_edit_spinner_motivos);
-                spinner_equipos = dialogView.findViewById(R.id.urgencia_edit_spinner_equipos);
+                spinner_personal = dialogView.findViewById(R.id.spinner_contratista);
+                spinner_motivos = dialogView.findViewById(R.id.spinner_motivos);
+                spinner_equipos = dialogView.findViewById(R.id.spinner_equipos);
                 btn_cancelar = dialogView.findViewById(R.id.dialog_edit_btn_cancelar);
                 btn_update = dialogView.findViewById(R.id.dialog_btn_actualizar);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_edit_urgencia_fecha);
@@ -206,7 +220,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                     }
                 });
 
-                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                spinner_personal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         personal_id = personal_ids[position];
@@ -222,8 +236,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                         Log.e("contratista_id",spinner_id+"");
-                        motivos_spin.getSelectedItem();
-                        String motivo_id = motivo_id_adapter[motivos_spin.getSelectedItemPosition()];
+                        spinner_motivos.getSelectedItem();
+                        String motivo_id = motivos_ids[spinner_motivos.getSelectedItemPosition()];
                         str_fecha = dialog_fecha.getText().toString();
                         str_hora = dialog_hora.getText().toString();
 
@@ -322,10 +336,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
         TextView registro,fecha_hora_atencion,contratista,cierre,number;
-        LinearLayout linear_full;
+        LinearLayout linear_full,linear_contratista;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
             super(itemView);
+            linear_contratista = itemView.findViewById(R.id.linear_contratista);
             card = itemView.findViewById(R.id.item_card_urgencia);
             number = itemView.findViewById(R.id.urgencia_number);
             icon_pencil = itemView.findViewById(R.id.icon_pencil);
@@ -336,6 +351,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             icon_file = itemView.findViewById(R.id.icon_file);
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
+            label_personal = itemView.findViewById(R.id.label_personal);
         }
     }
 
@@ -373,10 +389,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 System.out.println("contratistas_data_ids: "+data_id.length);
                                 ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                spinner_personal.setAdapter(dialog_personal_adapter);
                                 dialog_personal_adapter.notifyDataSetChanged();
-
-                                getUrgencia(urgencia_id);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -426,10 +440,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 }
                                 ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                spinner_personal.setAdapter(dialog_personal_adapter);
                                 dialog_personal_adapter.notifyDataSetChanged();
-                                getUrgencia(urgencia_id);
-
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -445,10 +457,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         queue.add(stringRequest);
     }
 
-    private void getEquipos()
+    private void getEquipos(final String tienda_id)
     {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
         Log.i("getEquipos_url",url);
+
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
         // Request a string response from the provided URL.
@@ -456,7 +469,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getEquipos_response: " + response);
+                        System.out.println("getEquiposAdapter_response: " + response);
+                        Log.e("adapter_tienda_id",tienda_id);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -467,6 +481,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                             } else {
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
+                                System.out.println("equipos_ids_size1: "+equipos_ids.length);
                                 int i=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
@@ -479,20 +494,22 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     i++;
                                 }
 
-                                ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
-                                motivo_id_adapter = equipos_ids;
+                                System.out.println("equipos_ids_size2: "+equipos_ids.length);
+                                System.out.println("equipos_size: "+equipos.length);
+
+                                ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,equipos);
                                 spinner_equipos.setAdapter(dialog_equipos_adapter);
                                 dialog_equipos_adapter.notifyDataSetChanged();
-
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            System.out.println("getEquipos_error1: "+e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("getEquipos_error: " + error.getMessage());
+                System.out.println("getEquipos_error2: " + error.getMessage());
             }
         }){
             @Override
@@ -505,6 +522,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
         };
 
         // Add the request to the RequestQueue.
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(5000, 20, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(stringRequest);
     }
 
@@ -541,8 +559,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 }
 
                                 motivo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                motivo_id_adapter = data_id;
-                                motivos_spin.setAdapter(motivo_adapter);
+                                motivos_ids = data_id;
+                                spinner_motivos.setAdapter(motivo_adapter);
                                 motivo_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -582,14 +600,46 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 getMotivos();
-                                getEquipos();
+                                getEquipos(((UrgenciasActivity)ctx).getTienda_id());
                                 for (Object ob : respuesta){
-                                    JSONObject o = (JSONObject)ob;
-                                    spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
-                                    personal_spinner.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
+                                    final JSONObject o = (JSONObject)ob;
                                     dialog_fecha.setText((String)o.get("fecha_atencion"));
                                     dialog_hora.setText((String)o.get("hora_atencion"));
                                     observaciones.setText((String)o.get("observaciones"));
+                                    if(o.get("tipo_proveedor").equals("1")){
+                                        getTecnicos();
+                                        radioUezu.setChecked(true);
+                                        tipo_proveedor=1;
+                                        label_personal.setText("Técnicos");
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                spinner_personal.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
+                                            }
+                                        }, 2500);
+
+                                    }else{
+                                        getContratistas();
+                                        radioContratistas.setChecked(true);
+                                        tipo_proveedor=2;
+                                        label_personal.setText("Contratistas");
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                spinner_personal.setSelection(findPersonalPosition((String)o.get("proveedor_id")));
+                                            }
+                                        }, 2500);
+                                    }
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
+                                            spinner_motivos.setSelection(findMotivoPosition((String)o.get("motivo_id")));
+                                        }
+                                    }, 2500);
+
                                 }
                             }
                         } catch (Exception e) {
@@ -631,10 +681,24 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     int findEquipoPosition(String equipo)
     {
         int position = 0;
+        System.out.println("equipos_ids"+equipos_ids.length);
         for(int i=0;i<equipos_ids.length;i++){
             if(equipos_ids[i].equals(equipo)){
                 position=i;
                 equipo_id = equipos_ids[i];
+            }
+        }
+        return position;
+    }
+
+    int findMotivoPosition(String motivo)
+    {
+        int position = 0;
+        System.out.println("motivos_ids"+motivos_ids.length);
+        for(int i=0;i<motivos_ids.length;i++){
+            if(motivos_ids[i].equals(motivo)){
+                position=i;
+                equipo_id = motivos_ids[i];
             }
         }
         return position;

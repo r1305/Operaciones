@@ -118,7 +118,8 @@ public class ClientesActivity extends AppCompatActivity {
                             if (cliente.getIde_error() == 0) {
                                 l.clear();
                                 adapter.notifyDataSetChanged();
-                                viewDialog.hideDialog(1);
+                                if(viewDialog!=null)
+                                    viewDialog.hideDialog(1);
                                 if(from==1) {
                                     Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                                 }
@@ -134,7 +135,8 @@ public class ClientesActivity extends AppCompatActivity {
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
-                                viewDialog.hideDialog(1);
+                                if(viewDialog!=null)
+                                    viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
                             l.clear();

@@ -84,7 +84,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     private int tipo_proveedor = 1;
 
     private String[] personal_ids;
-    private SearchableSpinner personal_spinner;
+    private SearchableSpinner spinner_personal;
     private String personal_id;
 
     RecyclerView recycler;
@@ -177,6 +177,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_adapter.notifyDataSetChanged();
+        if(cred.getData("key_user_type").equals("2"))
+            btn_new_equipo.setVisibility(View.GONE);
+        else
+            btn_new_equipo.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -269,7 +274,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         switch (id) {
             case R.id.tab_datos:
                 hideTabs();
-//                scroll_datos.setVisibility(View.VISIBLE);
                 datos.setVisibility(View.VISIBLE);
                 txt_datos.setTextColor(ctx.getResources().getColor(R.color.blanco));
                 icon_check.setImageResource(R.drawable.icon_check_white);
@@ -301,9 +305,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.9f));
                 getEquipos();
-                personal_spinner = dialogView.findViewById(R.id.spinner_contratista);
-                personal_spinner.setPositiveButton("Cerrar");
-                personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                spinner_personal = dialogView.findViewById(R.id.spinner_contratista);
+                spinner_personal.setPositiveButton("Cerrar");
+                spinner_personal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         personal_id = personal_ids[position];
@@ -316,7 +320,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 });
                 builder.setView(dialogView);
 
-                spinner_equipos = dialogView.findViewById(R.id.urgencia_spinner_equipos);
+                spinner_equipos = dialogView.findViewById(R.id.spinner_equipos);
                 spinner_equipos.setPositiveButton("Cerrar");
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
@@ -326,10 +330,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
-                spinner_motivos = dialogView.findViewById(R.id.new_urgencia_spinner_motivos);
+                spinner_motivos = dialogView.findViewById(R.id.spinner_motivos);
                 final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
                 final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
                 radioUezu.setChecked(true);
+
                 tipo_proveedor=1;
                 getTecnicos();
                 radioUezu.setOnClickListener(new View.OnClickListener() {
@@ -374,6 +379,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
                 spinner_equipos.setPositiveButton("Cerrar");
+                spinner_motivos.setPositiveButton("Cerrar");
+                spinner_personal.setPositiveButton("Cerrar");
 
 
                 Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
@@ -469,6 +476,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         registerUrgencia(observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
                     }
                 });
+                LinearLayout linear_fecha = dialogView.findViewById(R.id.linear_fecha);
+                LinearLayout linear_personal = dialogView.findViewById(R.id.linear_personal);
+                if(cred.getData("key_user_type").equals("2")){
+                    linear_fecha.setVisibility(View.GONE);
+                    linear_personal.setVisibility(View.GONE);
+                }else{
+                    linear_fecha.setVisibility(View.VISIBLE);
+                    linear_personal.setVisibility(View.VISIBLE);
+                }
                 alertDialog = builder.create();
                 alertDialog.show();
                 break;
@@ -528,7 +544,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 }
                                 ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                spinner_personal.setAdapter(dialog_personal_adapter);
                                 dialog_personal_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -580,7 +596,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                                 ArrayAdapter dialog_personal_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,data);
                                 personal_ids = data_id;
-                                personal_spinner.setAdapter(dialog_personal_adapter);
+                                spinner_personal.setAdapter(dialog_personal_adapter);
                                 dialog_personal_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -790,7 +806,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     JSONObject ob = (JSONObject)o;
                                     System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
@@ -1025,6 +1041,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
+
+        final SearchableSpinner spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
+        ArrayAdapter<String> nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
+        spinner_nro_equipo.setAdapter(nro_equipo_adapter);
+        nro_equipo_adapter.notifyDataSetChanged();
 
         spinner_modelos.setPositiveButton("Cerrar");
 

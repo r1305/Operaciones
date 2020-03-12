@@ -111,8 +111,9 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
+        holder.cierre.setText((String)ob.get("cierre"));
+        holder.number.setText((String)ob.get("mantenimiento"));
         if(status.equals("0")){
-
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
             holder.icon_pencil.setVisibility(View.VISIBLE);
             holder.icon_file.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +152,16 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
             holder.icon_status.setImageResource(R.drawable.icon_file);
             holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview_naranja,null));
+        }
+
+        if(cred.getData("key_user_type").equals("2"))
+        {
+            if(status.equals("0")){
+                holder.icon_pencil.setVisibility(View.GONE);
+                holder.icon_status.setVisibility(View.GONE);
+                holder.icon_file.setVisibility(View.GONE);
+            }
+            holder.linear_contratista.setVisibility(View.GONE);
         }
     }
 
@@ -279,6 +290,19 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 cal.get(Calendar.DAY_OF_MONTH));
         datePicker.setCancelable(false);
         datePicker.setTitle("Seleccione la fecha");
+        dialog_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    datePicker.show();
+            }
+        });
+        dialog_fecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker.show();
+            }
+        });
         icon_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,6 +328,19 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         datePicker.setCancelable(false);
         datePicker.setTitle("Seleccione la hora");
 
+        dialog_hora.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    timePicker.show();
+            }
+        });
+        dialog_hora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker.show();
+            }
+        });
         icon_clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -323,19 +360,22 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView registro,fecha_hora_atencion,contratista;
-        LinearLayout linear_full;
+        TextView registro,fecha_hora_atencion,contratista,cierre,number;
+        LinearLayout linear_full,linear_contratista;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
             super(itemView);
+            linear_contratista = itemView.findViewById(R.id.linear_contratista);
             card = itemView.findViewById(R.id.item_card_urgencia);
             icon_pencil = itemView.findViewById(R.id.icon_pencil);
-            registro = itemView.findViewById(R.id.item_urgencia_registro);
+            registro = itemView.findViewById(R.id.item_mantenimiento_registro);
+            cierre = itemView.findViewById(R.id.item_mantenimiento_cierre);
             fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
             contratista = itemView.findViewById(R.id.item_urgencia_contratista);
             icon_file = itemView.findViewById(R.id.icon_file);
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
+            number = itemView.findViewById(R.id.mantenimiento_number);
         }
     }
     private void getTecnicos()

@@ -76,6 +76,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:text="Fecha Atención"
+                    android:editable="false"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -122,6 +123,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:text="Hora Atención"
+                    android:editable="false"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"

@@ -128,6 +128,7 @@
 
                     <!-- Contratista-->
                     <LinearLayout
+                        android:id="@+id/linear_contratista"
                         android:layout_weight="0.8"
                         android:layout_marginStart="6dp"
                         android:layout_width="match_parent"
