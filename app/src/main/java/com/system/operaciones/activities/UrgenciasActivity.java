@@ -109,6 +109,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     String[] motivos_id;
     String motivo_id;
 
+    String marca_id,cond_marca_id = "";
+    String modelo_id,cond_modelo_id = "";
+    String btu_id,cond_btu_id="";
+    String tipo_id,cond_tipo_id="";
+    String voltaje_id,cond_voltaje_id="";
+    String fase_id, cond_fase_id="";
+    String refrigerante_id,cond_refrigerante_id="";
+    String nro_serie,cond_nro_serie="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -315,7 +324,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        personal_id = personal_ids[0];
                     }
                 });
                 builder.setView(dialogView);
@@ -360,7 +369,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        motivo_id = motivos_id[0];
                     }
                 });
                 spinner_motivos.setPositiveButton("Cerrar");
@@ -1094,7 +1103,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                marca_id=marcas_id[0];
             }
         });
         spinner_cond_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1106,7 +1115,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_marca_id = marcas_cond_id[0];
             }
         });
         spinner_modelos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1118,7 +1127,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                modelo_id = modelos_ids[0];
             }
         });
 
@@ -1131,6 +1140,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                btu_id = btus_id[0];
             }
         });
         spinner_cond_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1142,7 +1152,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_btu_id = btus_cond_id[0];
             }
         });
         spinner_tipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1154,7 +1164,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                tipo_id = tipos_id[0];
             }
         });
         spinner_cond_tipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1166,7 +1176,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_tipo_id = tipos_cond_id[0];
             }
         });
         spinner_voltajes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1178,7 +1188,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                voltaje_id = voltajes_id[0];
             }
         });
         spinner_cond_voltajes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1190,7 +1200,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_voltaje_id = voltajes_cond_id[0];
             }
         });
         spinner_fases.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1202,7 +1212,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                fase_id = fases_id[0];
             }
         });
         spinner_cond_fases.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1214,7 +1224,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_fase_id = fases_cond_id[0];
             }
         });
         spinner_refrigerantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1226,7 +1236,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                refrigerante_id = refrigerantes_id[0];
             }
         });
         spinner_cond_refrigerantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1238,7 +1248,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cond_refrigerante_id = refrigerantes_cond_id[0];
             }
         });
 
@@ -1774,21 +1784,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    String marca_id,cond_marca_id = "";
-    String modelo_id,cond_modelo_id = "";
-    String btu_id,cond_btu_id="";
-    String tipo_id,cond_tipo_id="";
-    String voltaje_id,cond_voltaje_id="";
-    String fase_id, cond_fase_id="";
-    String refrigerante_id,cond_refrigerante_id="";
-    String nro_serie,cond_nro_serie="";
-
     private void registrarEquipo()
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
         System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
-        System.out.println(cond_marca_id+"-"+cond_modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
+        System.out.println(cond_marca_id+"-"+modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -1837,7 +1838,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("nro_serie", nro_serie);
                 //Condensadora
                 params.put("cond_marca_id", cond_marca_id);
-                params.put("cond_modelo_id", cond_modelo_id);
+                params.put("cond_modelo_id", modelo_id);
                 params.put("cond_btu_id", cond_btu_id);
                 params.put("cond_tipo_id", cond_tipo_id);
                 params.put("cond_voltaje_id", cond_voltaje_id);
