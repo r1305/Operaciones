@@ -538,7 +538,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -589,7 +589,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -641,7 +641,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
@@ -770,7 +770,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("getUrgencias_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -841,7 +841,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(1);
                 System.out.println("getEquipos_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -876,7 +876,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                             if (cliente.getIde_error() == 0) {
                                 viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 equipos_l.clear();
                                 for(Object o: respuesta){
@@ -896,7 +896,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(1);
                 System.out.println("getEquiposTienda_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -930,7 +930,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 getUrgencias(tienda_id);
                                 new Utils().sendMailUrgencia(tienda_id,ctx);
@@ -1025,13 +1025,16 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     ArrayAdapter<String> refrigerante_cond_adapter;
     String[] refrigerantes_cond_id;
 
+    SearchableSpinner spinner_nro_equipo;
+    ArrayAdapter<String> nro_equipo_adapter;
+
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
     private void showModalRegisterEquipo()
     {
         viewDialog.showDialog();
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
         builder.setView(dialogView);
@@ -1051,8 +1054,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
 
-        final SearchableSpinner spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
-        ArrayAdapter<String> nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
+        spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
+        nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
         spinner_nro_equipo.setAdapter(nro_equipo_adapter);
         nro_equipo_adapter.notifyDataSetChanged();
 
@@ -1252,12 +1255,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create();
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrarEquipo();
+                registrarEquipo(alertDialog);
             }
         });
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
@@ -1317,7 +1320,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1373,7 +1376,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1424,7 +1427,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1475,7 +1478,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1531,7 +1534,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1582,7 +1585,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1633,7 +1636,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1689,7 +1692,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1745,7 +1748,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] data = new String[respuesta.size()];
                                 String[] data_id = new String[respuesta.size()];
@@ -1784,11 +1787,29 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    private void registrarEquipo()
+    private void registrarEquipo(final AlertDialog alertDialog)
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
-        System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
+        Log.e("tienda_id",tienda_id);
+        Log.e("nro_equipo",spinner_nro_equipo.getSelectedItemPosition()+1+"");
+        Log.e("marca_id",marca_id);
+        Log.e("modelo_id",modelo_id);
+        Log.e("btu_id",btu_id);
+        Log.e("tipo_id",tipo_id);
+        Log.e("voltaje_id",voltaje_id);
+        Log.e("fase_id",fase_id);
+        Log.e("refrigerante_id",refrigerante_id);
+        Log.e("nro_serie",nro_serie);
+
+        Log.e("cond_marca_id",cond_marca_id);
+        Log.e("modelo_id",modelo_id);
+        Log.e("cond_btu_id",cond_btu_id);
+        Log.e("cond_tipo_id",cond_tipo_id);
+        Log.e("cond_voltaje_id",cond_voltaje_id);
+        Log.e("cond_fase_id",cond_fase_id);
+        Log.e("cond_refrigerante_id",cond_refrigerante_id);
+        Log.e("cond_nro_serie",cond_nro_serie);
         System.out.println(cond_marca_id+"-"+modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
@@ -1806,10 +1827,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
 
                             if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 ((UrgenciasActivity)ctx).getEquipos();
-                                System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
+                                ((UrgenciasActivity)ctx).getEquiposTienda();
+                                alertDialog.dismiss();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1826,7 +1848,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
+                String nro_equipo = String.valueOf((spinner_nro_equipo.getSelectedItemPosition()+1));
                 params.put("tienda_id", tienda_id);
+                params.put("nro_equipo", nro_equipo);
                 //Evaporadora
                 params.put("marca_id", marca_id);
                 params.put("modelo_id", modelo_id);
@@ -1871,7 +1895,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                             if (cliente.getIde_error() == 0) {
                                 viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 String[] motivos = new String[respuesta.size()];
                                 motivos_id = new String[respuesta.size()];
