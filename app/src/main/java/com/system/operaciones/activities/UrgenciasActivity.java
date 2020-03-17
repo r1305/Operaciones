@@ -77,6 +77,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     Button dialog_btn_cancelar, dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
+    String user_type;
 
     private EditText dialog_hora, dialog_fecha;
     private ImageView icon_calendar, icon_clock;
@@ -125,6 +126,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         ctx = this;
         cred = new Credentials(ctx);
         viewDialog = new ViewDialog(this);
+
+        user_type = cred.getData("key_user_type");
+        System.out.println("user_type"+user_type);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Urgencias");
@@ -191,7 +195,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         else
             btn_new_equipo.setVisibility(View.VISIBLE);
 
-
     }
 
     @Override
@@ -213,29 +216,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     private void escanear() {
         Intent i = new Intent(ctx, LectorActivity.class);
         startActivityForResult(i, CODIGO_INTENT);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CODIGO_PERMISOS_CAMARA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Escanear directamten solo si fue pedido desde el botón
-                    if (permisoSolicitadoDesdeBoton) {
-                        escanear();
-                    }
-                    permisoCamaraConcedido = true;
-                } else {
-                    permisoDeCamaraDenegado();
-                }
-                break;
-        }
-    }
-
-    private void permisoDeCamaraDenegado() {
-        // Esto se llama cuando el usuario hace click en "Denegar" o
-        // cuando lo denegó anteriormente
-        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
     }
 
     public int getEquipo_count() {
@@ -656,7 +636,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     tv_tienda.setText(tienda);
                                     tv_tienda_tlf.setText(tienda_tlf);
                                     tv_email.setText(email);
-                                    if(!email.isEmpty()){
+                                    if(!email.isEmpty() && !user_type.equals("3")){
                                         tv_email.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -667,7 +647,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                             }
                                         });
                                     }
-                                    if (!tienda_tlf.isEmpty()) {
+                                    if (!tienda_tlf.isEmpty() && !user_type.equals("3")) {
                                         tv_tienda_tlf.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -689,7 +669,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     }
                                     tv_admin.setText(admin);
                                     tv_admin_cel.setText(admin_cel);
-                                    if (!admin_cel.isEmpty()) {
+
+                                    if (!admin_cel.isEmpty() && !user_type.equals("3")) {
                                         tv_admin_cel.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {

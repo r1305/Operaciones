@@ -47,6 +47,7 @@ import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
 import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -84,10 +85,10 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     private String id,tienda_id;
 
     AlertDialog alertDialog;
-    JRSpinner spinner_motivos;
+    SearchableSpinner spinner_motivos;
     String[] motivos_id;
 
-    JRSpinner spinner_diagnosticos;
+    SearchableSpinner spinner_diagnosticos;
     String[] diagnosticos_id;
 
     String solucion;
@@ -121,18 +122,16 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         getEquipos(tienda_id);
         viewDialog = new ViewDialog(this);
         viewDialog.showDialog();
-
-        verificarYPedirPermisosDeCamara();
         cred.save_data("image_type","0");
 
         spinner_motivos = findViewById(R.id.spinner_motivo);
         spinner_diagnosticos = findViewById(R.id.spinner_diagnostico);
         et_diagnostico = findViewById(R.id.et_diagnostico);
         getMotivos();
-        spinner_motivos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
+        spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(int position) {
-                motivo_id = motivos_id[position];
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                motivo_id = motivos_id[i];
                 if(motivo_id.equals("6")){
                     et_diagnostico.setVisibility(View.VISIBLE);
                 }else{
@@ -140,15 +139,26 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 }
                 getDiagnostico(motivo_id);
             }
-        });
 
-        spinner_diagnosticos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                diagnostico_id = diagnosticos_id[position];
-                getSolucion(diagnostico_id);
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
+
+        spinner_diagnosticos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                diagnostico_id = diagnosticos_id[i];
+                getSolucion(diagnostico_id);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         tv_solucion = findViewById(R.id.tv_solucion);
         Button btn_antes = findViewById(R.id.btn_antes);
         Button btn_despues = findViewById(R.id.btn_despues);
@@ -1206,22 +1216,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        if (requestCode == CODIGO_PERMISOS_CAMARA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Escanear directamten solo si fue pedido desde el botón
-                if (permisoSolicitadoDesdeBoton) {
-                    escanear();
-                }
-                permisoCamaraConcedido = true;
-            } else {
-                permisoDeCamaraDenegado();
-            }
-        }
-    }
-
     private void registrarFicha(final String urgencia_id)
     {
         viewDialog.showDialog();
@@ -1410,7 +1404,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
+    ArrayAdapter<String> motivos_adapter;
+    ArrayAdapter<String> diagnostico_adapter;
     private void getMotivos()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
@@ -1441,9 +1436,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                     motivos_id[i] = (String)ob.get("id");
                                     i++;
                                 }
-                                spinner_motivos.setItems(motivos);
-                                spinner_motivos.clear();
-                                spinner_diagnosticos.clear();
+                                motivos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
+                                spinner_motivos.setAdapter(motivos_adapter);
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
@@ -1494,8 +1488,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                     diagnosticos_id[i] = (String)ob.get("id");
                                     i++;
                                 }
-                                spinner_diagnosticos.setItems(diagnosticos);
-                                spinner_diagnosticos.clear();
+                                diagnostico_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,diagnosticos);
+                                spinner_diagnosticos.setAdapter(diagnostico_adapter);
                                 tv_solucion.setText("");
                             }
                         } catch (Exception e) {
@@ -1640,7 +1634,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
-    TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante;
+    TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_motivo,tv_nro_equipo;
     String equipo_id;
     private void getEquipo()
     {
@@ -1687,6 +1681,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             String nro_serie = (String)ob.get("nro_serie");
                                             String voltaje = (String)ob.get("voltaje");
                                             String refrigerante = (String)ob.get("refrigerante");
+                                            String nro_equipo = (String)ob.get("nro_equipo");
+                                            String motivo = (String)ob.get("motivo");
 
                                             tv_marca = findViewById(R.id.ficha_marca);
                                             tv_btu = findViewById(R.id.ficha_btu);
@@ -1695,6 +1691,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             tv_nro_serie = findViewById(R.id.ficha_nro_serie);
                                             tv_voltaje = findViewById(R.id.ficha_voltaje);
                                             tv_refrigerante = findViewById(R.id.ficha_refrigerante);
+                                            tv_motivo = findViewById(R.id.ficha_tv_motivo);
+                                            tv_nro_equipo = findViewById(R.id.ficha_tv_nro_equipo);
 
                                             tv_marca.setText(marca);
                                             tv_btu.setText(btu);
@@ -1703,6 +1701,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             tv_nro_serie.setText(nro_serie);
                                             tv_voltaje.setText(voltaje);
                                             tv_refrigerante.setText(refrigerante);
+                                            tv_motivo.setText(motivo);
+                                            tv_nro_equipo.setText("Equipo N° "+nro_equipo);
                                         }
                                     }
                                 }
@@ -2381,12 +2381,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=1;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -2395,12 +2389,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=2;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -2615,25 +2603,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         });
     }
 
-    private void permisoDeCamaraDenegado() {
-        // Esto se llama cuando el usuario hace click en "Denegar" o
-        // cuando lo denegó anteriormente
-        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
-    }
-
-    private void verificarYPedirPermisosDeCamara() {
-        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
-        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
-            // En caso de que haya dado permisos ponemos la bandera en true
-            // y llamar al método
-            permisoCamaraConcedido = true;
-        } else {
-            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(FichaUrgenciaActivity.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CODIGO_PERMISOS_CAMARA);
-        }
-    }
 
     private void escanear() {
         Intent i = new Intent(ctx, LectorActivity.class);
@@ -3535,7 +3504,5 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 }
                 break;
         }
-
-
     }
 }

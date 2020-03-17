@@ -146,6 +146,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                 holder.icon_file.setVisibility(View.GONE);
             }
             holder.linear_contratista.setVisibility(View.GONE);
+        }else if(cred.getData("key_user_type").equals("3"))
+        {
+            holder.icon_pencil.setVisibility(View.GONE);
         }
 
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
@@ -486,7 +489,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
@@ -494,11 +497,9 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                     i++;
                                 }
 
-                                System.out.println("equipos_ids_size2: "+equipos_ids.length);
-                                System.out.println("equipos_size: "+equipos.length);
-
                                 ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,equipos);
                                 spinner_equipos.setAdapter(dialog_equipos_adapter);
+                                spinner_equipos.setPositiveButton("Cerrar");
                                 dialog_equipos_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -561,6 +562,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 motivo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 motivos_ids = data_id;
                                 spinner_motivos.setAdapter(motivo_adapter);
+                                spinner_motivos.setPositiveButton("Cerrar");
                                 motivo_adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {

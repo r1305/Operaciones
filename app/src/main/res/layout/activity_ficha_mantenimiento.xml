@@ -34,6 +34,31 @@
                 android:background="@color/verdePastel"
                 android:layout_marginBottom="10dp"/>
 
+            <!-- Motivo -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center|start"
+                    android:text="Motivo:"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_weight="0.5"
+                    android:id="@+id/ficha_tv_motivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
             <!-- Marca -->
             <LinearLayout
                 android:layout_weight="1"

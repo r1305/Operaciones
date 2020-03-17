@@ -506,7 +506,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = ob.get("modelo")+" - "+ob.get("evap_nro_serie");
+                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }

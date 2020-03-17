@@ -34,6 +34,16 @@
                 android:background="@color/verdePastel"
                 android:layout_marginBottom="10dp"/>
 
+            <TextView
+                android:id="@+id/ficha_tv_nro_equipo"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:text="Equipo N° 1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/negro"/>
+
             <!-- Marca -->
             <LinearLayout
                 android:layout_weight="1"
@@ -215,6 +225,31 @@
                     android:textSize="15sp"/>
             </LinearLayout>
 
+            <!-- Motivo -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center|start"
+                    android:text="Motivo:"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_weight="0.5"
+                    android:id="@+id/ficha_tv_motivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- Lecturas -->
@@ -292,7 +327,7 @@
                     android:gravity="start"
                     android:fontFamily="@font/gotham_medium"
                     android:textColor="@color/negro"/>
-                <jrizani.jrspinner.JRSpinner
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                     android:id="@+id/spinner_motivo"
                     android:layout_weight="1"
                     android:textSize="15sp"
@@ -314,7 +349,7 @@
                     android:gravity="start"
                     android:fontFamily="@font/gotham_medium"
                     android:textColor="@color/negro"/>
-                <jrizani.jrspinner.JRSpinner
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                     android:id="@+id/spinner_diagnostico"
                     android:layout_weight="1"
                     android:textSize="15sp"

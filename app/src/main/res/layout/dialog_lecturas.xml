@@ -54,7 +54,7 @@
                             android:id="@+id/icon_camera_falla"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/icon_cam"
+                            android:src="@drawable/icon_cam2"
                             android:layout_gravity="center"/>
 
                         <ImageView
@@ -130,7 +130,7 @@
                             android:id="@+id/icon_cam_temp_l1"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/icon_cam"
+                            android:src="@drawable/icon_cam2"
                             android:layout_gravity="center"/>
 
                         <ImageView
@@ -174,7 +174,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/icon_cam"/>
+                            android:src="@drawable/icon_cam2"/>
 
                         <ImageView
                             android:id="@+id/icon_gallery_temp_l2"
@@ -217,7 +217,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/icon_cam"/>
+                            android:src="@drawable/icon_cam2"/>
 
                         <ImageView
                             android:id="@+id/icon_gallery_temp_l3"
@@ -296,7 +296,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/icon_cam" />
+                            android:src="@drawable/icon_cam2" />
 
                         <ImageView
                             android:id="@+id/icon_gallery_presion_baja"
@@ -342,7 +342,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/icon_cam" />
+                            android:src="@drawable/icon_cam2" />
 
                         <ImageView
                             android:id="@+id/icon_gallery_presion_alta"
@@ -440,7 +440,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam"/>
+                                        android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_amp_l1"
@@ -483,7 +483,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam"/>
+                                        android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_amp_l2"
@@ -526,7 +526,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam"/>
+                                        android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_amp_l3"
@@ -595,7 +595,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam"/>
+                                        android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_volt_l1"
@@ -638,7 +638,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam"/>
+                                        android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_volt_l2"
@@ -682,7 +682,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/icon_cam" />
+                                        android:src="@drawable/icon_cam2" />
 
                                     <ImageView
                                         android:id="@+id/icon_gallery_volt_l3"
