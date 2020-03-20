@@ -4,7 +4,7 @@
     android:id="@+id/item_card_urgencia"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="150dp"
     android:layout_gravity="center"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
@@ -41,13 +41,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginStart="2dp">
-                    <!-- Mantenimiento NUMBER-->
+                    <!-- Urgencia NUMBER-->
                     <LinearLayout
                         android:layout_weight="1"
                         android:layout_marginStart="6dp"
@@ -67,6 +66,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"/>
                     </LinearLayout>
+
                     <!-- Registro-->
                     <LinearLayout
                         android:layout_weight="1"
@@ -117,7 +117,7 @@
                             android:layout_gravity="center"
                             android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_atencion"
+                            android:id="@+id/item_mantenimiento_atencion"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -129,26 +129,25 @@
                     <!-- Contratista-->
                     <LinearLayout
                         android:id="@+id/linear_contratista"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:layout_marginStart="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:layout_gravity="center"
                         android:gravity="center">
-
                         <TextView
+                            android:layout_weight="0.4"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="0.4"
-                            android:fontFamily="@font/gotham_regular"
-                            android:gravity="left|center"
                             android:text="Atendido: "
                             android:textColor="@color/negro"
-                            android:textSize="15sp" />
+                            android:fontFamily="@font/gotham_regular"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_contratista"
+                            android:id="@+id/item_mantenimiento_contratista"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -186,6 +185,7 @@
                             android:fontFamily="@font/gotham_regular"/>
                     </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_weight="9"

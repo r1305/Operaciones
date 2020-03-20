@@ -24,16 +24,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,7 +68,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     Credentials cred;
     LinearLayout datos, equipos, servicios;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
-    ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
+    ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo,pdf_error;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
     TextView txt_settings, txt_equipos, txt_datos, observaciones;
     Button dialog_btn_cancelar, dialog_btn_registrar;
@@ -101,8 +98,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     int equipo_count = 0;
     int tipo_nro_serie = 1;
-    private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
-    private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
+    private static final int CODIGO_INTENT = 2;
 
     ViewDialog viewDialog;
 
@@ -118,6 +114,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     String fase_id, cond_fase_id="";
     String refrigerante_id,cond_refrigerante_id="";
     String nro_serie,cond_nro_serie="";
+    String lat,lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +143,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         tv_tienda_tlf = findViewById(R.id.tienda_tlf);
         tv_email = findViewById(R.id.email);
         tv_direccion = findViewById(R.id.direccion);
+        tv_direccion.setOnClickListener(this);
+        pdf_error = findViewById(R.id.img_error_code);
+        pdf_error.setOnClickListener(this);
 
         btn_new_urgencia = findViewById(R.id.btn_new_urgencia);
         btn_new_equipo = findViewById(R.id.btn_new_urgencia_equipo);
@@ -261,6 +261,23 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         int id = v.getId();
 
         switch (id) {
+            case R.id.direccion:
+                System.out.println("lat: "+lat+", lng: "+lng);
+                if(!lat.equals("0") && !lng.equals("0")){
+                    String strUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lng + " (" + "Label which you want" + ")";
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
+
+                    intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(ctx,"Información aún no disponible",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.img_error_code:
+                String pdf_url = ctx.getResources().getString(R.string.pdf_url_urgencia)+"codigo_errores.pdf";
+                Utils.openPdf(ctx,pdf_url);
+                break;
             case R.id.tab_datos:
                 hideTabs();
                 datos.setVisibility(View.VISIBLE);
@@ -632,6 +649,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     String direccion = (String) ob.get("direccion");
                                     String distrito = (String) ob.get("distrito");
                                     final String email = (String)ob.get("email");
+                                    lat = (String)ob.get("latitud");
+                                    lng = (String)ob.get("longitud");
 
                                     tv_tienda.setText(tienda);
                                     tv_tienda_tlf.setText(tienda_tlf);

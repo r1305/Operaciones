@@ -68,7 +68,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     Credentials cred;
     LinearLayout datos, equipos, servicios;
     LinearLayout tab_datos, tab_equipos, tab_servicios;
-    ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo;
+    ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo,pdf_error;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
     TextView txt_settings, txt_equipos, txt_datos, observaciones;
     Button dialog_btn_cancelar, dialog_btn_registrar;
@@ -100,9 +100,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
     ViewDialog viewDialog;
 
-    SearchableSpinner spinner_motivos;
-    String[] motivos_id;
-    String motivo_id;
+    String lat,lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +126,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         tv_tienda_tlf = findViewById(R.id.tienda_tlf);
         tv_email = findViewById(R.id.email);
         tv_direccion = findViewById(R.id.direccion);
+        tv_direccion.setOnClickListener(this);
+        pdf_error = findViewById(R.id.img_error_code);
+        pdf_error.setOnClickListener(this);
 
         btn_new_urgencia = findViewById(R.id.btn_new_urgencia);
         btn_new_equipo = findViewById(R.id.btn_new_urgencia_equipo);
@@ -243,6 +244,23 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         int id = v.getId();
 
         switch (id) {
+            case R.id.direccion:
+                System.out.println("lat: "+lat+", lng: "+lng);
+                if(!lat.equals("0") && !lng.equals("0")){
+                    String strUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lng + " (" + "Label which you want" + ")";
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
+
+                    intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(ctx,"Información aún no disponible",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.img_error_code:
+                String pdf_url = ctx.getResources().getString(R.string.pdf_url_urgencia)+"codigo_errores.pdf";
+                Utils.openPdf(ctx,pdf_url);
+                break;
             case R.id.tab_datos:
                 hideTabs();
                 datos.setVisibility(View.VISIBLE);
@@ -281,21 +299,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         personal_id = personal_ids[position];
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-                spinner_motivos = dialogView.findViewById(R.id.dialog_spinner_motivos);
-
-                getMotivos();
-                spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        motivo_id = motivos_id[position];
                     }
 
                     @Override
@@ -432,7 +435,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     }
                 });
 
-                getMotivos();
                 dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -611,6 +613,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                     String direccion = (String) ob.get("direccion");
                                     String distrito = (String) ob.get("distrito");
                                     final String email = (String)ob.get("email");
+                                    lat = (String)ob.get("latitud");
+                                    lng = (String)ob.get("longitud");
 
                                     tv_tienda.setText(tienda);
                                     tv_tienda_tlf.setText(tienda_tlf);
@@ -819,57 +823,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         queue.add(stringRequest);
     }
 
-    private void getMotivos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] motivos = new String[respuesta.size()];
-                                motivos_id = new String[respuesta.size()];
-                                int i=0;
-                                for (Object o : respuesta)
-                                {
-                                    JSONObject ob = (JSONObject)o;
-                                    motivos[i] = (String)ob.get("motivo");
-                                    motivos_id[i] = (String)ob.get("id");
-                                    i++;
-                                }
-                                ArrayAdapter<String> adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
-                                spinner_motivos.setAdapter(adapter_motivos);
-                                adapter_motivos.notifyDataSetChanged();
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                System.out.println("getMotivos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     public void registerMantenimiento(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_mantenimiento_url);
@@ -914,7 +867,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", tipo_proveedor+"");
-                params.put("motivo_id", motivo_id);
                 return params;
             }
         };

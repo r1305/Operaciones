@@ -273,54 +273,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--Motivo-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp">
-
-        <LinearLayout
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="top"
-            android:gravity="top">
-
-            <ImageView
-                android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:layout_gravity="top"
-                android:src="@drawable/icon_motivo"
-                android:tint="@color/negro" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Motivos"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/gotham_medium"
-                android:gravity="center_vertical"
-                android:textColor="@color/verdePastel"/>
-
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/dialog_spinner_motivos"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:backgroundTint="@color/verdePastel"
-                android:layout_marginStart="10dp"/>
-        </LinearLayout>
-    </LinearLayout>
-
     <!-- Observaciones -->
     <LinearLayout
         android:layout_weight="1"

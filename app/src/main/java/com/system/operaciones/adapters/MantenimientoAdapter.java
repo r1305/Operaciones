@@ -138,6 +138,13 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             });
         }
 
+        if(!cred.getData("key_user_type").equals("1"))
+        {
+            holder.icon_pencil.setVisibility(View.GONE);
+        }else{
+            holder.icon_pencil.setVisibility(View.VISIBLE);
+        }
+
         holder.icon_pencil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -370,14 +377,15 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             icon_pencil = itemView.findViewById(R.id.icon_pencil);
             registro = itemView.findViewById(R.id.item_mantenimiento_registro);
             cierre = itemView.findViewById(R.id.item_mantenimiento_cierre);
-            fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
-            contratista = itemView.findViewById(R.id.item_urgencia_contratista);
+            fecha_hora_atencion = itemView.findViewById(R.id.item_mantenimiento_atencion);
+            contratista = itemView.findViewById(R.id.item_mantenimiento_contratista);
             icon_file = itemView.findViewById(R.id.icon_file);
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
             number = itemView.findViewById(R.id.mantenimiento_number);
         }
     }
+
     private void getTecnicos()
     {
         tipo_proveedor=1;
@@ -564,7 +572,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
-                                getMotivos();
                                 getEquipos(((MantenimientosActivity)ctx).getTienda_id());
                                 for (Object ob : respuesta){
                                     final JSONObject o = (JSONObject)ob;
@@ -601,7 +608,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                         @Override
                                         public void run() {
                                             spinner_equipos.setSelection(findEquipoPosition((String)o.get("equipo_id")));
-                                            spinner_motivos.setSelection(findMotivoPosition((String)o.get("motivo_id")));
                                         }
                                     }, 2500);
 
@@ -717,68 +723,4 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         return position;
     }
 
-    int findMotivoPosition(String motivo)
-    {
-        int position = 0;
-        for(int i=0;i<motivos_ids.length;i++){
-            if(motivos_ids[i].equals(motivo)){
-                position=i;
-                motivo_id = equipos_ids[i];
-            }
-        }
-        return position;
-    }
-
-    private void getMotivos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        Log.i("getMotivos_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("motivo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-
-                                motivo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                motivos_ids = data_id;
-                                spinner_motivos.setAdapter(motivo_adapter);
-                                motivo_adapter.notifyDataSetChanged();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println(e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("getMotivos_error: " + error.getMessage());
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
 }

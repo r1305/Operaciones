@@ -34,30 +34,15 @@
                 android:background="@color/verdePastel"
                 android:layout_marginBottom="10dp"/>
 
-            <!-- Motivo -->
-            <LinearLayout
-                android:layout_weight="1"
+            <TextView
+                android:id="@+id/ficha_tv_nro_equipo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/gotham_medium"
-                    android:gravity="center|start"
-                    android:text="Motivo:"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_weight="0.5"
-                    android:id="@+id/ficha_tv_motivo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|start"
-                    android:textSize="15sp"/>
-            </LinearLayout>
+                android:layout_height="25dp"
+                android:text="Equipo N°"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/negro"/>
 
             <!-- Marca -->
             <LinearLayout
@@ -288,104 +273,8 @@
             </LinearLayout>
 
         </LinearLayout>
-        <!--Motivo-->
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_marginTop="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:textSize="15sp"
-                android:text="Diagnóstico"
-                android:fontFamily="@font/gotham_medium"
-                android:textColor="@color/blanco"
-                android:gravity="center"
-                android:background="@color/verdePastel"
-                android:layout_marginBottom="6dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <TextView
-                    android:text="Motivos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/negro"/>
-                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/spinner_motivo"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:fontFamily="@font/gotham_regular"
-                    android:backgroundTint="@color/verdePastel"
-                    app:jrs_icon_tint="@color/verdePastel"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Diagnóstico"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/negro"/>
-                <jrizani.jrspinner.JRSpinner
-                    android:id="@+id/spinner_diagnostico"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:backgroundTint="@color/verdePastel"
-                    app:jrs_icon_tint="@color/verdePastel"
-                    android:fontFamily="@font/gotham_regular"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Solución"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/negro"/>
-                <TextView
-                    android:id="@+id/tv_solucion"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/gotham_regular"/>
-
-                <EditText
-                    android:id="@+id/et_diagnostico"
-                    android:visibility="gone"
-                    android:background="@drawable/border_dialog"
-                    android:maxLines="5"
-                    android:inputType="textMultiLine"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:textCursorDrawable="@color/negro"
-                    android:paddingStart="5dp"
-                    android:scrollbars="vertical"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:paddingEnd="5dp"/>
-            </LinearLayout>
-        </LinearLayout>
-        <!--Diagnóstico-->
+        <!--Firmas-->
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -409,6 +298,16 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="6dp">
                 <Button
+                    android:id="@+id/btn_firma_cliente"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_ingresar"
+                    android:text="Cliente"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"/>
+
+                <Button
                     android:id="@+id/btn_firma_tecnico"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -417,15 +316,6 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Técnico"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"/>
-                <Button
-                    android:id="@+id/btn_firma_cliente"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_ingresar"
-                    android:text="Cliente"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"/>
             </LinearLayout>

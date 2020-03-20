@@ -498,6 +498,7 @@
                             </LinearLayout>
                             <!-- L3 -->
                             <LinearLayout
+                                android:id="@+id/linear_amp_l3"
                                 android:layout_weight="1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -653,6 +654,7 @@
                             </LinearLayout>
                             <!-- L3 -->
                             <LinearLayout
+                                android:id="@+id/linear_volt_l3"
                                 android:layout_weight="1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"

@@ -85,30 +85,19 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     private String id,tienda_id;
 
     AlertDialog alertDialog;
-    SearchableSpinner spinner_motivos;
-    String[] motivos_id;
-
-    SearchableSpinner spinner_diagnosticos;
-    String[] diagnosticos_id;
-
-    String solucion;
-    TextView tv_solucion;
-    EditText et_diagnostico;
-
-    String motivo_id;
-    String diagnostico_id;
 
     private String name_tecnico,dni_tecnico,cargo_tecnico,name_cliente,dni_cliente,cargo_cliente;
 
     int equipo_count;
     int tipo_nro_serie = 1;
-    private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
-    private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
+    private static final int  CODIGO_INTENT = 2;
 
     ViewDialog viewDialog;
 
     int modo_prueba = 1;
     String fase = "0";
+
+    EditText cargo,dni,name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -126,45 +115,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         viewDialog = new ViewDialog(this);
         viewDialog.showDialog();
 
-        verificarYPedirPermisosDeCamara();
         cred.save_data("image_type","0");
 
-        spinner_motivos = findViewById(R.id.spinner_motivo);
-        spinner_diagnosticos = findViewById(R.id.spinner_diagnostico);
-        et_diagnostico = findViewById(R.id.et_diagnostico);
-        getMotivos();
-        spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                motivo_id = motivos_id[i];
-                if(motivo_id.equals("6")){
-                    et_diagnostico.setVisibility(View.VISIBLE);
-                }else{
-                    et_diagnostico.setVisibility(View.GONE);
-                }
-                getDiagnostico(motivo_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                motivo_id = motivos_id[0];
-            }
-        });
-
-        spinner_diagnosticos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                diagnostico_id = diagnosticos_id[i];
-                getSolucion(diagnostico_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                diagnostico_id = diagnosticos_id[0];
-            }
-        });
-
-        tv_solucion = findViewById(R.id.tv_solucion);
         Button btn_antes = findViewById(R.id.btn_antes);
         Button btn_despues = findViewById(R.id.btn_despues);
 
@@ -224,6 +176,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
                 volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
+                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
+
+                if(fase.equals("1")){
+                    linear_amp_l3.setVisibility(View.GONE);
+                    linear_volt_l3.setVisibility(View.GONE);
+                }else{
+                    linear_amp_l3.setVisibility(View.VISIBLE);
+                    linear_volt_l3.setVisibility(View.VISIBLE);
+                }
 
                 temp_l1.setText(et_temp_l1);
                 temp_l2.setText(et_temp_l2);
@@ -514,6 +477,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 despues_volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
                 despues_volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 despues_volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
+                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
+
+                if(fase.equals("1")){
+                    linear_amp_l3.setVisibility(View.GONE);
+                    linear_volt_l3.setVisibility(View.GONE);
+                }else{
+                    linear_amp_l3.setVisibility(View.VISIBLE);
+                    linear_volt_l3.setVisibility(View.VISIBLE);
+                }
 
                 validateUploadDespues();
 
@@ -833,9 +807,9 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
-                final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
-                final EditText dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
-                final EditText cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
+                name = dialogView.findViewById(R.id.dialog_signature_et_name);
+                dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
+                cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
                 final SignaturePad signaturePad = dialogView.findViewById(R.id.dialog_signature);
                 final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -921,9 +895,13 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
-                final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
-                final EditText dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
-                final EditText cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
+                name = dialogView.findViewById(R.id.dialog_signature_et_name);
+                dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
+                cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
+                Log.e("tipo_proveedor",tipo_proveedor);
+                if(tipo_proveedor.equals("1")){
+                    getDatosTecnico(tecnico_id);
+                }
                 final SignaturePad signaturePad = dialogView.findViewById(R.id.dialog_signature);
                 final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -1211,22 +1189,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        if (requestCode == CODIGO_PERMISOS_CAMARA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Escanear directamten solo si fue pedido desde el botón
-                if (permisoSolicitadoDesdeBoton) {
-                    escanear();
-                }
-                permisoCamaraConcedido = true;
-            } else {
-                permisoDeCamaraDenegado();
-            }
-        }
-    }
-
     private void registrarFicha(final String urgencia_id)
     {
         viewDialog.showDialog();
@@ -1271,10 +1233,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("urgencia_id", urgencia_id);
                 params.put("tienda_id", tienda_id);
-
-                //MOTIVO DIAGNOSTICO SOLUCION
-                params.put("motivo",motivo_id);
-                params.put("diagnostico",diagnostico_id);
 
                 //ANTES
                 params.put("falla", image_falla);
@@ -1378,11 +1336,11 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Ficha creada correctamente",Toast.LENGTH_SHORT).show();
-                                viewDialog.hideDialog(1);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         new Utils().sendFichaMantenimiento(tienda_id,urgencia_id,ctx);
+                                        viewDialog.hideDialog(0);
                                         ((FichaMantenimientoActivity)ctx).finish();
                                     }
                                 }, 5000);
@@ -1413,177 +1371,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    ArrayAdapter<String> adapter_motivos;
-    ArrayAdapter<String> adapter_diagnosticos;
-    private void getMotivos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMotivos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMotivos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] motivos = new String[respuesta.size()];
-                                motivos_id = new String[respuesta.size()];
-                                int i=0;
-                                for (Object o : respuesta)
-                                {
-                                    JSONObject ob = (JSONObject)o;
-                                    motivos[i] = (String)ob.get("motivo");
-                                    motivos_id[i] = (String)ob.get("id");
-                                    i++;
-                                }
-                                adapter_motivos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,motivos);
-                                spinner_motivos.setAdapter(adapter_motivos);
-                                tv_solucion.setText("");
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getMotivos_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getMotivos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getDiagnostico(final String motivo_id)
-    {
-        System.out.println("motivo_id: "+motivo_id);
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getDiagnosticos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getDiagnosticos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] diagnosticos = new String[respuesta.size()];
-                                diagnosticos_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o:respuesta)
-                                {
-                                    JSONObject ob = (JSONObject)o;
-                                    diagnosticos[i] = (String)ob.get("diagnostico");
-                                    diagnosticos_id[i] = (String)ob.get("id");
-                                    i++;
-                                }
-                                adapter_diagnosticos = new ArrayAdapter<>(ctx,R.layout.dropdown_style,diagnosticos);
-                                spinner_diagnosticos.setAdapter(adapter_diagnosticos);
-                                tv_solucion.setText("");
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getDiagnosticos_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getDiagnosticos_error: " + error);
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("motivo_id", motivo_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getSolucion(final String diagnostico_id)
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getSolucion_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getDiagnosticos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                for(Object o : respuesta)
-                                {
-                                    JSONObject ob = (JSONObject)o;
-                                    solucion = (String)ob.get("solucion");
-                                }
-                                tv_solucion.setText(solucion);
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getSolucion_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getSolucion_error: " + error);
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("diagnostico_id", diagnostico_id);
-                return params;
-            }
-        };
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -1654,8 +1441,11 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
-    TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_motivo,tv_nro_equipo;
+    TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_nro_equipo;
     String equipo_id;
+
+    String tipo_proveedor="0";
+    String tecnico_id = "0";
     private void getEquipo()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipoMantenimiento_url);
@@ -1703,7 +1493,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                             String refrigerante = (String)ob.get("refrigerante");
                                             fase = (String)ob.get("cond_fase_id");
                                             String nro_equipo = (String)ob.get("nro_equipo");
-                                            String motivo = (String)ob.get("motivo");
 
                                             tv_marca = findViewById(R.id.ficha_marca);
                                             tv_btu = findViewById(R.id.ficha_btu);
@@ -1712,7 +1501,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                             tv_nro_serie = findViewById(R.id.ficha_nro_serie);
                                             tv_voltaje = findViewById(R.id.ficha_voltaje);
                                             tv_refrigerante = findViewById(R.id.ficha_refrigerante);
-                                            tv_motivo = findViewById(R.id.ficha_tv_motivo);
                                             tv_nro_equipo = findViewById(R.id.ficha_tv_nro_equipo);
 
                                             tv_marca.setText(marca);
@@ -1722,8 +1510,12 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                             tv_nro_serie.setText(nro_serie);
                                             tv_voltaje.setText(voltaje);
                                             tv_refrigerante.setText(refrigerante);
-                                            tv_motivo.setText(motivo);
                                             tv_nro_equipo.setText("Equipo N° "+nro_equipo);
+
+                                            tipo_proveedor = (String)ob.get("tipo_proveedor");
+                                            if(tipo_proveedor.equals("1")){
+                                                tecnico_id = (String)ob.get("proveedor_id");
+                                            }
                                         }
                                     }
                                 }
@@ -1747,6 +1539,57 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("mantenimiento_id", id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void getDatosTecnico(final String tecnico_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getDatosTecnico_url);
+        Log.i("getDatosTecnico_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getDatosTecnico_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for (Object ob : respuesta){
+                                    JSONObject o = (JSONObject)ob;
+                                    cargo.setText((String)o.get("cargo"));
+                                    name.setText((String)o.get("tecnico"));
+                                    dni.setText((String)o.get("dni"));
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("getDatosTecnico_error: "+e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getDatosTecnico_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tecnico_id", tecnico_id);
                 return params;
             }
         };
@@ -2414,12 +2257,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=1;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -2428,12 +2265,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tipo_nro_serie=2;
-                if (!permisoCamaraConcedido) {
-                    Toast.makeText(ctx, "Por favor permite que la app acceda a la cámara", Toast.LENGTH_SHORT).show();
-                    permisoSolicitadoDesdeBoton = true;
-                    verificarYPedirPermisosDeCamara();
-                    return;
-                }
                 escanear();
             }
         });
@@ -2646,26 +2477,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 btn_siguiente.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void permisoDeCamaraDenegado() {
-        // Esto se llama cuando el usuario hace click en "Denegar" o
-        // cuando lo denegó anteriormente
-        Toast.makeText(ctx, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
-    }
-
-    private void verificarYPedirPermisosDeCamara() {
-        int estadoDePermiso = ctx.checkSelfPermission(Manifest.permission.CAMERA);
-        if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
-            // En caso de que haya dado permisos ponemos la bandera en true
-            // y llamar al método
-            permisoCamaraConcedido = true;
-        } else {
-            // Si no, pedimos permisos. Ahora mira onRequestPermissionsResult
-            ActivityCompat.requestPermissions(FichaMantenimientoActivity.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CODIGO_PERMISOS_CAMARA);
-        }
     }
 
     private void escanear() {
@@ -3005,12 +2816,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             icon_gallery_amp_l2.setVisibility(View.GONE);
         }
 
-        if(!image_amp_l3.isEmpty()){
-            icon_camera_amp_l3.setVisibility(View.GONE);
-            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_amp_l3.setVisibility(View.VISIBLE);
-            icon_gallery_amp_l3.setVisibility(View.GONE);
+        if(!fase.equals("1")){
+
+            if(!image_amp_l3.isEmpty()){
+                icon_camera_amp_l3.setVisibility(View.GONE);
+                icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+            }else{
+                icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                icon_gallery_amp_l3.setVisibility(View.GONE);
+            }
         }
 
         //Voltaje
@@ -3030,12 +2844,15 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             icon_gallery_volt_l2.setVisibility(View.GONE);
         }
 
-        if(!image_volt_l3.isEmpty()){
-            icon_camera_volt_l3.setVisibility(View.GONE);
-            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_volt_l3.setVisibility(View.VISIBLE);
-            icon_gallery_volt_l3.setVisibility(View.GONE);
+        if(!fase.equals("1")){
+
+            if(!image_volt_l3.isEmpty()){
+                icon_camera_volt_l3.setVisibility(View.GONE);
+                icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+            }else{
+                icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                icon_gallery_volt_l3.setVisibility(View.GONE);
+            }
         }
     }
 

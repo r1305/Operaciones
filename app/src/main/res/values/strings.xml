@@ -52,6 +52,7 @@
     <string name="pdf_url_mantenimiento">https://uezuperu.com/app/files/pdf/mantenimientos/</string>
     <string name="getMantenimientos_url">ocupa/mantenimiento/getMantenimientos.php</string>
     <string name="getMantenimiento_url">ocupa/mantenimiento/getMantenimiento.php</string>
+    <string name="getDatosTecnico_url">ocupa/mantenimiento/getDatosTecnico.php</string>
     <string name="update_mantenimiento_url">ocupa/mantenimiento/updateMantenimiento.php</string>
     <string name="crear_mantenimiento_url">ocupa/mantenimiento/register.php</string>
     <string name="getEquipoMantenimiento_url">ocupa/mantenimiento/getEquipo.php</string>
@@ -77,5 +78,38 @@
         <item>Equipo 3</item>
         <item>Equipo 4</item>
         <item>Equipo 5</item>
+    </array>
+
+    <array name="temperatura">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
     </array>
 </resources>

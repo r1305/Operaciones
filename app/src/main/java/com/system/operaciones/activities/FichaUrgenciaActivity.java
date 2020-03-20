@@ -1,16 +1,8 @@
 package com.system.operaciones.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +23,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -102,10 +98,13 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
     int equipo_count;
     int tipo_nro_serie = 1;
-    private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
-    private boolean permisoCamaraConcedido = false, permisoSolicitadoDesdeBoton = false;
+    private static final int  CODIGO_INTENT = 2;
 
     ViewDialog viewDialog;
+
+    EditText cargo,dni,name;
+    String fase = "0";
+    int modo_prueba = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -219,6 +218,19 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
                 volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
+                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
+
+                if(fase.equals("1")){
+                    linear_amp_l3.setVisibility(View.GONE);
+                    linear_volt_l3.setVisibility(View.GONE);
+                }else{
+                    linear_amp_l3.setVisibility(View.VISIBLE);
+                    linear_volt_l3.setVisibility(View.VISIBLE);
+                }
+
+                validateUpload();
 
                 temp_l1.setText(et_temp_l1);
                 temp_l2.setText(et_temp_l2);
@@ -509,6 +521,17 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
                 despues_volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
                 despues_volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
+
+                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
+                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
+
+                if(fase.equals("1")){
+                    linear_amp_l3.setVisibility(View.GONE);
+                    linear_volt_l3.setVisibility(View.GONE);
+                }else{
+                    linear_amp_l3.setVisibility(View.VISIBLE);
+                    linear_volt_l3.setVisibility(View.VISIBLE);
+                }
 
                 validateUploadDespues();
 
@@ -927,11 +950,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
-                final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
-                final EditText dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
-                final EditText cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
+                name = dialogView.findViewById(R.id.dialog_signature_et_name);
+                dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
+                cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
                 final SignaturePad signaturePad = dialogView.findViewById(R.id.dialog_signature);
                 final AlertDialog alertDialog = builder.create();
+                Log.e("tipo_proveedor",tipo_proveedor);
+                if(tipo_proveedor.equals("1")){
+                    getDatosTecnico(proveedor_id);
+                }
                 alertDialog.show();
                 signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
                     @Override
@@ -1034,7 +1061,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                         equipo_count+=1;
                                 }
                                 getEquipo();
-
                             }
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
@@ -1343,6 +1369,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+
     }
 
     private void createFicha(final String urgencia_id)
@@ -1636,6 +1663,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
     TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_motivo,tv_nro_equipo;
     String equipo_id;
+    String tipo_proveedor="0",proveedor_id="0";
+
     private void getEquipo()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipo_url);
@@ -1683,6 +1712,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             String refrigerante = (String)ob.get("refrigerante");
                                             String nro_equipo = (String)ob.get("nro_equipo");
                                             String motivo = (String)ob.get("motivo");
+                                            fase = (String)ob.get("cond_fase_id");
 
                                             tv_marca = findViewById(R.id.ficha_marca);
                                             tv_btu = findViewById(R.id.ficha_btu);
@@ -1703,6 +1733,11 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             tv_refrigerante.setText(refrigerante);
                                             tv_motivo.setText(motivo);
                                             tv_nro_equipo.setText("Equipo N° "+nro_equipo);
+
+                                            tipo_proveedor = (String)ob.get("tipo_proveedor");
+                                            if(tipo_proveedor.equals("1")){
+                                                proveedor_id = (String)ob.get("proveedor_id");
+                                            }
                                         }
                                     }
                                 }
@@ -2934,13 +2969,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             icon_camera_amp_l2.setVisibility(View.VISIBLE);
             icon_gallery_amp_l2.setVisibility(View.GONE);
         }
+        if(!fase.equals("1")){
 
-        if(!image_amp_l3.isEmpty()){
-            icon_camera_amp_l3.setVisibility(View.GONE);
-            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_amp_l3.setVisibility(View.VISIBLE);
-            icon_gallery_amp_l3.setVisibility(View.GONE);
+            if(!image_amp_l3.isEmpty()){
+                icon_camera_amp_l3.setVisibility(View.GONE);
+                icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+            }else{
+                icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                icon_gallery_amp_l3.setVisibility(View.GONE);
+            }
         }
 
         //Voltaje
@@ -2960,12 +2997,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             icon_gallery_volt_l2.setVisibility(View.GONE);
         }
 
-        if(!image_volt_l3.isEmpty()){
-            icon_camera_volt_l3.setVisibility(View.GONE);
-            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_volt_l3.setVisibility(View.VISIBLE);
-            icon_gallery_volt_l3.setVisibility(View.GONE);
+        if(!fase.equals("1")){
+
+            if(!image_volt_l3.isEmpty()){
+                icon_camera_volt_l3.setVisibility(View.GONE);
+                icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+            }else{
+                icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                icon_gallery_volt_l3.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -3026,6 +3066,10 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     icon_gallery_falla.setVisibility(View.VISIBLE);
                     if(image_falla.isEmpty())
                         System.out.println("image_falla NULL");
+
+                    if(modo_prueba==1){
+                        setAllValues();
+                    }
                     break;
                 case "2":
                     image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
@@ -3124,6 +3168,10 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     despues_icon_gallery_falla.setVisibility(View.VISIBLE);
                     if(despues_image_falla.isEmpty())
                         System.out.println("despues_image_falla NULL");
+
+                    if(modo_prueba==1){
+                        setAllValuesDespues();
+                    }
                     break;
                 case "14":
                     despues_image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
@@ -3504,5 +3552,132 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void getDatosTecnico(final String tecnico_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getDatosTecnico_url);
+        Log.i("getDatosTecnico_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getDatosTecnico_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                for (Object ob : respuesta){
+                                    JSONObject o = (JSONObject)ob;
+                                    cargo.setText((String)o.get("cargo"));
+                                    name.setText((String)o.get("tecnico"));
+                                    dni.setText((String)o.get("dni"));
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("getDatosTecnico_error: "+e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getDatosTecnico_error: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tecnico_id", tecnico_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    void setAllValues()
+    {
+        image_temp_l1 =image_falla;
+        image_temp_l2 =image_falla;
+        image_temp_l3 =image_falla;
+        image_presion_alta =image_falla;
+        image_presion_baja =image_falla;
+        image_volt_l1 =image_falla;
+        image_volt_l2 =image_falla;
+        image_volt_l3 =image_falla;
+        image_amp_l1 =image_falla;
+        image_amp_l2 =image_falla;
+        image_amp_l3 =image_falla;
+
+        icon_camera_temp_l1.setVisibility(View.GONE);
+        icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        icon_camera_temp_l2.setVisibility(View.GONE);
+        icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        icon_camera_temp_l3.setVisibility(View.GONE);
+        icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+        icon_camera_presion_baja.setVisibility(View.GONE);
+        icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        icon_camera_presion_alta.setVisibility(View.GONE);
+        icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        icon_camera_amp_l1.setVisibility(View.GONE);
+        icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        icon_camera_amp_l2.setVisibility(View.GONE);
+        icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        icon_camera_amp_l3.setVisibility(View.GONE);
+        icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        icon_camera_volt_l1.setVisibility(View.GONE);
+        icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        icon_camera_volt_l2.setVisibility(View.GONE);
+        icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        icon_camera_volt_l3.setVisibility(View.GONE);
+        icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+    }
+
+    void setAllValuesDespues()
+    {
+        despues_image_temp_l1 = despues_image_falla;
+        despues_image_temp_l2 = despues_image_falla;
+        despues_image_temp_l3 = despues_image_falla;
+        despues_image_presion_alta = despues_image_falla;
+        despues_image_presion_baja = despues_image_falla;
+        despues_image_volt_l1 = despues_image_falla;
+        despues_image_volt_l2 = despues_image_falla;
+        despues_image_volt_l3 = despues_image_falla;
+        despues_image_amp_l1 = despues_image_falla;
+        despues_image_amp_l2 = despues_image_falla;
+        despues_image_amp_l3 = despues_image_falla;
+
+        despues_icon_camera_temp_l1.setVisibility(View.GONE);
+        despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        despues_icon_camera_temp_l2.setVisibility(View.GONE);
+        despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        despues_icon_camera_temp_l3.setVisibility(View.GONE);
+        despues_icon_gallery_temp_l3.setVisibility(View.VISIBLE);
+        despues_icon_camera_presion_baja.setVisibility(View.GONE);
+        despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        despues_icon_camera_presion_alta.setVisibility(View.GONE);
+        despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        despues_icon_camera_amp_l1.setVisibility(View.GONE);
+        despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        despues_icon_camera_amp_l2.setVisibility(View.GONE);
+        despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        despues_icon_camera_amp_l3.setVisibility(View.GONE);
+        icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        despues_icon_camera_volt_l1.setVisibility(View.GONE);
+        despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        despues_icon_camera_volt_l2.setVisibility(View.GONE);
+        despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        despues_icon_camera_volt_l3.setVisibility(View.GONE);
+        despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
     }
 }
