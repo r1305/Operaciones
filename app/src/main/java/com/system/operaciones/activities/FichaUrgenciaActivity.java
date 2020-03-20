@@ -106,6 +106,9 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     String fase = "0";
     int modo_prueba = 1;
 
+    String adjunto_b64="";
+    ImageView adjunto_preview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -122,6 +125,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         viewDialog = new ViewDialog(this);
         viewDialog.showDialog();
         cred.save_data("image_type","0");
+        adjunto_preview = findViewById(R.id.preview_adjunto);
+
 
         spinner_motivos = findViewById(R.id.spinner_motivo);
         spinner_diagnosticos = findViewById(R.id.spinner_diagnostico);
@@ -1107,13 +1112,13 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cleanPhoto(element);
-            }
-        });
-
+        if(element!=0){
+            builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cleanPhoto(element); }
+            });
+        }
 
         AlertDialog alert_preview = builder.create();
         alert_preview.show();
@@ -1713,6 +1718,17 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                                             String nro_equipo = (String)ob.get("nro_equipo");
                                             String motivo = (String)ob.get("motivo");
                                             fase = (String)ob.get("cond_fase_id");
+                                            adjunto_b64 = (String)ob.get("adjunto");
+                                            if(!adjunto_b64.equals("")){
+                                                adjunto_preview.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        showPreview(adjunto_b64,0);
+                                                    }
+                                                });
+                                            }else{
+                                                Toast.makeText(ctx,"Archivo adjunto no disponible",Toast.LENGTH_SHORT).show();
+                                            }
 
                                             tv_marca = findViewById(R.id.ficha_marca);
                                             tv_btu = findViewById(R.id.ficha_btu);
@@ -3349,7 +3365,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString,options);
                 try {
                     String image_type = cred.getData("image_type");
-                    String b64 = selectedImage.toString();
+//                    String b64 = selectedImage.toString();
                     switch (image_type){
                         case "1":
                             image_falla = Image.convert(bitmap);

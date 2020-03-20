@@ -6,12 +6,17 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +51,7 @@ import com.system.operaciones.adapters.EquipoAdapter;
 import com.system.operaciones.adapters.MantenimientoAdapter;
 import com.system.operaciones.response.RespuestaResponse;
 import com.system.operaciones.utils.Credentials;
+import com.system.operaciones.utils.Image;
 import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -101,6 +107,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     ViewDialog viewDialog;
 
     String lat,lng;
+    ImageView img_adjunto;
+    ImageView img_adjunto_view;
+    String adjunto="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +201,33 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     else
                         et_cond_nro_serie.setText(codigo);
                 }
+            }
+        }else{
+            //data.getData return the content URI for the selected Image
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            // Get the cursor
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            // Move to first row
+            cursor.moveToFirst();
+            //Get the column index of MediaStore.Images.Media.DATA
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            //Gets the String value in the column
+            String imgDecodableString = cursor.getString(columnIndex);
+            cursor.close();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString,options);
+            try {
+                String b64 = Image.convert(bitmap);
+                img_adjunto.setVisibility(View.GONE);
+                img_adjunto_view.setVisibility(View.VISIBLE);
+                adjunto = b64;
+                System.out.println("img_adjunto"+adjunto);
+
+            } catch (Exception e) {
+                viewDialog.hideDialog(1);
+                e.printStackTrace();
             }
         }
     }
@@ -294,6 +330,21 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
                 getEquipos();
+                img_adjunto = dialogView.findViewById(R.id.img_adjunto);
+                img_adjunto_view = dialogView.findViewById(R.id.img_adjunto_view);
+
+                img_adjunto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pickFromGallery();
+                    }
+                });
+                img_adjunto_view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPreview(adjunto);
+                    }
+                });
                 personal_spinner = dialogView.findViewById(R.id.dialog_spinner_contratistas);
                 personal_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -866,7 +917,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("fecha", fecha);
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
-                params.put("tipo", tipo_proveedor+"");
+                params.put("tipo", String.valueOf(tipo_proveedor));
+                params.put("adjunto", adjunto);
                 return params;
             }
         };
@@ -1837,5 +1889,52 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    private void pickFromGallery(){
+        //Create an Intent with action as ACTION_PICK
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        // Sets the type as image/*. This ensures only components of type image are selected
+        intent.setType("image/*");
+        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+        // Launching the Intent
+        startActivityForResult(intent,1);
+    }
+
+    private void showPreview(String b64)
+    {
+        System.out.println("preview_url: "+b64);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_preview_photo, null);
+        ImageView preview = dialogView.findViewById(R.id.dialog_preview_photo);
+        preview.setImageBitmap(Image.convert(b64));
+        preview.setMaxHeight(100);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        builder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cleanPhoto();
+            }
+        });
+
+        AlertDialog alert_preview = builder.create();
+        alert_preview.show();
+    }
+
+    void cleanPhoto()
+    {
+        img_adjunto.setVisibility(View.VISIBLE);
+        img_adjunto_view.setVisibility(View.GONE);
+        adjunto="";
     }
 }

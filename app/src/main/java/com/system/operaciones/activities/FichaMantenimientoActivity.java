@@ -98,7 +98,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     String fase = "0";
 
     EditText cargo,dni,name;
-
+    ImageView adjunto_preview;
+    String adjunto_b64="";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -114,6 +115,16 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         getEquipos();
         viewDialog = new ViewDialog(this);
         viewDialog.showDialog();
+        adjunto_preview = findViewById(R.id.preview_adjunto);
+        if(!adjunto_b64.equals("")){
+
+            adjunto_preview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPreview(adjunto_b64,0);
+                }
+            });
+        }
 
         cred.save_data("image_type","0");
 
@@ -1054,12 +1065,14 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cleanPhoto(element);
-            }
-        });
+        if(element!=0){
+            builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cleanPhoto(element);
+                }
+            });
+        }
 
 
         AlertDialog alert_preview = builder.create();
@@ -1493,7 +1506,17 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                             String refrigerante = (String)ob.get("refrigerante");
                                             fase = (String)ob.get("cond_fase_id");
                                             String nro_equipo = (String)ob.get("nro_equipo");
-
+                                            adjunto_b64 = (String)ob.get("adjunto");
+                                            if(!adjunto_b64.equals("")){
+                                                adjunto_preview.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        showPreview(adjunto_b64,0);
+                                                    }
+                                                });
+                                            }else{
+                                                Toast.makeText(ctx,"Archivo adjunto no disponible",Toast.LENGTH_SHORT).show();
+                                            }
                                             tv_marca = findViewById(R.id.ficha_marca);
                                             tv_btu = findViewById(R.id.ficha_btu);
                                             tv_tipo = findViewById(R.id.ficha_tipo);
@@ -1511,6 +1534,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                             tv_voltaje.setText(voltaje);
                                             tv_refrigerante.setText(refrigerante);
                                             tv_nro_equipo.setText("Equipo N° "+nro_equipo);
+
 
                                             tipo_proveedor = (String)ob.get("tipo_proveedor");
                                             if(tipo_proveedor.equals("1")){

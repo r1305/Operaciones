@@ -467,7 +467,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     data_id[i] = id;
                                     i++;
                                 }
-                                System.out.println("contratistas_data_ids: "+data_id.length);
                                 ArrayAdapter<String> personal_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
                                 spinner_personal.setAdapter(personal_adapter);
                                 personal_ids = data_id;

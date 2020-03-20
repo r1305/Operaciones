@@ -361,7 +361,38 @@
         </LinearLayout>
 
     </LinearLayout>
+    <!-- Adjunto -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <ImageView
+            android:id="@+id/img_adjunto"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_cam2"
+            android:layout_gravity="center"/>
 
+        <ImageView
+            android:id="@+id/img_adjunto_view"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_galery"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+        <TextView
+            android:text="Adjunto"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:textColor="@color/verdePastel"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
     <!-- Botones -->
     <LinearLayout
         android:layout_weight="1"

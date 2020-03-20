@@ -132,7 +132,6 @@ public class TiendasActivity extends AppCompatActivity {
                                 recycler.setVisibility(View.VISIBLE);
                                 for (Object o : respuesta) {
                                     JSONObject ob = (JSONObject) o;
-                                    System.out.println(ob);
                                     l.add(ob);
                                 }
                                 adapter.notifyDataSetChanged();
