@@ -112,4 +112,12 @@
         <item>29</item>
         <item>30</item>
     </array>
+
+    <array name="observaciones">
+        <item>Se requiere escalera de 8 pasos</item>
+        <item>Se requiere escalera telescópica</item>
+        <item>Se requiere andamio de 2 cuerpos</item>
+        <item>Se requiere andamio de 3 cuerpos</item>
+        <item>Otros</item>
+    </array>
 </resources>

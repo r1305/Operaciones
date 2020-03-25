@@ -291,7 +291,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="Motivos"
+                android:text="Problemas"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"

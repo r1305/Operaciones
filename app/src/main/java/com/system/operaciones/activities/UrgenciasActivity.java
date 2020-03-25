@@ -548,7 +548,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 alertDialog.show();
                 break;
             case R.id.btn_new_urgencia_equipo:
-                showModalRegisterEquipo();
+                openChooserEquipo();
                 break;
         }
     }
@@ -1084,6 +1084,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
+    EditText et_evap_marca,et_cond_marca;
+    EditText et_evap_modelo,et_cond_modelo;
 
     private void showModalRegisterEquipo()
     {
@@ -1119,6 +1121,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
         et_cond_nro_serie = dialogView.findViewById(R.id.cond_nro_serie);
         icon_cond_scan = dialogView.findViewById(R.id.icon_cond_scan);
+        et_evap_marca = dialogView.findViewById(R.id.et_evap_marca);
+        et_cond_marca = dialogView.findViewById(R.id.et_cond_marca);
+        et_evap_modelo = dialogView.findViewById(R.id.et_evap_modelo);
+        et_cond_modelo = dialogView.findViewById(R.id.et_cond_modelo);
 
         icon_evap_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1156,6 +1162,17 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 marca_id=marcas_id[position];
                 System.out.println("marca_id: "+marca_id);
+                if(marcas_cond_id[position].equals("99")){
+                    spinner_marcas.setVisibility(View.GONE);
+                    et_evap_marca.setVisibility(View.VISIBLE);
+                    spinner_modelos.setVisibility(View.GONE);
+                    et_evap_modelo.setVisibility(View.VISIBLE);
+                }else{
+                    spinner_marcas.setVisibility(View.VISIBLE);
+                    et_evap_marca.setVisibility(View.GONE);
+                    spinner_modelos.setVisibility(View.VISIBLE);
+                    et_evap_modelo.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -1168,6 +1185,17 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cond_marca_id = marcas_cond_id[position];
                 System.out.println("cond_marca_id: "+cond_marca_id);
+                if(marcas_cond_id[position].equals("99")){
+                    spinner_cond_marcas.setVisibility(View.GONE);
+                    et_cond_marca.setVisibility(View.VISIBLE);
+                    spinner_cond_modelos.setVisibility(View.GONE);
+                    et_cond_modelo.setVisibility(View.VISIBLE);
+                }else{
+                    spinner_marcas.setVisibility(View.VISIBLE);
+                    et_cond_marca.setVisibility(View.GONE);
+                    spinner_modelos.setVisibility(View.VISIBLE);
+                    et_cond_modelo.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -1855,6 +1883,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         Log.e("fase_id",fase_id);
         Log.e("refrigerante_id",refrigerante_id);
         Log.e("nro_serie",nro_serie);
+        Log.e("et_evap_marca",et_evap_marca.getText().toString());
+        Log.e("et_evap_modelo",et_evap_modelo.getText().toString());
 
         Log.e("cond_marca_id",cond_marca_id);
         Log.e("modelo_id",modelo_id);
@@ -1864,6 +1894,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         Log.e("cond_fase_id",cond_fase_id);
         Log.e("cond_refrigerante_id",cond_refrigerante_id);
         Log.e("cond_nro_serie",cond_nro_serie);
+        Log.e("et_cond_marca",et_cond_marca.getText().toString());
+        Log.e("et_cond_modelo",et_cond_modelo.getText().toString());
         System.out.println(cond_marca_id+"-"+modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
@@ -1914,6 +1946,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("fase_id", fase_id);
                 params.put("refrigerante_id", refrigerante_id);
                 params.put("nro_serie", nro_serie);
+                params.put("et_evap_marca",et_evap_marca.getText().toString());
+                params.put("et_evap_modelo",et_evap_modelo.getText().toString());
                 //Condensadora
                 params.put("cond_marca_id", cond_marca_id);
                 params.put("cond_modelo_id", modelo_id);
@@ -1923,6 +1957,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("cond_fase_id", cond_fase_id);
                 params.put("cond_refrigerante_id", cond_refrigerante_id);
                 params.put("cond_nro_serie", cond_nro_serie);
+                params.put("et_cond_marca",et_cond_marca.getText().toString());
+                params.put("et_cond_modelo",et_cond_modelo.getText().toString());
                 return params;
             }
         };
@@ -2027,5 +2063,37 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         img_adjunto.setVisibility(View.VISIBLE);
         img_adjunto_view.setVisibility(View.GONE);
         adjunto="";
+    }
+
+    void openChooserEquipo()
+    {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_chooser_equipo, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        TextView choose_equipo = dialogView.findViewById(R.id.choose_equipo);
+        TextView choose_cortina = dialogView.findViewById(R.id.choose_cortina);
+        final androidx.appcompat.app.AlertDialog alertDialogChooser = builder.create();
+        choose_equipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogChooser.dismiss();
+                showModalRegisterEquipo();
+            }
+        });
+        choose_cortina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ctx,"Pronto estará disponible",Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialogChooser.show();
     }
 }

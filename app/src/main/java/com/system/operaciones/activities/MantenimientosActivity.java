@@ -512,7 +512,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 alertDialog.show();
                 break;
             case R.id.btn_new_urgencia_equipo:
-                showModalRegisterEquipo();
+                openChooserEquipo();
                 break;
         }
     }
@@ -1013,6 +1013,11 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
 
+        et_evap_marca = dialogView.findViewById(R.id.et_evap_marca);
+        et_cond_marca = dialogView.findViewById(R.id.et_cond_marca);
+        et_evap_modelo = dialogView.findViewById(R.id.et_evap_modelo);
+        et_cond_modelo = dialogView.findViewById(R.id.et_cond_modelo);
+
         spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
         ArrayAdapter<String> nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
         spinner_nro_equipo.setAdapter(nro_equipo_adapter);
@@ -1066,6 +1071,17 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 marca_id=marcas_id[position];
                 System.out.println("marca_id: "+marca_id);
+                if(marcas_cond_id[position].equals("99")){
+                    spinner_marcas.setVisibility(View.GONE);
+                    et_evap_marca.setVisibility(View.VISIBLE);
+                    spinner_modelos.setVisibility(View.GONE);
+                    et_evap_modelo.setVisibility(View.VISIBLE);
+                }else{
+                    spinner_marcas.setVisibility(View.VISIBLE);
+                    et_evap_marca.setVisibility(View.GONE);
+                    spinner_modelos.setVisibility(View.VISIBLE);
+                    et_evap_modelo.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -1078,6 +1094,17 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cond_marca_id = marcas_cond_id[position];
                 System.out.println("cond_marca_id: "+cond_marca_id);
+                if(marcas_cond_id[position].equals("99")){
+                    spinner_cond_marcas.setVisibility(View.GONE);
+                    et_cond_marca.setVisibility(View.VISIBLE);
+                    spinner_cond_modelos.setVisibility(View.GONE);
+                    et_cond_modelo.setVisibility(View.VISIBLE);
+                }else{
+                    spinner_marcas.setVisibility(View.VISIBLE);
+                    et_cond_marca.setVisibility(View.GONE);
+                    spinner_modelos.setVisibility(View.VISIBLE);
+                    et_cond_modelo.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -1769,6 +1796,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     String fase_id, cond_fase_id="";
     String refrigerante_id,cond_refrigerante_id="";
     String nro_serie,cond_nro_serie="";
+    EditText et_evap_marca,et_cond_marca;
+    EditText et_evap_modelo,et_cond_modelo;
 
     private void registrarEquipo()
     {
@@ -1821,6 +1850,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("fase_id", fase_id);
                 params.put("refrigerante_id", refrigerante_id);
                 params.put("nro_serie", nro_serie);
+                params.put("et_evap_marca",et_evap_marca.getText().toString());
+                params.put("et_evap_modelo",et_evap_modelo.getText().toString());
                 //Condensadora
                 params.put("cond_marca_id", cond_marca_id);
                 params.put("cond_modelo_id", cond_modelo_id);
@@ -1831,6 +1862,8 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("cond_refrigerante_id", cond_refrigerante_id);
                 params.put("cond_nro_serie", cond_nro_serie);
                 params.put("nro_equipo", spinner_nro_equipo.getSelectedItem().toString());
+                params.put("et_cond_marca",et_cond_marca.getText().toString());
+                params.put("et_cond_modelo",et_cond_modelo.getText().toString());
                 return params;
             }
         };
@@ -1936,5 +1969,37 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         img_adjunto.setVisibility(View.VISIBLE);
         img_adjunto_view.setVisibility(View.GONE);
         adjunto="";
+    }
+
+    void openChooserEquipo()
+    {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_chooser_equipo, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        TextView choose_equipo = dialogView.findViewById(R.id.choose_equipo);
+        TextView choose_cortina = dialogView.findViewById(R.id.choose_cortina);
+        final androidx.appcompat.app.AlertDialog alertDialogChooser = builder.create();
+        choose_equipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogChooser.dismiss();
+                showModalRegisterEquipo();
+            }
+        });
+        choose_cortina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ctx,"Pronto estará disponible",Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialogChooser.show();
     }
 }

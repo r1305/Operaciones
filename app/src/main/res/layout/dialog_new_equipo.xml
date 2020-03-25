@@ -55,6 +55,37 @@
                 android:backgroundTint="@color/verdePastel"
                 />
         </LinearLayout>
+        <!-- Marcas -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marca"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <Spinner
+                android:id="@+id/spinner_marcas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/verdePastel"
+                />
+
+            <EditText
+                android:id="@+id/et_evap_marca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/verdePastel"
+                android:inputType="textCapCharacters"
+                android:visibility="gone"/>
+        </LinearLayout>
 
         <!-- Modelo -->
         <LinearLayout
@@ -74,60 +105,47 @@
                 android:textAlignment="textStart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                
+                android:backgroundTint="@color/verdePastel"
+                />
+
+            <EditText
+                android:id="@+id/et_evap_modelo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:inputType="textCapCharacters"
+                android:backgroundTint="@color/verdePastel"/>
+        </LinearLayout>
+
+        <!-- Tipo -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tipo"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <Spinner
+                android:id="@+id/spinner_tipos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:backgroundTint="@color/verdePastel"
                 />
         </LinearLayout>
 
+        <!-- Marca y Tipo -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <!-- Marcas -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Marca"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_marcas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
-
-            <!-- Tipo -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_tipos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -233,6 +251,8 @@
             </LinearLayout>
         </LinearLayout>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -279,6 +299,37 @@
             android:fontFamily="@font/gotham_medium"
             android:textColor="@color/negro"/>
 
+        <!-- Marcas -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marca"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <Spinner
+                android:id="@+id/spinner_cond_marcas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/verdePastel"
+                />
+            <EditText
+                android:id="@+id/et_cond_marca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/verdePastel"
+                android:inputType="textCapCharacters"
+                android:visibility="gone"/>
+        </LinearLayout>
+
         <!-- Modelo -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -299,57 +350,45 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/verdePastel"
                 />
+
+            <EditText
+                android:id="@+id/et_cond_modelo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:inputType="textCapCharacters"
+                android:backgroundTint="@color/verdePastel"/>
         </LinearLayout>
 
+        <!-- Tipo -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tipo"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <Spinner
+                android:id="@+id/spinner_cond_tipos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:backgroundTint="@color/verdePastel"
+                />
+        </LinearLayout>
+
+        <!-- Marca y Tipo -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <!-- Marcas -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Marca"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_cond_marcas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
-
-            <!-- Tipo -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_cond_tipos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

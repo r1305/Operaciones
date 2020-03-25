@@ -32,7 +32,8 @@
             android:hint="Nombre y Apellido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords|textNoSuggestions"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_weight="1"
@@ -78,7 +79,7 @@
             android:hint="Cargo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords|textNoSuggestions"/>
     </LinearLayout>
     <LinearLayout
         android:layout_weight="1"
