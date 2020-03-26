@@ -103,6 +103,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     String equipo_id;
 
     int equipo_count = 0;
+    int cortina_count = 0;
     int tipo_nro_serie = 1;
     private static final int CODIGO_INTENT = 2;
 
@@ -125,6 +126,9 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     ImageView img_adjunto;
     ImageView img_adjunto_view;
     String adjunto="";
+
+    int cant_equipos=0;
+    int cant_cortinas=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,13 +186,12 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         btn_new_urgencia.setOnClickListener(this);
         btn_new_equipo.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        tienda_id = intent.getStringExtra("tienda_id");
+        tienda_id = cred.getData("key_tienda_id");
         setTienda_id(tienda_id);
-        getTienda(tienda_id);
-        getUrgencias(tienda_id);
+        getTienda();
+        getUrgencias();
         getEquipos();
-        getEquiposTienda();
+//        getEquiposTienda();
 
         datos.setVisibility(View.VISIBLE);
         tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -200,11 +203,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         icon_check.setImageResource(R.drawable.icon_check_white);
 
         equipos_adapter.notifyDataSetChanged();
-        if(cred.getData("key_user_type").equals("2"))
-            btn_new_equipo.setVisibility(View.GONE);
-        else
-            btn_new_equipo.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -214,10 +212,18 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     String codigo = data.getStringExtra("codigo");
-                    if (tipo_nro_serie == 1)
-                        et_nro_serie.setText(codigo);
-                    else
-                        et_cond_nro_serie.setText(codigo);
+                    switch (tipo_nro_serie){
+                        case 1:
+                            et_nro_serie.setText(codigo);
+                        break;
+                        case 2:
+                            et_cond_nro_serie.setText(codigo);
+                        break;
+                        case 3:
+                            et_cortina_nro_serie.setText(codigo);
+                        break;
+
+                    }
                 }
             }
         }else{
@@ -263,18 +269,42 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         this.equipo_count = equipo_count;
     }
 
+    public int getCortina_count() {
+        return cortina_count;
+    }
+
+    public void setCortina_count(int cortina_count) {
+        this.cortina_count = cortina_count;
+    }
+
+    public int getCant_equipos() {
+        return cant_equipos;
+    }
+
+    public void setCant_equipos(int cant_equipos) {
+        this.cant_equipos = cant_equipos;
+    }
+
+    public int getCant_cortinas() {
+        return cant_cortinas;
+    }
+
+    public void setCant_cortinas(int cant_cortinas) {
+        this.cant_cortinas = cant_cortinas;
+    }
+
     @Override
     protected void onStart()
     {
         super.onStart();
-        getUrgencias(tienda_id);
+        getUrgencias();
     }
 
     @Override
     protected void onPostResume()
     {
         super.onPostResume();
-        getUrgencias(tienda_id);
+        getUrgencias();
     }
 
     public String getTienda_id()
@@ -672,7 +702,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getTienda(final String tienda_id)
+    public void getTienda()
     {
         viewDialog.showDialog();
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTienda_url);
@@ -702,6 +732,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                     String direccion = (String) ob.get("direccion");
                                     String distrito = (String) ob.get("distrito");
                                     final String email = (String)ob.get("email");
+                                    String equipos = (String)ob.get("cant_equipos");
+                                    String cortinas = (String)ob.get("cant_cortinas");
+                                    setCant_equipos(Integer.parseInt(equipos));
+                                    setCant_cortinas(Integer.parseInt(cortinas));
                                     lat = (String)ob.get("latitud");
                                     lng = (String)ob.get("longitud");
 
@@ -788,7 +822,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
-    public void getUrgencias(final String tienda_id)
+    public void getUrgencias()
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgencias_url);
         Log.i("getUrgencias_url",url);
@@ -799,7 +833,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getUrgencias_response: " + response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -841,7 +874,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     public void getEquipos()
     {
-        Log.e("tienda_id",tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
         Log.i("getEquipos_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -864,83 +896,48 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
                                 int i=0;
+                                int j=0;
+                                l.clear();
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
-                                    System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
                                         equipos[i] = "Equipo "+ob.get("nro_equipo");
+                                        equipos_l.add(ob);
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
                                     equipos_ids[i] = (String)ob.get("id");
-                                    i++;
-                                    setEquipo_count(i+1);
+                                    if(ob.get("tipo_equipo")!=null){
+                                        if(ob.get("tipo_equipo").equals("1")) {
+                                            i++;
+                                            setEquipo_count(i+1);
+                                        }else {
+                                            j++;
+                                            setCortina_count(j+1);
+                                        }
+                                    }
                                 }
+
+                                if(getCortina_count()==getCant_cortinas() && getEquipo_count()==getCant_equipos()){
+                                    btn_new_equipo.setVisibility(View.GONE);
+                                }else{
+                                    if(!cred.getData("key_user_type").equals("3"))
+                                        btn_new_equipo.setVisibility(View.VISIBLE);
+                                    else
+                                        btn_new_equipo.setVisibility(View.GONE);
+                                }
+
                                 ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
                                 if(spinner_equipos!=null){
                                     spinner_equipos.setAdapter(dialog_equipos_adapter);
                                     dialog_equipos_adapter.notifyDataSetChanged();
                                 }
-
-                                viewDialog.hideDialog(1);
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                System.out.println("getEquipos_error: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    public void getEquiposTienda()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
-        Log.i("getEquiposTienda_url",url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getEquiposTienda_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
-                            } else {
-                                equipos_l.clear();
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    equipos_l.add(ob);
-                                 }
                                 equipos_adapter.notifyDataSetChanged();
                                 viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
+                            System.out.println("getEquipos_error1: "+e);
                             e.printStackTrace();
                         }
                     }
@@ -948,7 +945,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(1);
-                System.out.println("getEquiposTienda_error: " + error.getMessage());
+                System.out.println("getEquipos_error2: " + error.getMessage());
                 Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
@@ -956,7 +953,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
+                params.put("tienda_id", cred.getData("key_tienda_id"));
                 return params;
             }
         };
@@ -985,7 +982,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
-                                getUrgencias(tienda_id);
+                                getUrgencias();
                                 new Utils().sendMailUrgencia(tienda_id,ctx);
                             }
                         } catch (Exception e) {
@@ -1079,13 +1076,15 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     ArrayAdapter<String> refrigerante_cond_adapter;
     String[] refrigerantes_cond_id;
 
-    SearchableSpinner spinner_nro_equipo;
-    ArrayAdapter<String> nro_equipo_adapter;
-
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
     EditText et_evap_marca,et_cond_marca;
     EditText et_evap_modelo,et_cond_modelo;
+
+    /**************************************/
+    EditText et_cortina_marca,et_cortina_modelo,et_cortina_nro_serie;
+    ImageView icon_cortina_scan;
+    Button btn_cortina_cancelar,btn_cortina_registrar;
 
     private void showModalRegisterEquipo()
     {
@@ -1109,12 +1108,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
         spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
         spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
-
-        spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
-        nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
-        spinner_nro_equipo.setAdapter(nro_equipo_adapter);
-        nro_equipo_adapter.notifyDataSetChanged();
-
         spinner_modelos.setPositiveButton("Cerrar");
 
         et_nro_serie = dialogView.findViewById(R.id.nro_serie);
@@ -1370,6 +1363,55 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             }
         });
         btn_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        viewDialog.hideDialog(1.5);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog.show();
+            }
+        }, 1500);
+    }
+
+    private void showModalRegisterCortina()
+    {
+        viewDialog.showDialog();
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_new_cortina, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        et_cortina_marca = dialogView.findViewById(R.id.et_cortina_marca);
+        et_cortina_modelo = dialogView.findViewById(R.id.et_cortina_modelo);
+        et_cortina_nro_serie = dialogView.findViewById(R.id.et_cortina_nro_serie);
+        icon_cortina_scan = dialogView.findViewById(R.id.icon_cortina_scan);
+
+        icon_cortina_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tipo_nro_serie=3;
+                escanear();
+            }
+        });
+
+        btn_cortina_cancelar = dialogView.findViewById(R.id.btn_cortina_cancelar);
+        btn_cortina_registrar = dialogView.findViewById(R.id.btn_cortina_registrar);
+
+        final AlertDialog alertDialog = builder.create();
+
+        btn_cortina_registrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registrarCortina(alertDialog);
+            }
+        });
+
+        btn_cortina_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
@@ -1874,7 +1916,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
         Log.e("tienda_id",tienda_id);
-        Log.e("nro_equipo",spinner_nro_equipo.getSelectedItemPosition()+1+"");
+        Log.e("nro_equipo",getEquipo_count()+"");
         Log.e("marca_id",marca_id);
         Log.e("modelo_id",modelo_id);
         Log.e("btu_id",btu_id);
@@ -1916,7 +1958,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
                                 ((UrgenciasActivity)ctx).getEquipos();
-                                ((UrgenciasActivity)ctx).getEquiposTienda();
+//                                ((UrgenciasActivity)ctx).getEquiposTienda();
                                 alertDialog.dismiss();
                             }
                         } catch (Exception e) {
@@ -1934,9 +1976,10 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                String nro_equipo = String.valueOf((spinner_nro_equipo.getSelectedItemPosition()+1));
+                String nro_equipo = String.valueOf(getEquipo_count());
                 params.put("tienda_id", tienda_id);
                 params.put("nro_equipo", nro_equipo);
+                params.put("tipo","1");
                 //Evaporadora
                 params.put("marca_id", marca_id);
                 params.put("modelo_id", modelo_id);
@@ -1959,6 +2002,67 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 params.put("cond_nro_serie", cond_nro_serie);
                 params.put("et_cond_marca",et_cond_marca.getText().toString());
                 params.put("et_cond_modelo",et_cond_modelo.getText().toString());
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private void registrarCortina(final AlertDialog alertDialog)
+    {
+        Log.e("tienda_id",tienda_id);
+        Log.e("nro_equipo",getCortina_count()+"");
+        Log.e("marca",et_cortina_marca.getText().toString());
+        Log.e("modelo",et_cortina_modelo.getText().toString());
+        Log.e("nro_serie",et_cortina_nro_serie.getText().toString());
+
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_cortina_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("registerCortina_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
+                            } else {
+//                                ((UrgenciasActivity)ctx).getEquiposTienda();
+                                ((UrgenciasActivity)ctx).getEquipos();
+                                alertDialog.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("registerCortina_error1: " + e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("registerCortina_error2: " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                String nro_equipo = String.valueOf((getCortina_count()));
+                params.put("tienda_id", tienda_id);
+                params.put("nro_equipo", nro_equipo);
+                params.put("tipo","2");
+                //Evaporadora
+                params.put("marca", et_cortina_marca.getText().toString());
+                params.put("modelo", et_cortina_modelo.getText().toString());
+                params.put("nro_serie", et_cortina_nro_serie.getText().toString());
                 return params;
             }
         };
@@ -2091,7 +2195,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         choose_cortina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ctx,"Pronto estará disponible",Toast.LENGTH_SHORT).show();
+                showModalRegisterCortina();
             }
         });
         alertDialogChooser.show();

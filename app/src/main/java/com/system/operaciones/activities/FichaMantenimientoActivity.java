@@ -90,7 +90,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     private String name_tecnico,dni_tecnico,cargo_tecnico,name_cliente,dni_cliente,cargo_cliente;
 
-    int equipo_count;
+    int equipo_count=0;
+    int cortina_count=0;
     int tipo_nro_serie = 1;
     private static final int  CODIGO_INTENT = 2;
 
@@ -1001,8 +1002,11 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     equipos.add((JSONObject)o);
-                                    if(!ob.get("id").equals("0"))
+                                    if(!ob.get("id").equals("0") && ob.get("tipo").equals("1"))
                                         equipo_count+=1;
+                                    else if(!ob.get("id").equals("0") && ob.get("tipo").equals("2"))
+                                        cortina_count+=1;
+
                                 }
                                 getEquipo();
 

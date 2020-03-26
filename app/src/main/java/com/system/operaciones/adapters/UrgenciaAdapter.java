@@ -462,7 +462,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     private void getEquipos(final String tienda_id)
     {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
         Log.i("getEquipos_url",url);
 
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -731,7 +731,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 new Utils().sendMailUpdateUrgencia(id,ctx);
-                                ((UrgenciasActivity)ctx).getUrgencias(((UrgenciasActivity) ctx).getTienda_id());
+                                ((UrgenciasActivity)ctx).getUrgencias();
                                 alertDialog.dismiss();
                             }
                         } catch (Exception e) {

@@ -34,10 +34,13 @@
 
     <!-- Equipo -->
     <string name="register_equipo_url">ocupa/equipo/registerEquipo.php</string>
+    <string name="register_cortina_url">ocupa/equipo/registerCortina.php</string>
     <string name="update_datos_equipo_url">ocupa/equipo/updateDatosEquipo.php</string>
+    <string name="update_datos_cortina_url">ocupa/equipo/updateDatosCortina.php</string>
     <string name="getEquipos_url">ocupa/equipo/getEquipos.php</string>
     <string name="getEquiposTienda_url">ocupa/equipo/getEquiposTienda.php</string>
     <string name="getEquipoById_url">ocupa/equipo/getEquipoById.php</string>
+    <string name="getCortina_url">ocupa/equipo/getCortina.php</string>
     <string name="getMarcas_url">ocupa/equipo/getMarcas.php</string>
     <string name="getModelos_url">ocupa/equipo/getModelos.php</string>
     <string name="getCondensadoraModelos_url">ocupa/equipo/getCondensadoraModelos.php</string>

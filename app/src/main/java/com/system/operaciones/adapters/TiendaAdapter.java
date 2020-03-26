@@ -60,7 +60,6 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("key_act",cred.getData("key_act"));
                 if(is_uezu.equals("0")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                     builder.setTitle("¡Atención!");
@@ -69,19 +68,19 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String act = cred.getData("key_act");
+                            cred.save_data("key_tienda_id",id);
                             if(act.equals("1"))
                             {
-                                Log.e("tienda_adapter_act","1");
-                                ctx.startActivity(new Intent(ctx, InstalacionesActivity.class).putExtra("tienda_id",id));
+                                ctx.startActivity(new Intent(ctx, InstalacionesActivity.class));
                             }
                             else if(act.equals("2")){
                                 Log.e("tienda_adapter_act","2");
-                                ctx.startActivity(new Intent(ctx, MantenimientosActivity.class).putExtra("tienda_id",id));
+                                ctx.startActivity(new Intent(ctx, MantenimientosActivity.class));
                             }
                             else if(act.equals("3"))
                             {
                                 Log.e("tienda_adapter_act","3");
-                                ctx.startActivity(new Intent(ctx, UrgenciasActivity.class).putExtra("tienda_id",id));
+                                ctx.startActivity(new Intent(ctx, UrgenciasActivity.class));
                             }
                         }
                     });
@@ -95,19 +94,20 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
                     alertDialog.show();
                 }else{
                     String act = cred.getData("key_act");
+                    cred.save_data("key_tienda_id",id);
                     if(act.equals("1"))
                     {
                         Log.e("tienda_adapter_act","1");
-                        ctx.startActivity(new Intent(ctx, InstalacionesActivity.class).putExtra("tienda_id",id));
+                        ctx.startActivity(new Intent(ctx, InstalacionesActivity.class));
                     }
                     else if(act.equals("2")){
                         Log.e("tienda_adapter_act","2");
-                        ctx.startActivity(new Intent(ctx, MantenimientosActivity.class).putExtra("tienda_id",id));
+                        ctx.startActivity(new Intent(ctx, MantenimientosActivity.class));
                     }
                     else if(act.equals("3"))
                     {
                         Log.e("tienda_adapter_act","3");
-                        ctx.startActivity(new Intent(ctx, UrgenciasActivity.class).putExtra("tienda_id",id));
+                        ctx.startActivity(new Intent(ctx, UrgenciasActivity.class));
                     }
                 }
             }

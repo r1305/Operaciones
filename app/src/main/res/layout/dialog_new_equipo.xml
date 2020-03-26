@@ -33,28 +33,6 @@
             android:textSize="15sp"
             android:fontFamily="@font/gotham_medium"
             android:textColor="@color/negro"/>
-        
-        <!-- Nro Equipo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nro de Equipo"
-                android:fontFamily="@font/gotham_medium"
-                android:textColor="@color/verdePastel"
-                android:textSize="15sp"/>
-
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/spinner_nro_equipo"
-                android:textAlignment="textStart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/verdePastel"
-                />
-        </LinearLayout>
         <!-- Marcas -->
         <LinearLayout
             android:layout_weight="1"

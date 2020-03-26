@@ -988,8 +988,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     EditText et_nro_serie,et_cond_nro_serie;
     ImageView icon_evap_scan,icon_cond_scan;
 
-    SearchableSpinner spinner_nro_equipo;
-
     private void showModalRegisterEquipo()
     {
         viewDialog.showDialog();
@@ -1018,13 +1016,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         et_evap_modelo = dialogView.findViewById(R.id.et_evap_modelo);
         et_cond_modelo = dialogView.findViewById(R.id.et_cond_modelo);
 
-        spinner_nro_equipo = dialogView.findViewById(R.id.spinner_nro_equipo);
-        ArrayAdapter<String> nro_equipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,ctx.getResources().getStringArray(R.array.equipo_number));
-        spinner_nro_equipo.setAdapter(nro_equipo_adapter);
-        nro_equipo_adapter.notifyDataSetChanged();
-
-        spinner_nro_equipo.setPositiveButton("Cerrar");
-        spinner_nro_equipo.setTitle("Seleccione el Nro de equipo");
         spinner_modelos.setPositiveButton("Cerrar");
         spinner_modelos.setTitle("Seleccione un modelo");
         spinner_cond_modelos.setPositiveButton("Cerrar");
@@ -1803,7 +1794,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     {
         nro_serie = et_nro_serie.getText().toString();
         cond_nro_serie = et_cond_nro_serie.getText().toString();
-        System.out.println("nro_equipo: "+spinner_nro_equipo.getSelectedItem().toString());
+        System.out.println("nro_equipo: "+getEquipo_count());
         System.out.println(marca_id+"-"+modelo_id+"-"+btu_id+"-"+tipo_id+"-"+voltaje_id+"-"+fase_id+"-"+refrigerante_id+"-"+nro_serie);
         System.out.println(cond_marca_id+"-"+cond_modelo_id+"-"+cond_btu_id+"-"+cond_tipo_id+"-"+cond_voltaje_id+"-"+cond_fase_id+"-"+cond_refrigerante_id+"-"+cond_nro_serie);
 
@@ -1841,6 +1832,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("tienda_id", tienda_id);
+                params.put("nro_equipo", getEquipo_count()+"");
                 //Evaporadora
                 params.put("marca_id", marca_id);
                 params.put("modelo_id", modelo_id);
@@ -1861,7 +1853,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("cond_fase_id", cond_fase_id);
                 params.put("cond_refrigerante_id", cond_refrigerante_id);
                 params.put("cond_nro_serie", cond_nro_serie);
-                params.put("nro_equipo", spinner_nro_equipo.getSelectedItem().toString());
                 params.put("et_cond_marca",et_cond_marca.getText().toString());
                 params.put("et_cond_modelo",et_cond_modelo.getText().toString());
                 return params;
