@@ -21,6 +21,7 @@
     <string name="getDiagnosticos_url">ocupa/urgencia/getDiagnosticos.php</string>
     <string name="getSolucion_url">ocupa/urgencia/getSolucion.php</string>
     <string name="getUrgencias_url">ocupa/urgencia/getUrgencias.php</string>
+    <string name="getUrgenciasByUsuario_url">ocupa/urgencia/getUrgenciasByUsuario.php</string>
     <string name="getUrgencia_url">ocupa/urgencia/getUrgencia.php</string>
     <string name="getContratistas_url">ocupa/urgencia/getContratistas.php</string>
     <string name="getTecnicos_url">ocupa/urgencia/getTecnicos.php</string>
@@ -54,6 +55,7 @@
     <!-- Mantenimientos -->
     <string name="pdf_url_mantenimiento">https://uezuperu.com/app/files/pdf/mantenimientos/</string>
     <string name="getMantenimientos_url">ocupa/mantenimiento/getMantenimientos.php</string>
+    <string name="getMantenimientosByUsuario_url">ocupa/mantenimiento/getMantenimientosByUsuario.php</string>
     <string name="getMantenimiento_url">ocupa/mantenimiento/getMantenimiento.php</string>
     <string name="getDatosTecnico_url">ocupa/mantenimiento/getDatosTecnico.php</string>
     <string name="update_mantenimiento_url">ocupa/mantenimiento/updateMantenimiento.php</string>

@@ -209,7 +209,7 @@
                     android:layout_gravity="center_vertical"/>
 
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/spinner_contratista"
+                    android:id="@+id/dialog_spinner_contratistas"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -264,7 +264,7 @@
                     android:textColor="@color/verdePastel" />
 
                 <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/spinner_equipos"
+                    android:id="@+id/dialog_spinner_equipos"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

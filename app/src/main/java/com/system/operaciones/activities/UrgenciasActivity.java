@@ -94,11 +94,11 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
     RecyclerView recycler;
     List<JSONObject> l = new ArrayList<>();
     UrgenciaAdapter adapter;
-    SearchableSpinner spinner_equipos;
     RecyclerView equipos_recycler;
     List<JSONObject> equipos_l = new ArrayList<>();
     EquipoAdapter equipos_adapter;
 
+    SearchableSpinner spinner_equipos;
     String[] equipos_ids;
     String equipo_id;
 
@@ -189,9 +189,14 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         tienda_id = cred.getData("key_tienda_id");
         setTienda_id(tienda_id);
         getTienda();
-        getUrgencias();
-        getEquipos();
-//        getEquiposTienda();
+        if(!user_type.equals("3"))
+            getUrgencias();
+        else
+            getUrgenciasByUsuario(cred.getData("user_id"));
+//        getEquipos();
+        getEquiposTienda();
+
+        System.out.println("usuario_id: "+cred.getData("user_id"));
 
         datos.setVisibility(View.VISIBLE);
         tab_datos.setBackgroundColor(getResources().getColor(R.color.verdePastel));
@@ -367,6 +372,198 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 tab_servicios.setBackgroundColor(getResources().getColor(R.color.verdePastel));
                 break;
             case R.id.btn_new_urgencia:
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+//                // retrieve display dimensions
+//                Rect displayRectangle = new Rect();
+//                Window window = getWindow();
+//                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//                // inflate and adjust layout
+//                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View dialogView = inflater.inflate(R.layout.dialog_new_urgencia, null);
+//                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
+//                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.9f));
+//
+//                img_adjunto = dialogView.findViewById(R.id.img_adjunto);
+//                img_adjunto_view = dialogView.findViewById(R.id.img_adjunto_view);
+//
+//                img_adjunto.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        pickFromGallery();
+//                    }
+//                });
+//
+//                img_adjunto_view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        showPreview(adjunto);
+//                    }
+//                });
+//                spinner_personal = dialogView.findViewById(R.id.spinner_contratista);
+//                spinner_personal.setPositiveButton("Cerrar");
+//
+//                builder.setView(dialogView);
+//
+//                spinner_equipos = dialogView.findViewById(R.id.spinner_equipos);
+//                spinner_equipos.setPositiveButton("Cerrar");
+//                dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
+//                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
+//                icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
+//                icon_clock = dialogView.findViewById(R.id.dialog_icon_clock);
+//                dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
+//                dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
+//                dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
+//                observaciones = dialogView.findViewById(R.id.dialog_observaciones);
+//                spinner_motivos = dialogView.findViewById(R.id.spinner_motivos);
+//                final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
+//                final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+//                radioUezu.setChecked(true);
+//
+//                tipo_proveedor=1;
+//
+//                getTecnicos();
+//                getMotivos();
+//                getEquipos();
+//
+//                spinner_personal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+////                        personal_id = personal_ids[position];
+////                        Log.e("position_personal",position+"");
+////                        Log.e("personal_id",motivos_id[position]);
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//                        personal_id = personal_ids[0];
+//                    }
+//                });
+//                radioUezu.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        tipo_proveedor=1;
+//                        getTecnicos();
+//                    }
+//                });
+//                radioContratistas.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        tipo_proveedor=2;
+//                        getContratistas();
+//                    }
+//                });
+//
+//                spinner_motivos.setPositiveButton("Cerrar");
+//                spinner_equipos.setPositiveButton("Cerrar");
+//                spinner_motivos.setPositiveButton("Cerrar");
+//                spinner_personal.setPositiveButton("Cerrar");
+//
+//
+//                Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
+//
+//                // Create the DatePickerDialog instance
+//                final DatePickerDialog datePicker = new DatePickerDialog(ctx, new DatePickerDialog.OnDateSetListener() {
+//
+//                    // when dialog box is closed, below method will be called.
+//                    public void onDateSet(DatePicker view, int selectedYear,
+//                                          int selectedMonth, int selectedDay) {
+//                        String year1 = String.valueOf(selectedYear);
+//                        String month1 = ((selectedMonth + 1) < 10 ? "0" : "") + (selectedMonth + 1);
+//                        String day1 = ((selectedDay < 10) ? "0" : "") + selectedDay;
+//                        str_fecha = year1 + "-" + month1 + "-" + day1;
+//                        dialog_fecha.setText(str_fecha);
+//                        dialog_fecha.setError(null);
+//                    }
+//                },
+//                        cal.get(Calendar.YEAR),
+//                        cal.get(Calendar.MONTH),
+//                        cal.get(Calendar.DAY_OF_MONTH));
+//                datePicker.setCancelable(false);
+//                datePicker.setTitle("Seleccione la fecha");
+//                icon_calendar.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        datePicker.show();
+//                    }
+//                });
+//                dialog_fecha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChange(View v, boolean hasFocus) {
+//                        if(hasFocus)
+//                            datePicker.show();
+//                    }
+//                });
+//                dialog_fecha.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        datePicker.show();
+//                    }
+//                });
+//
+//                // Create the DatePickerDialog instance
+//                final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
+//
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        String hour = (hourOfDay < 10 ? "0" : "") + hourOfDay;
+//                        String min = (minute < 10 ? "0" : "") + minute;
+//                        str_hora = hour + ":" + min;
+//                        dialog_hora.setText(str_hora);
+//                        dialog_hora.setError(null);
+//                    }
+//                },
+//                        cal.get(Calendar.HOUR_OF_DAY),
+//                        cal.get(Calendar.MINUTE),
+//                        true);
+//                datePicker.setCancelable(false);
+//                datePicker.setTitle("Seleccione la hora");
+//
+//                icon_clock.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        timePicker.show();
+//                    }
+//                });
+//                dialog_hora.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChange(View v, boolean hasFocus) {
+//                        if(hasFocus)
+//                            timePicker.show();
+//                    }
+//                });
+//                dialog_hora.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        timePicker.show();
+//                    }
+//                });
+//
+//                getMotivos();
+//                dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        alertDialog.dismiss();
+//                    }
+//                });
+//                dialog_btn_registrar.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        alertDialog.dismiss();
+//                        registerUrgencia(observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
+//                    }
+//                });
+//                LinearLayout linear_fecha = dialogView.findViewById(R.id.linear_fecha);
+//                LinearLayout linear_personal = dialogView.findViewById(R.id.linear_personal);
+//                if(cred.getData("key_user_type").equals("2")){
+//                    linear_fecha.setVisibility(View.GONE);
+//                    linear_personal.setVisibility(View.GONE);
+//                }else{
+//                    linear_fecha.setVisibility(View.VISIBLE);
+//                    linear_personal.setVisibility(View.VISIBLE);
+//                }
+//                alertDialog = builder.create();
+//                alertDialog.show();
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 // retrieve display dimensions
                 Rect displayRectangle = new Rect();
@@ -376,8 +573,8 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View dialogView = inflater.inflate(R.layout.dialog_new_urgencia, null);
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.5f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.9f));
-                getEquipos();
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
+
                 img_adjunto = dialogView.findViewById(R.id.img_adjunto);
                 img_adjunto_view = dialogView.findViewById(R.id.img_adjunto_view);
 
@@ -387,15 +584,13 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         pickFromGallery();
                     }
                 });
-
                 img_adjunto_view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         showPreview(adjunto);
                     }
                 });
-                spinner_personal = dialogView.findViewById(R.id.spinner_contratista);
-                spinner_personal.setPositiveButton("Cerrar");
+                spinner_personal = dialogView.findViewById(R.id.dialog_spinner_contratistas);
                 spinner_personal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -404,13 +599,14 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        personal_id = personal_ids[0];
+
                     }
                 });
+
                 builder.setView(dialogView);
 
-                spinner_equipos = dialogView.findViewById(R.id.spinner_equipos);
-                spinner_equipos.setPositiveButton("Cerrar");
+                spinner_equipos = dialogView.findViewById(R.id.dialog_spinner_equipos);
+                spinner_motivos = dialogView.findViewById(R.id.spinner_motivos);
                 dialog_fecha = dialogView.findViewById(R.id.dialog_urgencia_fecha);
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
                 icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
@@ -419,16 +615,19 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
                 observaciones = dialogView.findViewById(R.id.dialog_observaciones);
-                spinner_motivos = dialogView.findViewById(R.id.spinner_motivos);
-                final RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
-                final RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
-                radioUezu.setChecked(true);
+                RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
+                RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
+                final TextView label_personal = dialogView.findViewById(R.id.label_personal);
 
-                tipo_proveedor=1;
+                tipo_proveedor = 1;
+                getEquipos();
                 getTecnicos();
+                getMotivos();
+                radioUezu.setChecked(true);
                 radioUezu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        label_personal.setText("Técnicos");
                         tipo_proveedor=1;
                         getTecnicos();
                     }
@@ -436,11 +635,26 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 radioContratistas.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        label_personal.setText("Contratistas");
                         tipo_proveedor=2;
                         getContratistas();
                     }
                 });
-                getMotivos();
+
+                spinner_personal.setPositiveButton("Cerrar");
+                spinner_equipos.setPositiveButton("Cerrar");
+
+                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        equipo_id = equipos_ids[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
                 spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -452,25 +666,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         motivo_id = motivos_id[0];
                     }
                 });
-                spinner_motivos.setPositiveButton("Cerrar");
-
-                spinner_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Log.e("position_equipo",position+"");
-                        Log.e("equipo_id",equipos_ids[position]);
-                        equipo_id = equipos_ids[position];
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-                spinner_equipos.setPositiveButton("Cerrar");
-                spinner_motivos.setPositiveButton("Cerrar");
-                spinner_personal.setPositiveButton("Cerrar");
-
 
                 Calendar cal = Calendar.getInstance(TimeZone.getDefault()); // Get current date
 
@@ -512,7 +707,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                         datePicker.show();
                     }
                 });
-
                 // Create the DatePickerDialog instance
                 final TimePickerDialog timePicker = new TimePickerDialog(ctx, new TimePickerDialog.OnTimeSetListener() {
 
@@ -551,7 +745,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
-                getMotivos();
                 dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -833,6 +1026,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        System.out.println("getUrgencias_response: "+response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -872,8 +1066,62 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
         queue.add(stringRequest);
     }
 
+    public void getUrgenciasByUsuario(final String usuario_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getUrgenciasByUsuario_url);
+        Log.i("getUrgencias_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                l.clear();
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    System.out.println("json_urgencias: "+ob);
+                                    l.add(ob);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("getUrgenciasByUsuario_error1: "+e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getUrgenciasByUsuario_error2: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
+                params.put("usuario_id", usuario_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
     public void getEquipos()
     {
+        Log.e("tienda_id",tienda_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquipos_url);
         Log.i("getEquipos_url",url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -896,48 +1144,28 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
                                 int i=0;
-                                int j=0;
-                                l.clear();
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
+                                    System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
                                         equipos[i] = "Equipo "+ob.get("nro_equipo");
-                                        equipos_l.add(ob);
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
                                     equipos_ids[i] = (String)ob.get("id");
-                                    if(ob.get("tipo_equipo")!=null){
-                                        if(ob.get("tipo_equipo").equals("1")) {
-                                            i++;
-                                            setEquipo_count(i+1);
-                                        }else {
-                                            j++;
-                                            setCortina_count(j+1);
-                                        }
-                                    }
-                                }
-
-                                if(getCortina_count()==getCant_cortinas() && getEquipo_count()==getCant_equipos()){
-                                    btn_new_equipo.setVisibility(View.GONE);
-                                }else{
-                                    if(!cred.getData("key_user_type").equals("3"))
-                                        btn_new_equipo.setVisibility(View.VISIBLE);
-                                    else
-                                        btn_new_equipo.setVisibility(View.GONE);
-                                }
-
-                                ArrayAdapter dialog_equipos_adapter = new ArrayAdapter<String>(ctx,R.layout.dropdown_style,equipos);
-                                if(spinner_equipos!=null){
-                                    spinner_equipos.setAdapter(dialog_equipos_adapter);
-                                    dialog_equipos_adapter.notifyDataSetChanged();
+                                    i++;
+                                    setEquipo_count(i+1);
                                 }
                                 equipos_adapter.notifyDataSetChanged();
+                                if(spinner_equipos!=null && equipos_adapter!=null) {
+                                    ArrayAdapter<String> equipo_spinner_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,equipos);
+                                    spinner_equipos.setAdapter(equipo_spinner_adapter);
+                                    equipo_spinner_adapter.notifyDataSetChanged();
+                                }
                                 viewDialog.hideDialog(1);
                             }
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
-                            System.out.println("getEquipos_error1: "+e);
                             e.printStackTrace();
                         }
                     }
@@ -945,15 +1173,69 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 viewDialog.hideDialog(1);
-                System.out.println("getEquipos_error2: " + error.getMessage());
-                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
+                System.out.println("getEquipos_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", cred.getData("key_tienda_id"));
+                params.put("tienda_id", tienda_id);
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getEquiposTienda()
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getEquiposTienda_url);
+        Log.i("getEquiposTienda_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("getEquiposTienda_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                viewDialog.hideDialog(1);
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
+                            } else {
+                                equipos_l.clear();
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    equipos_l.add(ob);
+                                }
+                                equipos_adapter.notifyDataSetChanged();
+                                viewDialog.hideDialog(1);
+                            }
+                        } catch (Exception e) {
+                            viewDialog.hideDialog(1);
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                viewDialog.hideDialog(1);
+                System.out.println("getEquiposTienda_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
                 return params;
             }
         };

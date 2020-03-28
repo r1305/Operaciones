@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -56,14 +55,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import jrizani.jrspinner.JRSpinner;
-
 public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdapter.ViewHolder>{
 
     private Credentials cred;
     private Context ctx;
     private List<JSONObject> l = new ArrayList<>();
-    private EditText dialog_hora,dialog_fecha,observaciones;
+    private EditText dialog_hora,dialog_fecha;
     private ImageView icon_calendar,icon_clock;
     private Button btn_cancelar,btn_update;
     private AlertDialog alertDialog;
@@ -74,11 +71,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
     SearchableSpinner spinner_equipos;
     String[] equipos_ids;
     String equipo_id="0";
-
-    SearchableSpinner spinner_motivos;
-    ArrayAdapter<String> motivo_adapter;
-    String[] motivos_ids;
-    String motivo_id="0";
 
     private String[] personal_ids;
     private SearchableSpinner spinner_personal;
@@ -113,6 +105,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         holder.contratista.setText((String)ob.get("proveedor"));
         holder.cierre.setText((String)ob.get("cierre"));
         holder.number.setText((String)ob.get("mantenimiento"));
+        holder.nro_equipo.setText("Equipo N° "+(String)ob.get("nro_equipo"));
         if(status.equals("0")){
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
             holder.icon_pencil.setVisibility(View.VISIBLE);
@@ -151,14 +144,30 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 openModal(l.get(holder.getAdapterPosition()));
             }
         });
-        if(status.equals("1")){
-            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.blanco,null));
-            holder.icon_status.setImageResource(R.drawable.icon_check);
-            holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview,null));
+        if(status.equals("0")){
+
+            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
+            holder.icon_pencil.setVisibility(View.VISIBLE);
+            holder.icon_file.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ctx.startActivity(new Intent(ctx, FichaMantenimientoActivity.class)
+                            .putExtra("id",(String)l.get(position).get("id"))
+                            .putExtra("tienda_id",((MantenimientosActivity)ctx).getTienda_id()));
+                }
+            });
         }else{
-            holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
-            holder.icon_status.setImageResource(R.drawable.icon_file);
-            holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview_naranja,null));
+            holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_pdf,null));
+            holder.icon_pencil.setVisibility(View.GONE);
+            holder.icon_file.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mantenimiento_id = (String)l.get(position).get("id");
+                    String pdf_url = ctx.getResources().getString(R.string.pdf_url_mantenimiento)+mantenimiento_id+".pdf";
+                    System.out.println("pdf_url: "+pdf_url);
+                    Utils.openPdf(ctx,pdf_url);
+                }
+            });
         }
 
         if(cred.getData("key_user_type").equals("2"))
@@ -169,6 +178,9 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 holder.icon_file.setVisibility(View.GONE);
             }
             holder.linear_contratista.setVisibility(View.GONE);
+        }else if(cred.getData("key_user_type").equals("3"))
+        {
+            holder.icon_pencil.setVisibility(View.GONE);
         }
     }
 
@@ -187,21 +199,18 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
         spinner_personal = dialogView.findViewById(R.id.dialog_spinner_contratistas);
         spinner_equipos = dialogView.findViewById(R.id.dialog_spinner_equipos);
-        spinner_motivos = dialogView.findViewById(R.id.dialog_spinner_motivos);
         btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
         btn_update = dialogView.findViewById(R.id.dialog_btn_actualizar);
         dialog_fecha = dialogView.findViewById(R.id.dialog_fecha);
         dialog_hora = dialogView.findViewById(R.id.dialog_hora);
         icon_calendar = dialogView.findViewById(R.id.dialog_icon_calendar);
         icon_clock = dialogView.findViewById(R.id.dialog_icon_clock);
-        observaciones = dialogView.findViewById(R.id.dialog_observaciones);
         radioUezu = dialogView.findViewById(R.id.radio_uezu);
         radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
         label_personal = dialogView.findViewById(R.id.label_personal);
 
         spinner_equipos.setPositiveButton("Cerrar");
         spinner_personal.setPositiveButton("Cerrar");
-        spinner_motivos.setPositiveButton("Cerrar");
 
         radioUezu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,17 +238,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-            }
-        });
-        spinner_motivos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                motivo_id = motivos_ids[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -272,7 +270,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             public void onClick(View v) {
                 str_fecha = dialog_fecha.getText().toString();
                 str_hora = dialog_hora.getText().toString();
-                updateMantenimiento(observaciones.getText().toString(),equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor);
+                updateMantenimiento("",equipo_id, str_fecha,str_hora, personal_id, tipo_proveedor);
             }
         });
 
@@ -367,7 +365,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView registro,fecha_hora_atencion,contratista,cierre,number;
+        TextView registro,fecha_hora_atencion,contratista,cierre,number,nro_equipo;
         LinearLayout linear_full,linear_contratista;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
@@ -383,6 +381,7 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
             number = itemView.findViewById(R.id.mantenimiento_number);
+            nro_equipo = itemView.findViewById(R.id.mantenimiento_nro_equipo);
         }
     }
 
@@ -576,7 +575,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                                     final JSONObject o = (JSONObject)ob;
                                     dialog_fecha.setText((String)o.get("fecha_atencion"));
                                     dialog_hora.setText((String)o.get("hora_atencion"));
-                                    observaciones.setText((String)o.get("observaciones"));
                                     if(o.get("tipo_proveedor").equals("1")){
                                         getTecnicos();
                                         radioUezu.setChecked(true);
@@ -645,7 +643,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
         System.out.println("contratista_id: "+contratista_id);
         System.out.println("tipo_proveedor: "+tipo_proveedor);
         System.out.println("mantenimiento_id: "+mantenimiento_id);
-        System.out.println("motivo_id: "+motivo_id);
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_mantenimiento_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -689,7 +686,6 @@ public class MantenimientoAdapter extends RecyclerView.Adapter<MantenimientoAdap
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
                 params.put("tipo", String.valueOf(tipo_proveedor));
-                params.put("motivo_id", motivo_id);
                 return params;
             }
         };

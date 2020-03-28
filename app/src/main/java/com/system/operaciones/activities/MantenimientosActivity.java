@@ -110,6 +110,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     ImageView img_adjunto;
     ImageView img_adjunto_view;
     String adjunto="";
+    String user_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,9 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Mantenimientos");
+
+        user_type = cred.getData("key_user_type");
+        System.out.println("user_type"+user_type);
 
         datos = findViewById(R.id.linear_datos);
         tab_datos = findViewById(R.id.tab_datos);
@@ -164,11 +168,14 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         btn_new_urgencia.setOnClickListener(this);
         btn_new_equipo.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        tienda_id = intent.getStringExtra("tienda_id");
+        tienda_id = cred.getData("key_tienda_id");
         setTienda_id(tienda_id);
         getTienda(tienda_id);
-        getMantenimientos();
+        if(!user_type.equals("3"))
+            getMantenimientos();
+        else
+            getMantenimientosByUsuario(cred.getData("user_id"));
+
         getEquipos();
         getEquiposTienda();
 
@@ -1874,7 +1881,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("getMantenimientos_response: " + response);
+                        System.out.println("getMantenimientos: "+response);
                         try {
                             RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
                             JSONParser parser = new JSONParser();
@@ -1907,6 +1914,58 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
             {
                 Map<String, String> params = new HashMap<>();
                 params.put("tienda_id", tienda_id);
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void getMantenimientosByUsuario(final String usuario_id)
+    {
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMantenimientosByUsuario_url);
+        Log.i("getUrgencia_url",url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                l.clear();
+                                for(Object o: respuesta){
+                                    JSONObject ob = (JSONObject)o;
+                                    l.add(ob);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            System.out.println("getMantenimientos_error: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("getMantenimientos_error: " + error.getMessage());
+                Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("tienda_id", tienda_id);
+                params.put("usuario_id", usuario_id);
                 return params;
             }
         };

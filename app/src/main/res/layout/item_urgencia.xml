@@ -67,6 +67,27 @@
                             android:gravity="center"/>
                     </LinearLayout>
 
+                    <!-- Nro Equipo-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/urgencia_nro_equipo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Equipo N° "
+                            android:textColor="@color/negro"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
                     <!-- Registro-->
                     <LinearLayout
                         android:layout_weight="1"

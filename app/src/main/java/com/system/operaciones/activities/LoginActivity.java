@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                             ctx.startActivity(i);
                                             ((LoginActivity)ctx).finish();
                                         }
-                                    },5000);
+                                    },3000);
 
                                 }
                             }

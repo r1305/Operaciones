@@ -102,16 +102,18 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         JSONObject ob = l.get(position);
+        System.out.println("json_adapter: "+ob);
         urgencia_id = (String)ob.get("id");
         tienda_id = (String)ob.get("tienda_id");
         final String status = (String)ob.get("status");
-        Log.e("status","id: "+l.get(position).get("id")+"->status: "+status);
+        System.out.println("holder_proveedor: "+ (String)ob.get("proveedor"));
 
         holder.number.setText((String)ob.get("urgencia"));
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
         holder.cierre.setText((String)ob.get("cierre"));
+        holder.nro_equipo.setText("Equipo N° "+(String)ob.get("nro_equipo"));
         if(status.equals("0")){
 
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
@@ -338,7 +340,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CardView card;
-        TextView registro,fecha_hora_atencion,contratista,cierre,number;
+        TextView registro,fecha_hora_atencion,contratista,cierre,number,nro_equipo;
         LinearLayout linear_full,linear_contratista;
         ImageView icon_status,icon_file,icon_pencil;
         private ViewHolder(View itemView) {
@@ -355,6 +357,7 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
             icon_status = itemView.findViewById(R.id.icon_status);
             linear_full = itemView.findViewById(R.id.linear_card);
             label_personal = itemView.findViewById(R.id.label_personal);
+            nro_equipo = itemView.findViewById(R.id.urgencia_nro_equipo);
         }
     }
 

@@ -70,17 +70,23 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     Context ctx;
     Credentials cred;
     //ANTES
-    private ImageView icon_camera_falla,icon_camera_presion_baja,icon_camera_presion_alta,icon_camera_temp_l1,icon_camera_temp_l2,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
-    private ImageView icon_gallery_falla,icon_gallery_presion_baja,icon_gallery_presion_alta,icon_gallery_temp_l1,icon_gallery_temp_l2,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
-    String image_falla="",image_presion_baja="",image_presion_alta="",image_temp_l1="",image_temp_l2="",image_amp_l1="",image_amp_l2="",image_amp_l3="",image_volt_l1="",image_volt_l2="",image_volt_l3="",image_signature_tecnico="",image_signature_cliente="";
-    String et_temp_l1="0",et_temp_l2="0",et_temp_l3="0",et_presion_baja="0",et_presion_alta="0",et_amp_l1="0",et_amp_l2="0",et_amp_l3="0",et_volt_l1="0",et_volt_l2="0",et_volt_l3="0";
-    private EditText presion_baja,presion_alta,temp_l1,temp_l2,amp_l1,amp_l2,amp_l3,volt_l1,volt_l2,volt_l3;
+    private ImageView icon_camera_serpentin,icon_camera_bomba,icon_camera_cortina;
+    private ImageView icon_gallery_serpentin,icon_gallery_bomba,icon_gallery_cortina;
+    private ImageView icon_camera_cond_serpentin,icon_camera_ventilador,icon_camera_carcaza;
+    private ImageView icon_gallery_cond_serpentin,icon_gallery_ventilador,icon_gallery_carcaza;
+    String image_serpentin="",image_bomba="",image_cortina="";
+    String image_cond_serpentin="",image_ventilador="",image_carcaza="";
+
     //DESPUES
-    private ImageView despues_icon_camera_falla,despues_icon_camera_presion_baja,despues_icon_camera_presion_alta,despues_icon_camera_temp_l1,despues_icon_camera_temp_l2,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
-    private ImageView despues_icon_gallery_falla,despues_icon_gallery_presion_baja,despues_icon_gallery_presion_alta,despues_icon_gallery_temp_l1,despues_icon_gallery_temp_l2,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
-    String despues_image_falla="",despues_image_presion_baja="",despues_image_presion_alta="",despues_image_temp_l1="",despues_image_temp_l2="",despues_image_amp_l1="",despues_image_amp_l2="",despues_image_amp_l3="",despues_image_volt_l1="",despues_image_volt_l2="",despues_image_volt_l3="",despues_image_signature_tecnico="",despues_image_signature_cliente="";
-    String et_despues_temp_l1="0",et_despues_temp_l2="0",et_despues_temp_l3="0",et_despues_presion_baja="0",et_despues_presion_alta="0",et_despues_amp_l1="0",et_despues_amp_l2="0",et_despues_amp_l3="0",et_despues_volt_l1="0",et_despues_volt_l2="0",et_despues_volt_l3="0";
-    private EditText despues_presion_baja,despues_presion_alta,despues_temp_l1,despues_temp_l2,despues_amp_l1,despues_amp_l2,despues_amp_l3,despues_volt_l1,despues_volt_l2,despues_volt_l3;
+    private ImageView despues_icon_camera_serpentin,despues_icon_camera_bomba,despues_icon_camera_cortina;
+    private ImageView despues_icon_gallery_serpentin,despues_icon_gallery_bomba,despues_icon_gallery_cortina;
+    private ImageView despues_icon_camera_cond_serpentin,despues_icon_camera_ventilador,despues_icon_camera_carcaza;
+    private ImageView despues_icon_gallery_cond_serpentin,despues_icon_gallery_ventilador,despues_icon_gallery_carcaza;
+    String despues_image_serpentin="",despues_image_bomba="",despues_image_cortina="";
+    String despues_image_cond_serpentin="",despues_image_ventilador="",despues_image_carcaza="";
+
+    //Firmas
+    String image_signature_cliente="",image_signature_tecnico="";
 
     private Button btn_lectura_cancelar;
     private Button btn_lectura_guardar;
@@ -88,7 +94,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     AlertDialog alertDialog;
 
-    private String name_tecnico,dni_tecnico,cargo_tecnico,name_cliente,dni_cliente,cargo_cliente;
+    private String name_tecnico="",dni_tecnico="",cargo_tecnico="",name_cliente="",dni_cliente="",cargo_cliente="";
 
     int equipo_count=0;
     int cortina_count=0;
@@ -97,7 +103,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     ViewDialog viewDialog;
 
-    int modo_prueba = 1;
+    int modo_prueba = 0;
     String fase = "0";
 
     EditText cargo,dni,name;
@@ -160,84 +166,22 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 LayoutInflater inflater = getLayoutInflater();
-                Rect displayRectangle = new Rect();
-                Window window = getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                View dialogView = inflater.inflate(R.layout.dialog_lecturas, null);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.75f));
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
-                icon_camera_falla = dialogView.findViewById(R.id.icon_camera_falla);
+                icon_camera_serpentin = dialogView.findViewById(R.id.icon_cam_serpentin);
+                icon_camera_bomba = dialogView.findViewById(R.id.icon_cam_bomba);
+                icon_camera_cortina = dialogView.findViewById(R.id.icon_camera_cortina);
+                icon_camera_cond_serpentin = dialogView.findViewById(R.id.icon_cam_cond_serpentin);
+                icon_camera_ventilador = dialogView.findViewById(R.id.icon_cam_ventilador);
+                icon_camera_carcaza = dialogView.findViewById(R.id.icon_cam_carcaza);
 
-                icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
-                icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
-
-                icon_camera_temp_l1 = dialogView.findViewById(R.id.icon_cam_temp_l1);
-                icon_camera_temp_l2 = dialogView.findViewById(R.id.icon_cam_temp_l2);
-
-                icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
-                icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
-                icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
-
-                icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
-                icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
-                icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
-
-                icon_gallery_falla = dialogView.findViewById(R.id.icon_gallery_falla);
-
-                icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
-                icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
-
-                icon_gallery_temp_l1 = dialogView.findViewById(R.id.icon_gallery_temp_l1);
-                icon_gallery_temp_l2 = dialogView.findViewById(R.id.icon_gallery_temp_l2);
-
-                icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
-                icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
-                icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
-
-                icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
-                icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
-                icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
-
-                presion_baja = dialogView.findViewById(R.id.et_presion_baja);
-                presion_alta = dialogView.findViewById(R.id.et_presion_alta);
-
-                temp_l1 = dialogView.findViewById(R.id.et_temperatura_l1);
-                temp_l2 = dialogView.findViewById(R.id.et_temperatura_l2);
-
-                amp_l1 = dialogView.findViewById(R.id.et_amperaje_l1);
-                amp_l2 = dialogView.findViewById(R.id.et_amperaje_l2);
-                amp_l3 = dialogView.findViewById(R.id.et_amperaje_l3);
-
-                volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
-                volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
-                volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
-
-                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
-                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
-
-                if(fase.equals("1")){
-                    linear_amp_l3.setVisibility(View.GONE);
-                    linear_volt_l3.setVisibility(View.GONE);
-                }else{
-                    linear_amp_l3.setVisibility(View.VISIBLE);
-                    linear_volt_l3.setVisibility(View.VISIBLE);
-                }
-
-                temp_l1.setText(et_temp_l1);
-                temp_l2.setText(et_temp_l2);
-
-                presion_alta.setText(et_presion_alta);
-                presion_baja.setText(et_presion_baja);
-
-                amp_l1.setText(et_amp_l1);
-                amp_l2.setText(et_amp_l2);
-                amp_l3.setText(et_amp_l3);
-
-                volt_l1.setText(et_volt_l1);
-                volt_l2.setText(et_volt_l2);
-                volt_l3.setText(et_volt_l3);
+                icon_gallery_serpentin = dialogView.findViewById(R.id.icon_gallery_serpentin);
+                icon_gallery_bomba = dialogView.findViewById(R.id.icon_gallery_bomba);
+                icon_gallery_cortina = dialogView.findViewById(R.id.icon_gallery_cortina);
+                icon_gallery_cond_serpentin = dialogView.findViewById(R.id.icon_gallery_cond_serpentin);
+                icon_gallery_ventilador = dialogView.findViewById(R.id.icon_gallery_ventilador);
+                icon_gallery_carcaza = dialogView.findViewById(R.id.icon_gallery_carcaza);
 
                 btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
                 btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
@@ -250,16 +194,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        et_temp_l1=temp_l1.getText().toString();
-                        et_temp_l2=temp_l2.getText().toString();
-                        et_presion_baja=presion_baja.getText().toString();
-                        et_presion_alta=presion_alta.getText().toString();
-                        et_amp_l1=amp_l1.getText().toString();
-                        et_amp_l2=amp_l2.getText().toString();
-                        et_amp_l3=amp_l3.getText().toString();
-                        et_volt_l1=volt_l1.getText().toString();
-                        et_volt_l2=volt_l2.getText().toString();
-                        et_volt_l3=volt_l3.getText().toString();
                         alertDialog.dismiss();
                         Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                     }
@@ -268,7 +202,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 alertDialog = builder.create();
                 alertDialog.show();
 
-                icon_camera_falla.setOnClickListener(new View.OnClickListener() {
+                icon_camera_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.e("falla","1");
@@ -277,14 +211,14 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
+                icon_gallery_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_falla,1);
+                        showPreview(image_serpentin,1);
                     }
                 });
 
-                icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                icon_camera_bomba.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","2");
@@ -292,14 +226,14 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                icon_gallery_bomba.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_temp_l1,2);
+                        showPreview(image_bomba,2);
                     }
                 });
 
-                icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                icon_camera_cortina.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","3");
@@ -307,30 +241,46 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                icon_gallery_cortina.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_temp_l2,3);
+                        showPreview(image_cortina,3);
                     }
                 });
 
-                icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                icon_camera_cond_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("presion_baja","1");
+                        Log.e("cond_serpentin","4");
+                        cred.save_data("image_type","4");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_cond_serpentin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(image_cortina,4);
+                    }
+                });
+
+                icon_camera_ventilador.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("cond_ventilador","5");
                         cred.save_data("image_type","5");
                         openChooser();
                     }
                 });
 
-                icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                icon_gallery_ventilador.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_baja,5);
+                        showPreview(image_ventilador,5);
                     }
                 });
 
-                icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                icon_camera_carcaza.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cred.save_data("image_type","6");
@@ -338,100 +288,10 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                 });
 
-                icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                icon_gallery_carcaza.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_alta,6);
-                    }
-                });
-
-                icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","7");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_amp_l1,7);
-                    }
-                });
-
-                icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","8");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_amp_l2,8);
-                    }
-                });
-
-                icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","9");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_amp_l3,9);
-                    }
-                });
-
-                icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","10");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_volt_l1,10);
-                    }
-                });
-
-                icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","11");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_volt_l2,11);
-                    }
-                });
-
-                icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","12");
-                        openChooser();
-                    }
-                });
-
-                icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(image_volt_l3,12);
+                        showPreview(image_carcaza,6);
                     }
                 });
 
@@ -445,66 +305,23 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_lecturas, null);
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
 
-                despues_icon_camera_falla = dialogView.findViewById(R.id.icon_camera_falla);
+                despues_icon_camera_serpentin = dialogView.findViewById(R.id.icon_cam_serpentin);
+                despues_icon_camera_bomba = dialogView.findViewById(R.id.icon_cam_bomba);
+                despues_icon_camera_cortina = dialogView.findViewById(R.id.icon_camera_cortina);
+                despues_icon_camera_cond_serpentin = dialogView.findViewById(R.id.icon_cam_cond_serpentin);
+                despues_icon_camera_ventilador = dialogView.findViewById(R.id.icon_cam_ventilador);
+                despues_icon_camera_carcaza = dialogView.findViewById(R.id.icon_cam_carcaza);
 
-                despues_icon_camera_presion_baja = dialogView.findViewById(R.id.icon_camera_presion_baja);
-                despues_icon_camera_presion_alta = dialogView.findViewById(R.id.icon_camera_presion_alta);
-
-                despues_icon_camera_temp_l1 = dialogView.findViewById(R.id.icon_cam_temp_l1);
-                despues_icon_camera_temp_l2 = dialogView.findViewById(R.id.icon_cam_temp_l2);
-
-                despues_icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
-                despues_icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
-                despues_icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
-
-                despues_icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
-                despues_icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
-                despues_icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
-
-                despues_icon_gallery_falla = dialogView.findViewById(R.id.icon_gallery_falla);
-
-                despues_icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
-                despues_icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
-
-                despues_icon_gallery_temp_l1 = dialogView.findViewById(R.id.icon_gallery_temp_l1);
-                despues_icon_gallery_temp_l2 = dialogView.findViewById(R.id.icon_gallery_temp_l2);
-
-                despues_icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
-                despues_icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
-                despues_icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
-
-                despues_icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
-                despues_icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
-                despues_icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
-
-                despues_presion_baja = dialogView.findViewById(R.id.et_presion_baja);
-                despues_presion_alta = dialogView.findViewById(R.id.et_presion_alta);
-
-                despues_temp_l1 = dialogView.findViewById(R.id.et_temperatura_l1);
-                despues_temp_l2 = dialogView.findViewById(R.id.et_temperatura_l2);
-
-                despues_amp_l1 = dialogView.findViewById(R.id.et_amperaje_l1);
-                despues_amp_l2 = dialogView.findViewById(R.id.et_amperaje_l2);
-                despues_amp_l3 = dialogView.findViewById(R.id.et_amperaje_l3);
-
-                despues_volt_l1 = dialogView.findViewById(R.id.et_voltaje_l1);
-                despues_volt_l2 = dialogView.findViewById(R.id.et_voltaje_l2);
-                despues_volt_l3 = dialogView.findViewById(R.id.et_voltaje_l3);
-
-                LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
-                LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
-
-                if(fase.equals("1")){
-                    linear_amp_l3.setVisibility(View.GONE);
-                    linear_volt_l3.setVisibility(View.GONE);
-                }else{
-                    linear_amp_l3.setVisibility(View.VISIBLE);
-                    linear_volt_l3.setVisibility(View.VISIBLE);
-                }
+                despues_icon_gallery_serpentin = dialogView.findViewById(R.id.icon_gallery_serpentin);
+                despues_icon_gallery_bomba = dialogView.findViewById(R.id.icon_gallery_bomba);
+                despues_icon_gallery_cortina = dialogView.findViewById(R.id.icon_gallery_cortina);
+                despues_icon_gallery_cond_serpentin = dialogView.findViewById(R.id.icon_gallery_cond_serpentin);
+                despues_icon_gallery_ventilador = dialogView.findViewById(R.id.icon_gallery_ventilador);
+                despues_icon_gallery_carcaza = dialogView.findViewById(R.id.icon_gallery_carcaza);
 
                 validateUploadDespues();
 
@@ -527,170 +344,96 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 alertDialog = builder.create();
                 alertDialog.show();
 
-                despues_icon_camera_falla.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("falla","13");
-                        cred.save_data("image_type","13");
+                        Log.e("falla","1");
+                        cred.save_data("image_type","7");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_falla,13);
+                        showPreview(image_serpentin,7);
                     }
                 });
 
-                despues_icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_bomba.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","14");
+                        cred.save_data("image_type","8");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_bomba.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l1,14);
+                        showPreview(image_bomba,8);
                     }
                 });
 
-                despues_icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_cortina.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","15");
+                        cred.save_data("image_type","9");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_cortina.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l2,15);
+                        showPreview(image_cortina,9);
                     }
                 });
 
-                despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_cond_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("presion_baja","17");
-                        cred.save_data("image_type","17");
+                        Log.e("despues_cond_serpentin","10");
+                        cred.save_data("image_type","10");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_cond_serpentin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_presion_baja,17);
+                        showPreview(image_cortina,10);
                     }
                 });
 
-                despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_ventilador.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","18");
+                        Log.e("cond_ventilador","11");
+                        cred.save_data("image_type","11");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_ventilador.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_presion_alta,18);
+                        showPreview(image_ventilador,11);
                     }
                 });
 
-                despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_camera_carcaza.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","19");
+                        cred.save_data("image_type","12");
                         openChooser();
                     }
                 });
 
-                despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                despues_icon_gallery_carcaza.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l1,19);
-                    }
-                });
-
-                despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","20");
-                        openChooser();
-                    }
-                });
-
-                despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_amp_l2,20);
-                    }
-                });
-
-                despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","21");
-                        openChooser();
-                    }
-                });
-
-                despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_amp_l3,21);
-                    }
-                });
-
-                despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","22");
-                        openChooser();
-                    }
-                });
-
-                despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_volt_l1,22);
-                    }
-                });
-
-                despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","23");
-                        openChooser();
-                    }
-                });
-
-                despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_volt_l2,23);
-                    }
-                });
-
-                despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cred.save_data("image_type","24");
-                        openChooser();
-                    }
-                });
-
-                despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPreview(despues_image_volt_l3,24);
+                        showPreview(image_carcaza,12);
                     }
                 });
 
@@ -711,84 +454,35 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(image_falla.isEmpty()){
+                if(image_serpentin.isEmpty()){
                     Toast.makeText(ctx,"Debe cargar foto de la falla",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(image_temp_l1.isEmpty()){
+                if(image_bomba.isEmpty()){
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T1",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(image_temp_l2.isEmpty()){
+                if(image_cortina.isEmpty()){
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de temperatura T2",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(image_presion_baja.isEmpty())
+                if(image_cond_serpentin.isEmpty())
                 {
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de presión baja",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(image_presion_alta.isEmpty())
+                if(image_ventilador.isEmpty())
                 {
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de presión alta",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(image_amp_l1.isEmpty())
+                if(image_carcaza.isEmpty())
                 {
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 1",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(image_amp_l2.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(image_amp_l3.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                if(despues_image_falla.isEmpty()){
-                    Toast.makeText(ctx,"Debe cargar foto después de la reparación de la falla",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(despues_image_temp_l1.isEmpty()){
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de temperatura T1",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(despues_image_temp_l2.isEmpty()){
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de temperatura T2",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(despues_image_presion_baja.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de presión baja",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(despues_image_presion_alta.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de presión alta",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(despues_image_amp_l1.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 1",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(despues_image_amp_l2.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(despues_image_amp_l3.isEmpty())
-                {
-                    Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 registrarFicha(id);
             }
         });
@@ -829,10 +523,12 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(image_signature_cliente.isEmpty()){
                             Toast.makeText(ctx,"Ingrese firma de cliente",Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         if(name.getText().toString().trim().isEmpty()){
                             Toast.makeText(ctx,"Ingrese Nombre y Apellido",Toast.LENGTH_SHORT).show();
                             name.setError("Completar campo");
+                            return;
                         }else{
                             name.setError(null);
                             name_cliente = name.getText().toString().trim();
@@ -840,6 +536,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                         if(dni.getText().toString().trim().isEmpty() || dni.getText().toString().length()<8 || dni.getText().toString().length()>8){
                             dni.setError("Completar campo");
                             Toast.makeText(ctx,"Ingrese DNI válido",Toast.LENGTH_SHORT).show();
+                            return;
                         }else{
                             dni.setError(null);
                             dni_cliente = dni.getText().toString();
@@ -847,10 +544,12 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                         if(cargo.getText().toString().trim().isEmpty()){
                             cargo.setError("Completar campo");
                             Toast.makeText(ctx,"Ingrese Cargo válido",Toast.LENGTH_SHORT).show();
+                            return;
                         }else{
                             cargo.setError(null);
                             cargo_cliente = cargo.getText().toString().trim();
                         }
+
                         System.out.println("image_signature_cliente"+image_signature_cliente);
                         System.out.println("name_cliente"+name_cliente);
                         System.out.println("dni_cliente"+dni_cliente);
@@ -861,6 +560,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             alertDialog.dismiss();
                         }else{
                             Toast.makeText(ctx,"Debe completar la información",Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 });
@@ -1074,106 +774,67 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     void cleanPhoto(int element)
     {
         switch (element){
+            //Antes
             case 1:
-                image_falla="";
-                icon_gallery_falla.setVisibility(View.GONE);
-                icon_camera_falla.setVisibility(View.VISIBLE);
+                image_serpentin="";
+                icon_gallery_serpentin.setVisibility(View.GONE);
+                icon_camera_serpentin.setVisibility(View.VISIBLE);
                 break;
             case 2:
-                image_temp_l1="";
-                icon_gallery_temp_l1.setVisibility(View.GONE);
-                icon_camera_temp_l1.setVisibility(View.VISIBLE);
+                image_bomba="";
+                icon_gallery_bomba.setVisibility(View.GONE);
+                icon_camera_bomba.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                image_temp_l2="";
-                icon_gallery_temp_l2.setVisibility(View.GONE);
-                icon_camera_temp_l2.setVisibility(View.VISIBLE);
+                image_cortina="";
+                icon_gallery_cortina.setVisibility(View.GONE);
+                icon_camera_cortina.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                image_cond_serpentin="";
+                icon_gallery_cond_serpentin.setVisibility(View.GONE);
+                icon_camera_cond_serpentin.setVisibility(View.VISIBLE);
                 break;
             case 5:
-                image_presion_baja="";
-                icon_gallery_presion_baja.setVisibility(View.GONE);
-                icon_camera_presion_baja.setVisibility(View.VISIBLE);
+                image_ventilador="";
+                icon_gallery_ventilador.setVisibility(View.GONE);
+                icon_camera_ventilador.setVisibility(View.VISIBLE);
                 break;
             case 6:
-                image_presion_alta="";
-                icon_gallery_presion_alta.setVisibility(View.GONE);
-                icon_camera_presion_alta.setVisibility(View.VISIBLE);
+                image_carcaza="";
+                icon_gallery_carcaza.setVisibility(View.GONE);
+                icon_camera_carcaza.setVisibility(View.VISIBLE);
                 break;
+            //Despues
             case 7:
-                image_amp_l1="";
-                icon_gallery_amp_l1.setVisibility(View.GONE);
-                icon_camera_amp_l1.setVisibility(View.VISIBLE);
+                despues_image_serpentin="";
+                despues_icon_gallery_serpentin.setVisibility(View.GONE);
+                despues_icon_camera_serpentin.setVisibility(View.VISIBLE);
                 break;
             case 8:
-                image_amp_l2="";
-                icon_gallery_amp_l2.setVisibility(View.GONE);
-                icon_camera_amp_l2.setVisibility(View.VISIBLE);
+                despues_image_bomba="";
+                despues_icon_gallery_bomba.setVisibility(View.GONE);
+                despues_icon_camera_bomba.setVisibility(View.VISIBLE);
                 break;
             case 9:
-                image_amp_l3="";
-                icon_gallery_amp_l3.setVisibility(View.GONE);
-                icon_camera_amp_l3.setVisibility(View.VISIBLE);
+                despues_image_cortina="";
+                despues_icon_gallery_cortina.setVisibility(View.GONE);
+                despues_icon_camera_cortina.setVisibility(View.VISIBLE);
                 break;
             case 10:
-                image_volt_l1="";
-                icon_gallery_volt_l1.setVisibility(View.GONE);
-                icon_camera_volt_l1.setVisibility(View.VISIBLE);
+                despues_image_cond_serpentin="";
+                despues_icon_gallery_cond_serpentin.setVisibility(View.GONE);
+                despues_icon_camera_cond_serpentin.setVisibility(View.VISIBLE);
                 break;
             case 11:
-                image_volt_l2="";
-                icon_gallery_volt_l2.setVisibility(View.GONE);
-                icon_camera_volt_l2.setVisibility(View.VISIBLE);
+                despues_image_ventilador="";
+                despues_icon_gallery_ventilador.setVisibility(View.GONE);
+                despues_icon_camera_ventilador.setVisibility(View.VISIBLE);
                 break;
             case 12:
-                image_volt_l3="";
-                icon_gallery_volt_l3.setVisibility(View.GONE);
-                icon_camera_volt_l3.setVisibility(View.VISIBLE);
-                break;
-            case 13:
-                despues_image_falla="";
-                despues_icon_gallery_falla.setVisibility(View.GONE);
-                despues_icon_camera_falla.setVisibility(View.VISIBLE);
-                break;
-            case 14:
-                despues_image_temp_l1="";
-                despues_icon_gallery_temp_l1.setVisibility(View.GONE);
-                despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
-                break;
-            case 15:
-                despues_image_temp_l2="";
-                despues_icon_gallery_temp_l2.setVisibility(View.GONE);
-                despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
-                break;
-
-            case 17:
-                despues_image_amp_l1="";
-                despues_icon_gallery_amp_l1.setVisibility(View.GONE);
-                despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
-                break;
-            case 18:
-                despues_image_amp_l2="";
-                despues_icon_gallery_amp_l2.setVisibility(View.GONE);
-                despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
-                break;
-            case 19:
-                despues_image_amp_l3="";
-                despues_icon_gallery_amp_l3.setVisibility(View.GONE);
-                despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
-                break;
-            case 20:
-                despues_image_volt_l1="";
-                despues_icon_gallery_volt_l1.setVisibility(View.GONE);
-                despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
-                break;
-            case 21:
-                despues_image_volt_l2="";
-                despues_icon_gallery_volt_l2.setVisibility(View.GONE);
-                despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
-                break;
-            case 22:
-                despues_image_volt_l3="";
-                despues_icon_gallery_volt_l3.setVisibility(View.GONE);
-                despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
+                despues_image_carcaza="";
+                despues_icon_gallery_carcaza.setVisibility(View.GONE);
+                despues_icon_camera_carcaza.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -1185,7 +846,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registrarFicha(final String urgencia_id)
+    private void registrarFicha(final String mantenimiento_id)
     {
         viewDialog.showDialog();
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_ficha_mantenimiento_url);
@@ -1207,7 +868,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(ctx,"Registro correcto",Toast.LENGTH_SHORT).show();
-                                createFicha(urgencia_id);
+                                createFicha(mantenimiento_id);
                             }
                         } catch (Exception e) {
                             viewDialog.hideDialog(1);
@@ -1227,7 +888,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", urgencia_id);
+                params.put("mantenimiento_id", mantenimiento_id);
                 params.put("tienda_id", tienda_id);
                 if(spinner_observaciones.getSelectedItem().toString().equals("Otros")){
                     params.put("observaciones",et_otros.getText().toString());
@@ -1236,58 +897,20 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 }
 
                 //ANTES
-                params.put("falla", image_falla);
-
-                params.put("temperatura_l1", temp_l1.getText().toString());
-                params.put("img_temperatura_l1", image_temp_l1);
-                params.put("temperatura_l2", temp_l2.getText().toString());
-                params.put("img_temperatura_l2", image_temp_l2);
-
-                params.put("presion_baja", presion_baja.getText().toString());
-                params.put("img_presion_baja", image_presion_baja);
-                params.put("presion_alta", presion_alta.getText().toString());
-                params.put("img_presion_alta", image_presion_alta);
-
-                params.put("amperaje_l1", amp_l1.getText().toString());
-                params.put("img_amperaje_l1", image_amp_l1);
-                params.put("amperaje_l2", amp_l2.getText().toString());
-                params.put("img_amperaje_l2", image_amp_l2);
-                params.put("amperaje_l3", amp_l3.getText().toString());
-                params.put("img_amperaje_l3", image_amp_l3);
-
-                params.put("voltaje_l1", volt_l1.getText().toString());
-                params.put("img_voltaje_l1", image_volt_l1);
-                params.put("voltaje_l2", volt_l2.getText().toString());
-                params.put("img_voltaje_l2", image_volt_l2);
-                params.put("voltaje_l3", volt_l3.getText().toString());
-                params.put("img_voltaje_l3", image_volt_l3);
+                params.put("img_serpentin", image_serpentin);
+                params.put("img_bomba", image_bomba);
+                params.put("img_cortina", image_cortina);
+                params.put("img_cond_serpentin", image_cond_serpentin);
+                params.put("img_ventilador", image_ventilador);
+                params.put("img_carcaza", image_carcaza);
 
                 //DESPUES
-                params.put("despues_falla", despues_image_falla);
-
-                params.put("despues_temperatura_l1", despues_temp_l1.getText().toString());
-                params.put("despues_img_temperatura_l1", despues_image_temp_l1);
-                params.put("despues_temperatura_l2", despues_temp_l2.getText().toString());
-                params.put("despues_img_temperatura_l2", despues_image_temp_l2);
-
-                params.put("despues_presion_baja", despues_presion_baja.getText().toString());
-                params.put("despues_img_presion_baja", despues_image_presion_baja);
-                params.put("despues_presion_alta", despues_presion_alta.getText().toString());
-                params.put("despues_img_presion_alta", despues_image_presion_alta);
-
-                params.put("despues_amperaje_l1", despues_amp_l1.getText().toString());
-                params.put("despues_img_amperaje_l1", despues_image_amp_l1);
-                params.put("despues_amperaje_l2", despues_amp_l2.getText().toString());
-                params.put("despues_img_amperaje_l2", despues_image_amp_l2);
-                params.put("despues_amperaje_l3", despues_amp_l3.getText().toString());
-                params.put("despues_img_amperaje_l3", despues_image_amp_l3);
-
-                params.put("despues_voltaje_l1", despues_volt_l1.getText().toString());
-                params.put("despues_img_voltaje_l1", despues_image_volt_l1);
-                params.put("despues_voltaje_l2", despues_volt_l2.getText().toString());
-                params.put("despues_img_voltaje_l2", despues_image_volt_l2);
-                params.put("despues_voltaje_l3", despues_volt_l3.getText().toString());
-                params.put("despues_img_voltaje_l3", despues_image_volt_l3);
+                params.put("despues_img_serpentin", despues_image_serpentin);
+                params.put("despues_img_bomba", despues_image_bomba);
+                params.put("despues_img_cortina", despues_image_cortina);
+                params.put("despues_img_cond_serpentin", despues_image_cond_serpentin);
+                params.put("despues_img_ventilador", despues_image_ventilador);
+                params.put("despues_img_carcaza", despues_image_carcaza);
 
                 //FIRMAS
                 params.put("img_signature_tecnico",image_signature_tecnico);
@@ -1373,70 +996,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    //Dialog New Equipo
-    Button btn_cancelar,btn_actualizar,btn_registrar,btn_siguiente,btn_atras;
-    LinearLayout linear_evaporadora,linear_condensadora;
-
-    Spinner spinner_marcas;
-    ArrayAdapter<String> marcas_adapter;
-    String[] marcas_id;
-
-    Spinner spinner_selection_equipos;
-    ArrayAdapter<String> selection_equipos_adapter;
-    String[] selection_equipos_id;
-
-    Spinner spinner_cond_marcas;
-    ArrayAdapter<String> marcas_cond_adapter;
-    String[] marcas_cond_id;
-
-    JRSpinner spinner_modelos;
-    String[] modelos_ids;
-
-    JRSpinner spinner_cond_modelos;
-    String[] modelos_cond_ids;
-
-    Spinner spinner_btus;
-    ArrayAdapter<String> btu_adapter;
-    String[] btus_id;
-
-    Spinner spinner_cond_btus;
-    ArrayAdapter<String> btu_cond_adapter;
-    String[] btus_cond_id;
-
-    Spinner spinner_tipos;
-    ArrayAdapter<String> tipo_adapter;
-    String[] tipos_id;
-
-    Spinner spinner_cond_tipos;
-    ArrayAdapter<String> tipo_cond_adapter;
-    String[] tipos_cond_id;
-
-    Spinner spinner_voltajes;
-    ArrayAdapter<String> voltaje_adapter;
-    String[] voltajes_id;
-
-    Spinner spinner_cond_voltajes;
-    ArrayAdapter<String> voltaje_cond_adapter;
-    String[] voltajes_cond_id;
-
-    Spinner spinner_fases;
-    ArrayAdapter<String> fase_adapter;
-    String[] fases_id;
-
-    Spinner spinner_cond_fases;
-    ArrayAdapter<String> fase_cond_adapter;
-    String[] fases_cond_id;
-
-    Spinner spinner_refrigerantes;
-    ArrayAdapter<String> refrigerante_adapter;
-    String[] refrigerantes_id;
-
-    Spinner spinner_cond_refrigerantes;
-    ArrayAdapter<String> refrigerante_cond_adapter;
-    String[] refrigerantes_cond_id;
 
     EditText et_nro_serie,et_cond_nro_serie;
-    ImageView icon_evap_scan,icon_cond_scan;
 
     TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_nro_equipo;
     String equipo_id;
@@ -1471,60 +1032,51 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                                 }
                                 System.out.println("getEquipo_equipo_contador: "+equipo_count);
                                 viewDialog.hideDialog(1);
-                                if(equipo_count==0){
-                                    showModalRegisterEquipo();
-                                }else{
-                                    System.out.println("equipo_id: "+equipo_id);
-                                    if(equipo_id.equals("0")){
-                                        showModalEquipoSelection();
+                                for (Object o:respuesta)
+                                {
+                                    JSONObject ob = (JSONObject)o;
+                                    String marca = (String)ob.get("marca");
+                                    String btu = (String)ob.get("btu");
+                                    String tipo = (String)ob.get("tipo");
+                                    String modelo = (String)ob.get("modelo");
+                                    String nro_serie = (String)ob.get("nro_serie");
+                                    String voltaje = (String)ob.get("voltaje");
+                                    String refrigerante = (String)ob.get("refrigerante");
+                                    fase = (String)ob.get("cond_fase_id");
+                                    String nro_equipo = (String)ob.get("nro_equipo");
+                                    adjunto_b64 = (String)ob.get("adjunto");
+                                    if(adjunto_b64!=null && !adjunto_b64.equals("")){
+                                        adjunto_preview.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                showPreview(adjunto_b64,0);
+                                            }
+                                        });
                                     }else{
-                                        for (Object o:respuesta)
-                                        {
-                                            JSONObject ob = (JSONObject)o;
-                                            String marca = (String)ob.get("marca");
-                                            String btu = (String)ob.get("btu");
-                                            String tipo = (String)ob.get("tipo");
-                                            String modelo = (String)ob.get("modelo");
-                                            String nro_serie = (String)ob.get("nro_serie");
-                                            String voltaje = (String)ob.get("voltaje");
-                                            String refrigerante = (String)ob.get("refrigerante");
-                                            fase = (String)ob.get("cond_fase_id");
-                                            String nro_equipo = (String)ob.get("nro_equipo");
-                                            adjunto_b64 = (String)ob.get("adjunto");
-                                            if(adjunto_b64!=null && !adjunto_b64.equals("")){
-                                                adjunto_preview.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        showPreview(adjunto_b64,0);
-                                                    }
-                                                });
-                                            }else{
-                                                Toast.makeText(ctx,"Archivo adjunto no disponible",Toast.LENGTH_SHORT).show();
-                                            }
-                                            tv_marca = findViewById(R.id.ficha_marca);
-                                            tv_btu = findViewById(R.id.ficha_btu);
-                                            tv_tipo = findViewById(R.id.ficha_tipo);
-                                            tv_modelo = findViewById(R.id.ficha_modelo);
-                                            tv_nro_serie = findViewById(R.id.ficha_nro_serie);
-                                            tv_voltaje = findViewById(R.id.ficha_voltaje);
-                                            tv_refrigerante = findViewById(R.id.ficha_refrigerante);
-                                            tv_nro_equipo = findViewById(R.id.ficha_tv_nro_equipo);
+                                        Toast.makeText(ctx,"Archivo adjunto no disponible",Toast.LENGTH_SHORT).show();
+                                    }
+                                    tv_marca = findViewById(R.id.ficha_marca);
+                                    tv_btu = findViewById(R.id.ficha_btu);
+                                    tv_tipo = findViewById(R.id.ficha_tipo);
+                                    tv_modelo = findViewById(R.id.ficha_modelo);
+                                    tv_nro_serie = findViewById(R.id.ficha_nro_serie);
+                                    tv_voltaje = findViewById(R.id.ficha_voltaje);
+                                    tv_refrigerante = findViewById(R.id.ficha_refrigerante);
+                                    tv_nro_equipo = findViewById(R.id.ficha_tv_nro_equipo);
 
-                                            tv_marca.setText(marca);
-                                            tv_btu.setText(btu);
-                                            tv_tipo.setText(tipo);
-                                            tv_modelo.setText(modelo);
-                                            tv_nro_serie.setText(nro_serie);
-                                            tv_voltaje.setText(voltaje);
-                                            tv_refrigerante.setText(refrigerante);
-                                            tv_nro_equipo.setText("Equipo N° "+nro_equipo);
+                                    tv_marca.setText(marca);
+                                    tv_btu.setText(btu);
+                                    tv_tipo.setText(tipo);
+                                    tv_modelo.setText(modelo);
+                                    tv_nro_serie.setText(nro_serie);
+                                    tv_voltaje.setText(voltaje);
+                                    tv_refrigerante.setText(refrigerante);
+                                    tv_nro_equipo.setText("Equipo N° "+nro_equipo);
 
 
-                                            tipo_proveedor = (String)ob.get("tipo_proveedor");
-                                            if(tipo_proveedor.equals("1")){
-                                                tecnico_id = (String)ob.get("proveedor_id");
-                                            }
-                                        }
+                                    tipo_proveedor = (String)ob.get("tipo_proveedor");
+                                    if(tipo_proveedor.equals("1")){
+                                        tecnico_id = (String)ob.get("proveedor_id");
                                     }
                                 }
                             }
@@ -1615,1234 +1167,105 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     String refrigerante_id="",cond_refrigerante_id="";
     String nro_serie="",cond_nro_serie="";
 
-    private void getMarcas()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getMarcas_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getMarcas_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String motivo = (String)ob.get("marca");
-                                    String id = (String)ob.get("id");
-                                    data[i] = motivo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                marcas_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                marcas_id = data_id;
-                                spinner_marcas.setAdapter(marcas_adapter);
-                                marcas_adapter.notifyDataSetChanged();
-                                marca_id = marcas_id[0];
-
-                                marcas_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                marcas_cond_id = data_id;
-                                spinner_cond_marcas.setAdapter(marcas_cond_adapter);
-                                marcas_cond_adapter.notifyDataSetChanged();
-                                cond_marca_id = marcas_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getMarcas_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getModelos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getModelos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getModelos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i =0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String modelo = (String)ob.get("modelo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = modelo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                spinner_modelos.setItems(data);
-                                modelos_ids = data_id;
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getModelos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getCondensadoraModelos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getCondensadoraModelos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getCondensadoraModelos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i =0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String modelo = (String)ob.get("modelo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = modelo;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                spinner_cond_modelos.setItems(data);
-                                modelos_cond_ids = data_id;
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getCondensadoraModelos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getBtus()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getBtus_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getBtus_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String btu = (String)ob.get("btu");
-                                    String id = (String)ob.get("id");
-                                    data[i] = btu;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                btu_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                btus_id = data_id;
-                                spinner_btus.setAdapter(btu_adapter);
-                                btu_adapter.notifyDataSetChanged();
-                                btu_id = btus_id[0];
-
-                                btu_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                btus_cond_id = data_id;
-                                spinner_cond_btus.setAdapter(btu_cond_adapter);
-                                btu_cond_adapter.notifyDataSetChanged();
-                                cond_btu_id = btus_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getBtus_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getTipos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getTipos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getTipos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String btu = (String)ob.get("tipo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = btu;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                tipo_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                tipos_id = data_id;
-                                spinner_tipos.setAdapter(tipo_adapter);
-                                tipo_adapter.notifyDataSetChanged();
-                                tipo_id = tipos_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getTipos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getCondensadoraTipos()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getCondensadoraTipos_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getCondensadoraTipos_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String btu = (String)ob.get("tipo");
-                                    String id = (String)ob.get("id");
-                                    data[i] = btu;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                tipo_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                tipos_cond_id = data_id;
-                                spinner_cond_tipos.setAdapter(tipo_cond_adapter);
-                                tipo_cond_adapter.notifyDataSetChanged();
-                                cond_tipo_id = tipos_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getCondensadoraTipos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getVoltajes()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getVoltajes_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getVoltajes_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String btu = (String)ob.get("voltaje");
-                                    String id = (String)ob.get("id");
-                                    data[i] = btu;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                voltaje_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                voltajes_id = data_id;
-                                spinner_voltajes.setAdapter(voltaje_adapter);
-                                voltaje_adapter.notifyDataSetChanged();
-                                voltaje_id = voltajes_id[0];
-
-                                voltaje_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                voltajes_cond_id = data_id;
-                                spinner_cond_voltajes.setAdapter(voltaje_adapter);
-                                voltaje_cond_adapter.notifyDataSetChanged();
-                                cond_voltaje_id = voltajes_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getTipos_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getFases()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getFases_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getFases_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String fase = (String)ob.get("fase");
-                                    String id = (String)ob.get("id");
-                                    data[i] = fase;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                fase_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                fases_id = data_id;
-                                spinner_fases.setAdapter(fase_adapter);
-                                fase_adapter.notifyDataSetChanged();
-                                fase_id = fases_id[0];
-
-                                fase_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                fases_cond_id = data_id;
-                                spinner_cond_fases.setAdapter(fase_cond_adapter);
-                                fase_cond_adapter.notifyDataSetChanged();
-                                cond_fase_id = fases_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getFases_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void getRefrigerantes()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.getRefrigerantes_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("getRefrigerantes_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                String[] data = new String[respuesta.size()];
-                                String[] data_id = new String[respuesta.size()];
-                                int i = 0;
-                                for(Object o: respuesta){
-                                    JSONObject ob = (JSONObject)o;
-                                    String refrigerante = (String)ob.get("refrigerante");
-                                    String id = (String)ob.get("id");
-                                    data[i] = refrigerante;
-                                    data_id[i] = id;
-                                    i++;
-                                }
-                                refrigerante_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                refrigerantes_id = data_id;
-                                spinner_refrigerantes.setAdapter(refrigerante_adapter);
-                                refrigerante_adapter.notifyDataSetChanged();
-                                refrigerante_id = refrigerantes_id[0];
-
-                                refrigerante_cond_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-                                refrigerantes_cond_id = data_id;
-                                spinner_cond_refrigerantes.setAdapter(refrigerante_cond_adapter);
-                                refrigerante_cond_adapter.notifyDataSetChanged();
-                                cond_refrigerante_id = refrigerantes_cond_id[0];
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("getFases_error: " + error);
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void registrarEquipo()
-    {
-        viewDialog.showDialog();
-        nro_serie = et_nro_serie.getText().toString();
-        cond_nro_serie = et_cond_nro_serie.getText().toString();
-        if(modelo_id.isEmpty()){
-            spinner_modelos.setError("Debe ingresar un modelo");
-            return;
-        }else{
-            spinner_modelos.setError(null);
-        }
-        if(cond_modelo_id.isEmpty()){
-            spinner_modelos.setError("Debe ingresar un modelo");
-            return;
-        }else{
-            spinner_cond_modelos.setError(null);
-        }
-        if(nro_serie.isEmpty()){
-            et_nro_serie.setError("Debe ingresar un numero de serie");
-            return;
-        }
-        if(cond_nro_serie.isEmpty()){
-            et_cond_nro_serie.setError("Debe ingresar un numero de serie");
-            return;
-        }
-
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_equipo_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("registerEquipo_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                viewDialog.hideDialog(3);
-                                getEquipos();
-                                System.out.println("equipos_count: "+((UrgenciasActivity)ctx).getEquipo_count());
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("registerEquipo_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("registerEquipo_error: " + error);
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("tienda_id", tienda_id);
-                //Evaporadora
-                params.put("marca_id", marca_id);
-                params.put("modelo_id", modelo_id);
-                params.put("btu_id", btu_id);
-                params.put("tipo_id", tipo_id);
-                params.put("voltaje_id", voltaje_id);
-                params.put("fase_id", fase_id);
-                params.put("refrigerante_id", refrigerante_id);
-                params.put("nro_serie", nro_serie);
-                //Condensadora
-                params.put("cond_marca_id", cond_marca_id);
-                params.put("cond_modelo_id", cond_modelo_id);
-                params.put("cond_btu_id", cond_btu_id);
-                params.put("cond_tipo_id", cond_tipo_id);
-                params.put("cond_voltaje_id", cond_voltaje_id);
-                params.put("cond_fase_id", cond_fase_id);
-                params.put("cond_refrigerante_id", cond_refrigerante_id);
-                params.put("cond_nro_serie", cond_nro_serie);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    private void showModalRegisterEquipo()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_new_equipo, null);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        spinner_marcas = dialogView.findViewById(R.id.spinner_marcas);
-        spinner_cond_marcas = dialogView.findViewById(R.id.spinner_cond_marcas);
-        spinner_modelos = dialogView.findViewById(R.id.spinner_modelo);
-        spinner_cond_modelos = dialogView.findViewById(R.id.spinner_cond_modelo);
-        spinner_btus = dialogView.findViewById(R.id.spinner_btus);
-        spinner_cond_btus = dialogView.findViewById(R.id.spinner_cond_btus);
-        spinner_tipos = dialogView.findViewById(R.id.spinner_tipos);
-        spinner_cond_tipos = dialogView.findViewById(R.id.spinner_cond_tipos);
-        spinner_voltajes = dialogView.findViewById(R.id.spinner_voltajes);
-        spinner_cond_voltajes = dialogView.findViewById(R.id.spinner_cond_voltajes);
-        spinner_fases = dialogView.findViewById(R.id.spinner_fases);
-        spinner_cond_fases = dialogView.findViewById(R.id.spinner_cond_fases);
-        spinner_refrigerantes = dialogView.findViewById(R.id.spinner_refrigerantes);
-        spinner_cond_refrigerantes = dialogView.findViewById(R.id.spinner_cond_refrigerantes);
-        icon_evap_scan = dialogView.findViewById(R.id.icon_evap_scan);
-        icon_cond_scan = dialogView.findViewById(R.id.icon_cond_scan);
-
-        et_nro_serie = dialogView.findViewById(R.id.nro_serie);
-        icon_evap_scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tipo_nro_serie=1;
-                escanear();
-            }
-        });
-        et_cond_nro_serie = dialogView.findViewById(R.id.cond_nro_serie);
-        icon_cond_scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tipo_nro_serie=2;
-                escanear();
-            }
-        });
-
-//        btn_cancelar = dialogView.findViewById(R.id.btn_cancelar);
-        btn_registrar = dialogView.findViewById(R.id.btn_registrar);
-        btn_siguiente = dialogView.findViewById(R.id.btn_siguiente);
-        btn_atras = dialogView.findViewById(R.id.btn_atras);
-
-        linear_evaporadora = dialogView.findViewById(R.id.linear_evaporadora);
-        linear_condensadora = dialogView.findViewById(R.id.linear_condensadora);
-
-        getMarcas();
-        getModelos();
-        getBtus();
-        getTipos();
-        getVoltajes();
-        getFases();
-        getRefrigerantes();
-
-        spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                marca_id=marcas_id[position];
-                System.out.println("marca_id: "+marca_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_cond_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_marca_id = marcas_cond_id[position];
-                System.out.println("cond_marca_id: "+cond_marca_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                modelo_id = modelos_ids[position];
-                System.out.println("modelo_id: "+modelo_id);
-                spinner_modelos.setError(null);
-            }
-        });
-        spinner_cond_modelos.setOnItemClickListener(new JRSpinner.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                cond_modelo_id = modelos_cond_ids[position];
-                System.out.println("cond_modelo_id: "+cond_modelo_id);
-            }
-        });
-        spinner_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                btu_id = btus_id[position];
-                System.out.println("btu_id: "+btu_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        spinner_cond_btus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_btu_id = btus_cond_id[position];
-                System.out.println("cond_btu_id: "+cond_btu_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_tipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tipo_id = tipos_id[position];
-                System.out.println("tipo_id: "+tipo_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_cond_tipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_tipo_id = tipos_cond_id[position];
-                System.out.println("cond_tipo_id: "+cond_tipo_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_voltajes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                voltaje_id = voltajes_id[position];
-                System.out.println("voltaje_id: "+voltaje_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_cond_voltajes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_voltaje_id = voltajes_cond_id[position];
-                System.out.println("cond_voltaje_id: "+cond_voltaje_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_fases.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                fase_id = fases_id[position];
-                System.out.println("fase_id: "+fase_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_cond_fases.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_fase_id = fases_cond_id[position];
-                System.out.println("cond_fase_id: "+cond_fase_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_refrigerantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                refrigerante_id = refrigerantes_id[position];
-                System.out.println("refrigerante_id: "+refrigerante_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_cond_refrigerantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cond_refrigerante_id = refrigerantes_cond_id[position];
-                System.out.println("cond_refrigerante_id: "+cond_refrigerante_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        btn_registrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                registrarEquipo();
-            }
-        });
-        btn_siguiente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linear_evaporadora.setVisibility(View.GONE);
-                linear_condensadora.setVisibility(View.VISIBLE);
-                btn_siguiente.setVisibility(View.GONE);
-                btn_registrar.setVisibility(View.VISIBLE);
-//                btn_cancelar.setVisibility(View.GONE);
-                btn_atras.setVisibility(View.VISIBLE);
-                getCondensadoraTipos();
-                getCondensadoraModelos();
-            }
-        });
-        btn_atras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linear_condensadora.setVisibility(View.GONE);
-                linear_evaporadora.setVisibility(View.VISIBLE);
-                btn_atras.setVisibility(View.GONE);
-//                btn_cancelar.setVisibility(View.VISIBLE);
-                btn_registrar.setVisibility(View.GONE);
-                btn_siguiente.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    private void escanear() {
-        Intent i = new Intent(ctx, LectorActivity.class);
-        startActivityForResult(i, CODIGO_INTENT);
-    }
-
-    String equipo_selection_id;
-    private void showModalEquipoSelection()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_equipo_selection, null);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        spinner_selection_equipos = dialogView.findViewById(R.id.spinner_equipo_selection);
-        String[] data = new String[equipos.size()];
-        String[] data_id = new String[equipos.size()];
-        int i = 0;
-        for(Object o: equipos){
-            JSONObject ob = (JSONObject)o;
-            String equipo = (String)ob.get("evap_nro_serie");
-            String id = (String)ob.get("id");
-            data[i] = equipo;
-            data_id[i] = id;
-            i++;
-        }
-        selection_equipos_adapter = new ArrayAdapter<>(ctx,R.layout.dropdown_style,data);
-        selection_equipos_id = data_id;
-        spinner_selection_equipos.setAdapter(selection_equipos_adapter);
-        selection_equipos_adapter.notifyDataSetChanged();
-
-        btn_cancelar = dialogView.findViewById(R.id.btn_cancelar);
-        btn_actualizar = dialogView.findViewById(R.id.btn_actualizar);
-        btn_registrar = dialogView.findViewById(R.id.btn_registrar);
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        equipo_selection_id = "";
-        spinner_selection_equipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                equipo_selection_id = selection_equipos_id[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-        btn_actualizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ctx,"Actualizando equipo",Toast.LENGTH_LONG).show();
-                updateEquipo();
-            }
-        });
-
-        btn_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
-        btn_registrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showModalRegisterEquipo();
-            }
-        });
-    }
-
-    private void updateEquipo()
-    {
-        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.update_equipo_url);
-        RequestQueue queue = Volley.newRequestQueue(ctx);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("update_equipo_response: " + response);
-                        try {
-                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
-                            JSONParser parser = new JSONParser();
-                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
-
-                            if (cliente.getIde_error() == 0) {
-                                viewDialog.hideDialog(1);
-                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_LONG).show();
-                            } else {
-                                getEquipo();
-                                Toast.makeText(ctx,"Equipo actualizado",Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            viewDialog.hideDialog(1);
-                            e.printStackTrace();
-                            System.out.println("getFases_error: " + e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                viewDialog.hideDialog(1);
-                error.printStackTrace();
-                System.out.println("update_equipo_error: " + error);
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-                params.put("urgencia_id", id);
-                params.put("equipo_id", equipo_selection_id);
-                return params;
-            }
-        };
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     void validateUploadDespues()
     {
-        despues_temp_l1.setText(et_despues_temp_l1);
-        despues_temp_l2.setText(et_despues_temp_l2);
-
-        despues_presion_alta.setText(et_despues_presion_alta);
-        despues_presion_baja.setText(et_despues_presion_baja);
-
-        despues_amp_l1.setText(et_amp_l1);
-        despues_amp_l2.setText(et_amp_l2);
-        despues_amp_l3.setText(et_amp_l3);
-
-        despues_volt_l1.setText(et_volt_l1);
-        despues_volt_l2.setText(et_volt_l2);
-        despues_volt_l3.setText(et_volt_l3);
-
-        //Falla
-        if(!despues_image_falla.isEmpty()){
-            despues_icon_camera_falla.setVisibility(View.GONE);
-            despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+        if(!despues_image_serpentin.isEmpty()){
+            despues_icon_camera_serpentin.setVisibility(View.GONE);
+            despues_icon_gallery_serpentin.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_gallery_falla.setVisibility(View.GONE);
-            despues_icon_camera_falla.setVisibility(View.VISIBLE);
+            despues_icon_gallery_serpentin.setVisibility(View.GONE);
+            despues_icon_camera_serpentin.setVisibility(View.VISIBLE);
         }
 
-        //Temperatura
-        if(!despues_image_temp_l1.isEmpty()){
-            despues_icon_camera_temp_l1.setVisibility(View.GONE);
-            despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        if(!despues_image_bomba.isEmpty()){
+            despues_icon_camera_bomba.setVisibility(View.GONE);
+            despues_icon_gallery_bomba.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
-            despues_icon_gallery_temp_l1.setVisibility(View.GONE);
+            despues_icon_camera_bomba.setVisibility(View.VISIBLE);
+            despues_icon_gallery_bomba.setVisibility(View.GONE);
         }
 
-        if(!despues_image_temp_l2.isEmpty()){
-            despues_icon_camera_temp_l2.setVisibility(View.GONE);
-            despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        if(!despues_image_cortina.isEmpty()){
+            despues_icon_camera_cortina.setVisibility(View.GONE);
+            despues_icon_gallery_cortina.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
-            despues_icon_gallery_temp_l2.setVisibility(View.GONE);
+            despues_icon_camera_cortina.setVisibility(View.VISIBLE);
+            despues_icon_gallery_cortina.setVisibility(View.GONE);
         }
 
-        //Presión
-
-        if(!despues_image_presion_baja.isEmpty()){
-            despues_icon_camera_presion_baja.setVisibility(View.GONE);
-            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        if(!despues_image_cond_serpentin.isEmpty()){
+            despues_icon_camera_cond_serpentin.setVisibility(View.GONE);
+            despues_icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
-            despues_icon_gallery_presion_baja.setVisibility(View.GONE);
+            despues_icon_camera_cond_serpentin.setVisibility(View.VISIBLE);
+            despues_icon_gallery_cond_serpentin.setVisibility(View.GONE);
         }
 
-        if(!despues_image_presion_alta.isEmpty()){
-            despues_icon_camera_presion_alta.setVisibility(View.GONE);
-            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        if(!despues_image_ventilador.isEmpty()){
+            despues_icon_camera_ventilador.setVisibility(View.GONE);
+            despues_icon_gallery_ventilador.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
-            despues_icon_gallery_presion_alta.setVisibility(View.GONE);
+            despues_icon_camera_ventilador.setVisibility(View.VISIBLE);
+            despues_icon_gallery_ventilador.setVisibility(View.GONE);
         }
 
-        //Amperaje
-        if(!despues_image_amp_l1.isEmpty()){
-            despues_icon_camera_amp_l1.setVisibility(View.GONE);
-            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        if(!despues_image_carcaza.isEmpty()){
+            despues_icon_camera_carcaza.setVisibility(View.GONE);
+            despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
         }else{
-            despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
-            despues_icon_gallery_amp_l1.setVisibility(View.GONE);
-        }
-
-        if(!despues_image_amp_l2.isEmpty()){
-            despues_icon_camera_amp_l2.setVisibility(View.GONE);
-            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-        }else{
-            despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
-            despues_icon_gallery_amp_l2.setVisibility(View.GONE);
-        }
-
-        if(!fase.equals("1")){
-            if(!despues_image_amp_l3.isEmpty()){
-                despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-            }else{
-                despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
-                despues_icon_gallery_amp_l3.setVisibility(View.GONE);
-            }
-        }
-
-        //Voltaje
-        if(!despues_image_volt_l1.isEmpty()){
-            despues_icon_camera_volt_l1.setVisibility(View.GONE);
-            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-        }else{
-            despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
-            despues_icon_gallery_volt_l1.setVisibility(View.GONE);
-        }
-
-        if(!despues_image_volt_l2.isEmpty()){
-            despues_icon_camera_volt_l2.setVisibility(View.GONE);
-            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-        }else{
-            despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
-            despues_icon_gallery_volt_l2.setVisibility(View.GONE);
-        }
-
-        if(!fase.equals("1")){
-            if(!despues_image_volt_l3.isEmpty()){
-                despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-            }else{
-                despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
-                despues_icon_gallery_volt_l3.setVisibility(View.GONE);
-            }
+            despues_icon_camera_carcaza.setVisibility(View.VISIBLE);
+            despues_icon_gallery_carcaza.setVisibility(View.GONE);
         }
     }
 
     void validateUpload()
     {
-        temp_l1.setText(et_temp_l1);
-        temp_l2.setText(et_temp_l2);
-
-        presion_alta.setText(et_presion_alta);
-        presion_baja.setText(et_presion_baja);
-
-        amp_l1.setText(et_amp_l1);
-        amp_l2.setText(et_amp_l2);
-        amp_l3.setText(et_amp_l3);
-
-        volt_l1.setText(et_volt_l1);
-        volt_l2.setText(et_volt_l2);
-        volt_l3.setText(et_volt_l3);
-
-        //Falla
-        if(!image_falla.isEmpty()){
-            icon_camera_falla.setVisibility(View.GONE);
-            icon_gallery_falla.setVisibility(View.VISIBLE);
+        if(!image_serpentin.isEmpty()){
+            icon_camera_serpentin.setVisibility(View.GONE);
+            icon_gallery_serpentin.setVisibility(View.VISIBLE);
         }else{
-            icon_gallery_falla.setVisibility(View.GONE);
-            icon_camera_falla.setVisibility(View.VISIBLE);
+            icon_gallery_serpentin.setVisibility(View.GONE);
+            icon_camera_serpentin.setVisibility(View.VISIBLE);
         }
 
-        if(!image_falla.isEmpty()){
-            icon_camera_falla.setVisibility(View.GONE);
-            icon_gallery_falla.setVisibility(View.VISIBLE);
+        if(!image_bomba.isEmpty()){
+            icon_camera_bomba.setVisibility(View.GONE);
+            icon_gallery_bomba.setVisibility(View.VISIBLE);
         }else{
-            icon_gallery_falla.setVisibility(View.GONE);
-            icon_camera_falla.setVisibility(View.VISIBLE);
+            icon_camera_bomba.setVisibility(View.VISIBLE);
+            icon_gallery_bomba.setVisibility(View.GONE);
         }
 
-        //Temperatura
-        if(!image_temp_l1.isEmpty()){
-            icon_camera_temp_l1.setVisibility(View.GONE);
-            icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+        if(!image_cortina.isEmpty()){
+            icon_camera_cortina.setVisibility(View.GONE);
+            icon_gallery_cortina.setVisibility(View.VISIBLE);
         }else{
-            icon_camera_temp_l1.setVisibility(View.VISIBLE);
-            icon_gallery_temp_l1.setVisibility(View.GONE);
+            icon_camera_cortina.setVisibility(View.VISIBLE);
+            icon_gallery_cortina.setVisibility(View.GONE);
         }
 
-        if(!image_temp_l2.isEmpty()){
-            icon_camera_temp_l2.setVisibility(View.GONE);
-            icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+        if(!image_cond_serpentin.isEmpty()){
+            icon_camera_cond_serpentin.setVisibility(View.GONE);
+            icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
         }else{
-            icon_camera_temp_l2.setVisibility(View.VISIBLE);
-            icon_gallery_temp_l2.setVisibility(View.GONE);
+            icon_camera_cond_serpentin.setVisibility(View.VISIBLE);
+            icon_gallery_cond_serpentin.setVisibility(View.GONE);
         }
 
-        //Presión
-
-        if(!image_presion_baja.isEmpty()){
-            icon_camera_presion_baja.setVisibility(View.GONE);
-            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        if(!image_ventilador.isEmpty()){
+            icon_camera_ventilador.setVisibility(View.GONE);
+            icon_gallery_ventilador.setVisibility(View.VISIBLE);
         }else{
-            icon_camera_presion_baja.setVisibility(View.VISIBLE);
-            icon_gallery_presion_baja.setVisibility(View.GONE);
+            icon_camera_ventilador.setVisibility(View.VISIBLE);
+            icon_gallery_ventilador.setVisibility(View.GONE);
         }
 
-        if(!image_presion_alta.isEmpty()){
-            icon_camera_presion_alta.setVisibility(View.GONE);
-            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        if(!image_carcaza.isEmpty()){
+            icon_camera_carcaza.setVisibility(View.GONE);
+            icon_gallery_carcaza.setVisibility(View.VISIBLE);
         }else{
-            icon_camera_presion_alta.setVisibility(View.VISIBLE);
-            icon_gallery_presion_alta.setVisibility(View.GONE);
-        }
-
-        //Amperaje
-        if(!image_amp_l1.isEmpty()){
-            icon_camera_amp_l1.setVisibility(View.GONE);
-            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_amp_l1.setVisibility(View.VISIBLE);
-            icon_gallery_amp_l1.setVisibility(View.GONE);
-        }
-
-        if(!image_amp_l2.isEmpty()){
-            icon_camera_amp_l2.setVisibility(View.GONE);
-            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_amp_l2.setVisibility(View.VISIBLE);
-            icon_gallery_amp_l2.setVisibility(View.GONE);
-        }
-
-        if(!fase.equals("1")){
-
-            if(!image_amp_l3.isEmpty()){
-                icon_camera_amp_l3.setVisibility(View.GONE);
-                icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-            }else{
-                icon_camera_amp_l3.setVisibility(View.VISIBLE);
-                icon_gallery_amp_l3.setVisibility(View.GONE);
-            }
-        }
-
-        //Voltaje
-        if(!image_volt_l1.isEmpty()){
-            icon_camera_volt_l1.setVisibility(View.GONE);
-            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_volt_l1.setVisibility(View.VISIBLE);
-            icon_gallery_volt_l1.setVisibility(View.GONE);
-        }
-
-        if(!image_volt_l2.isEmpty()){
-            icon_camera_volt_l2.setVisibility(View.GONE);
-            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-        }else{
-            icon_camera_volt_l2.setVisibility(View.VISIBLE);
-            icon_gallery_volt_l2.setVisibility(View.GONE);
-        }
-
-        if(!fase.equals("1")){
-
-            if(!image_volt_l3.isEmpty()){
-                icon_camera_volt_l3.setVisibility(View.GONE);
-                icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-            }else{
-                icon_camera_volt_l3.setVisibility(View.VISIBLE);
-                icon_gallery_volt_l3.setVisibility(View.GONE);
-            }
+            icon_camera_carcaza.setVisibility(View.VISIBLE);
+            icon_gallery_carcaza.setVisibility(View.GONE);
         }
     }
 
@@ -2896,12 +1319,13 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             String image_type = cred.getData("image_type");
             String b64 = currentPhotoPath;
             switch (image_type){
+                //Antes
                 case "1":
-                    image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    image_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
                     Log.e("image_falla","1");
-                    icon_camera_falla.setVisibility(View.GONE);
-                    icon_gallery_falla.setVisibility(View.VISIBLE);
-                    if(image_falla.isEmpty())
+                    icon_camera_serpentin.setVisibility(View.GONE);
+                    icon_gallery_serpentin.setVisibility(View.VISIBLE);
+                    if(image_serpentin.isEmpty())
                         System.out.println("image_falla NULL");
 
                     if(modo_prueba==1){
@@ -2909,185 +1333,103 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     }
                     break;
                 case "2":
-                    image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_temp_l1","2");
-                    icon_camera_temp_l1.setVisibility(View.GONE);
-                    icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(image_temp_l1.isEmpty())
-                        System.out.println("image_temp_l1 NULL");
+                    image_bomba = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_bomba","2");
+                    icon_camera_bomba.setVisibility(View.GONE);
+                    icon_gallery_bomba.setVisibility(View.VISIBLE);
+                    if(image_bomba.isEmpty())
+                        System.out.println("image_bomba NULL");
                     break;
                 case "3":
-                    image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_temp_l2","3");
-                    icon_camera_temp_l2.setVisibility(View.GONE);
-                    icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(image_temp_l2.isEmpty())
-                        System.out.println("image_temp_l2 NULL");
+                    image_cortina = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_cortina","3");
+                    icon_camera_cortina.setVisibility(View.GONE);
+                    icon_gallery_cortina.setVisibility(View.VISIBLE);
+                    if(image_cortina.isEmpty())
+                        System.out.println("image_cortina NULL");
+                    break;
+                case "4":
+                    image_cond_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_cond_serpentin","5");
+                    icon_camera_cond_serpentin.setVisibility(View.GONE);
+                    icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+                    if(image_cond_serpentin.isEmpty())
+                        System.out.println("image_cond_serpentin NULL");
                     break;
                 case "5":
-                    image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_presion_baja","5");
-                    icon_camera_presion_baja.setVisibility(View.GONE);
-                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(image_presion_baja.isEmpty())
-                        System.out.println("image_presion_baja NULL");
+                    image_ventilador = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_ventilador","6");
+                    icon_camera_ventilador.setVisibility(View.GONE);
+                    icon_gallery_ventilador.setVisibility(View.VISIBLE);
+                    if(image_ventilador.isEmpty())
+                        System.out.println("image_ventilador NULL");
                     break;
                 case "6":
-                    image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_presion_alta","6");
-                    icon_camera_presion_alta.setVisibility(View.GONE);
-                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(image_presion_alta.isEmpty())
-                        System.out.println("image_presion_alta NULL");
+                    image_carcaza = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("image_carcaza","7");
+                    icon_camera_carcaza.setVisibility(View.GONE);
+                    icon_gallery_carcaza.setVisibility(View.VISIBLE);
+                    if(image_carcaza.isEmpty())
+                        System.out.println("image_carcaza NULL");
                     break;
+                //Después
                 case "7":
-                    image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_amp_l1","7");
-                    icon_camera_amp_l1.setVisibility(View.GONE);
-                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "8":
-                    image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_amp_l2","8");
-                    icon_camera_amp_l2.setVisibility(View.GONE);
-                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(image_amp_l2.isEmpty())
-                        System.out.println("image_amp_l2 NULL");
-                    break;
-                case "9":
-                    image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_amp_l3","9");
-                    icon_camera_amp_l3.setVisibility(View.GONE);
-                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(image_amp_l3.isEmpty())
-                        System.out.println("image_amp_l3 NULL");
-                    break;
-                case "10":
-                    image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_volt_l1","10");
-                    icon_camera_volt_l1.setVisibility(View.GONE);
-                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(image_volt_l1.isEmpty())
-                        System.out.println("image_volt_l1 NULL");
-                    break;
-                case "11":
-                    image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_volt_l2","11");
-                    icon_camera_volt_l2.setVisibility(View.GONE);
-                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(image_volt_l2.isEmpty())
-                        System.out.println("image_volt_l2 NULL");
-                    break;
-                case "12":
-                    image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_volt_l3","12");
-                    icon_camera_volt_l3.setVisibility(View.GONE);
-                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(image_volt_l3.isEmpty())
-                        System.out.println("image_volt_l3 NULL");
-                    break;
-
-                //despues
-                case "13":
-                    despues_image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_falla","13");
-                    despues_icon_camera_falla.setVisibility(View.GONE);
-                    despues_icon_gallery_falla.setVisibility(View.VISIBLE);
-                    if(despues_image_falla.isEmpty())
-                        System.out.println("despues_image_falla NULL");
+                    despues_image_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_serpentin","1");
+                    despues_icon_camera_serpentin.setVisibility(View.GONE);
+                    despues_icon_gallery_serpentin.setVisibility(View.VISIBLE);
+                    if(despues_image_serpentin.isEmpty())
+                        System.out.println("despues_image_serpentin NULL");
 
                     if(modo_prueba==1){
                         setAllValuesDespues();
                     }
                     break;
-                case "14":
-                    despues_image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_temp_l1","14");
-                    despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l1.isEmpty())
-                        System.out.println("despues_image_temp_l1 NULL");
+                case "8":
+                    despues_image_bomba = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_bomba","2");
+                    despues_icon_camera_bomba.setVisibility(View.GONE);
+                    despues_icon_gallery_bomba.setVisibility(View.VISIBLE);
+                    if(despues_image_bomba.isEmpty())
+                        System.out.println("despues_image_bomba NULL");
                     break;
-                case "15":
-                    despues_image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_temp_l2","15");
-                    despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_temp_l2.isEmpty())
-                        System.out.println("despues_image_temp_l2 NULL");
+                case "9":
+                    despues_image_cortina = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_cortina","3");
+                    despues_icon_camera_cortina.setVisibility(View.GONE);
+                    despues_icon_gallery_cortina.setVisibility(View.VISIBLE);
+                    if(despues_image_cortina.isEmpty())
+                        System.out.println("despues_image_cortina NULL");
                     break;
-
-                case "17":
-                    despues_image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_presion_baja","17");
-                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_baja.isEmpty())
-                        System.out.println("despues_image_presion_baja NULL");
+                case "10":
+                    despues_image_cond_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_cond_serpentin","5");
+                    despues_icon_camera_cond_serpentin.setVisibility(View.GONE);
+                    despues_icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+                    if(despues_image_cond_serpentin.isEmpty())
+                        System.out.println("despues_image_cond_serpentin NULL");
                     break;
-                case "18":
-                    despues_image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_presion_alta","18");
-                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                    if(despues_image_presion_alta.isEmpty())
-                        System.out.println("despues_image_presion_alta NULL");
+                case "11":
+                    despues_image_ventilador = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_ventilador","6");
+                    despues_icon_camera_ventilador.setVisibility(View.GONE);
+                    despues_icon_gallery_ventilador.setVisibility(View.VISIBLE);
+                    if(despues_image_ventilador.isEmpty())
+                        System.out.println("despues_image_ventilador NULL");
                     break;
-                case "19":
-                    despues_image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("image_amp_l1","19");
-                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l1.isEmpty())
-                        System.out.println("image_amp_l1 NULL");
-                    break;
-                case "20":
-                    despues_image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_amp_l2","20");
-                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l2.isEmpty())
-                        System.out.println("despues_image_amp_l2 NULL");
-                    break;
-                case "21":
-                    despues_image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_amp_l3","21");
-                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_amp_l3.isEmpty())
-                        System.out.println("despues_image_amp_l3 NULL");
-                    break;
-                case "22":
-                    despues_image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_volt_l1","22");
-                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l1.isEmpty())
-                        System.out.println("despues_image_volt_l1 NULL");
-                    break;
-                case "23":
-                    despues_image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_volt_l2","23");
-                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l2.isEmpty())
-                        System.out.println("despues_image_volt_l2 NULL");
-                    break;
-                case "24":
-                    despues_image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
-                    Log.e("despues_image_volt_l3","24");
-                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                    if(despues_image_volt_l3.isEmpty())
-                        System.out.println("despues_image_volt_l3 NULL");
+                case "12":
+                    despues_image_carcaza = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_image_carcaza","7");
+                    despues_icon_camera_carcaza.setVisibility(View.GONE);
+                    despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
+                    if(despues_image_carcaza.isEmpty())
+                        System.out.println("despues_image_carcaza NULL");
                     break;
             }
         } catch (Exception e) {
             viewDialog.hideDialog(1);
             e.printStackTrace();
-            System.out.println("getFases_error: " + e);
+            System.out.println("galleryPic_error: " + e);
         }
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
@@ -3144,15 +1486,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case 1://take photo
-                if(cred.getData("image_type").equals("0")){
-                    String codigo = data.getStringExtra("codigo");
-                    if(tipo_nro_serie==1)
-                        et_nro_serie.setText(codigo);
-                    else
-                        et_cond_nro_serie.setText(codigo);
-                }else{
-                    galleryAddPic();
-                }
+                galleryAddPic();
                 break;
             case 2://choose from gallery
                 //data.getData return the content URI for the selected Image
@@ -3174,183 +1508,103 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     String image_type = cred.getData("image_type");
                     String b64 = selectedImage.toString();
                     switch (image_type){
+                        //Antes
                         case "1":
-                            image_falla = Image.convert(bitmap);
+                            image_serpentin = Image.convert(bitmap);
                             Log.e("image_falla","1");
-                            icon_camera_falla.setVisibility(View.GONE);
-                            icon_gallery_falla.setVisibility(View.VISIBLE);
-                            if(image_falla.isEmpty())
-                                System.out.println("image_falla NULL");
+                            icon_camera_serpentin.setVisibility(View.GONE);
+                            icon_gallery_serpentin.setVisibility(View.VISIBLE);
+                            if(image_serpentin.isEmpty())
+                                System.out.println("image_serpentin NULL");
                             break;
                         case "2":
-                            image_temp_l1 = Image.convert(bitmap);
-                            Log.e("image_temp_l1","2");
-                            icon_camera_temp_l1.setVisibility(View.GONE);
-                            icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                            if(image_temp_l1.isEmpty())
-                                System.out.println("image_temp_l1 NULL");
+                            image_bomba = Image.convert(bitmap);
+                            Log.e("image_bomba","2");
+                            icon_camera_bomba.setVisibility(View.GONE);
+                            icon_gallery_bomba.setVisibility(View.VISIBLE);
+                            if(image_bomba.isEmpty())
+                                System.out.println("image_tbomba NULL");
                             break;
                         case "3":
-                            image_temp_l2 = Image.convert(bitmap);
-                            Log.e("image_temp_l2","3");
-                            icon_camera_temp_l2.setVisibility(View.GONE);
-                            icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                            if(image_temp_l2.isEmpty())
-                                System.out.println("image_temp_l2 NULL");
+                            image_cortina = Image.convert(bitmap);
+                            Log.e("image_cortina","3");
+                            icon_camera_cortina.setVisibility(View.GONE);
+                            icon_gallery_cortina.setVisibility(View.VISIBLE);
+                            if(image_cortina.isEmpty())
+                                System.out.println("image_cortina NULL");
+                            break;
+                        case "4":
+                            image_cond_serpentin = Image.convert(bitmap);
+                            Log.e("image_cond_serpentin","5");
+                            icon_camera_cond_serpentin.setVisibility(View.GONE);
+                            icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+                            if(image_cond_serpentin.isEmpty())
+                                System.out.println("image_cond_serpentin NULL");
                             break;
                         case "5":
-                            image_presion_baja = Image.convert(bitmap);
-                            Log.e("image_presion_baja","5");
-                            icon_camera_presion_baja.setVisibility(View.GONE);
-                            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                            if(image_presion_baja.isEmpty())
-                                System.out.println("image_presion_baja NULL");
+                            image_ventilador = Image.convert(bitmap);
+                            Log.e("image_ventilador","6");
+                            icon_camera_ventilador.setVisibility(View.GONE);
+                            icon_gallery_ventilador.setVisibility(View.VISIBLE);
+                            if(image_ventilador.isEmpty())
+                                System.out.println("image_ventilador NULL");
                             break;
                         case "6":
-                            image_presion_alta = Image.convert(bitmap);
-                            Log.e("image_presion_alta","6");
-                            icon_camera_presion_alta.setVisibility(View.GONE);
-                            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                            if(image_presion_alta.isEmpty())
-                                System.out.println("image_presion_alta NULL");
+                            image_carcaza = Image.convert(bitmap);
+                            Log.e("image_carcaza","7");
+                            icon_camera_carcaza.setVisibility(View.GONE);
+                            icon_gallery_carcaza.setVisibility(View.VISIBLE);
+                            if(image_carcaza.isEmpty())
+                                System.out.println("image_carcaza NULL");
                             break;
+                        //Depues
                         case "7":
-                            image_amp_l1 = Image.convert(bitmap);
-                            Log.e("image_amp_l1","7");
-                            icon_camera_amp_l1.setVisibility(View.GONE);
-                            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                            if(image_amp_l1.isEmpty())
-                                System.out.println("image_amp_l1 NULL");
+                            despues_image_serpentin = Image.convert(bitmap);
+                            Log.e("despues_image_falla","1");
+                            despues_icon_camera_serpentin.setVisibility(View.GONE);
+                            despues_icon_gallery_serpentin.setVisibility(View.VISIBLE);
+                            if(despues_image_serpentin.isEmpty())
+                                System.out.println("despues_image_serpentin NULL");
                             break;
                         case "8":
-                            image_amp_l2 = Image.convert(bitmap);
-                            Log.e("image_amp_l2","8");
-                            icon_camera_amp_l2.setVisibility(View.GONE);
-                            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                            if(image_amp_l2.isEmpty())
-                                System.out.println("image_amp_l2 NULL");
+                            despues_image_bomba = Image.convert(bitmap);
+                            Log.e("despues_image_bomba","2");
+                            despues_icon_camera_bomba.setVisibility(View.GONE);
+                            despues_icon_gallery_bomba.setVisibility(View.VISIBLE);
+                            if(despues_image_bomba.isEmpty())
+                                System.out.println("despues_image_tbomba NULL");
                             break;
                         case "9":
-                            image_amp_l3 = Image.convert(bitmap);
-                            Log.e("image_amp_l3","9");
-                            icon_camera_amp_l3.setVisibility(View.GONE);
-                            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                            if(image_amp_l3.isEmpty())
-                                System.out.println("image_amp_l3 NULL");
+                            despues_image_cortina = Image.convert(bitmap);
+                            Log.e("despues_image_cortina","3");
+                            despues_icon_camera_cortina.setVisibility(View.GONE);
+                            despues_icon_gallery_cortina.setVisibility(View.VISIBLE);
+                            if(despues_image_cortina.isEmpty())
+                                System.out.println("image_cortina NULL");
                             break;
                         case "10":
-                            image_volt_l1 = Image.convert(bitmap);
-                            Log.e("image_volt_l1","10");
-                            icon_camera_volt_l1.setVisibility(View.GONE);
-                            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                            if(image_volt_l1.isEmpty())
-                                System.out.println("image_volt_l1 NULL");
+                            despues_image_cond_serpentin = Image.convert(bitmap);
+                            Log.e("despues_image_cond_serpentin","5");
+                            despues_icon_camera_cond_serpentin.setVisibility(View.GONE);
+                            despues_icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+                            if(image_cond_serpentin.isEmpty())
+                                System.out.println("despues_image_cond_serpentin NULL");
                             break;
                         case "11":
-                            image_volt_l2 = Image.convert(bitmap);
-                            Log.e("image_volt_l2","11");
-                            icon_camera_volt_l2.setVisibility(View.GONE);
-                            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                            if(image_volt_l2.isEmpty())
-                                System.out.println("image_volt_l2 NULL");
+                            despues_image_ventilador = Image.convert(bitmap);
+                            Log.e("despues_image_ventilador","6");
+                            despues_icon_camera_ventilador.setVisibility(View.GONE);
+                            despues_icon_gallery_ventilador.setVisibility(View.VISIBLE);
+                            if(despues_image_ventilador.isEmpty())
+                                System.out.println("despues_image_ventilador NULL");
                             break;
                         case "12":
-                            image_volt_l3 = Image.convert(bitmap);
-                            Log.e("image_volt_l3","12");
-                            icon_camera_volt_l3.setVisibility(View.GONE);
-                            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                            if(image_volt_l3.isEmpty())
-                                System.out.println("image_volt_l3 NULL");
-                            break;
-
-                        //despues
-                        case "13":
-                            despues_image_falla = Image.convert(bitmap);
-                            Log.e("despues_image_falla","13");
-                            despues_icon_camera_falla.setVisibility(View.GONE);
-                            despues_icon_gallery_falla.setVisibility(View.VISIBLE);
-                            if(despues_image_falla.isEmpty())
-                                System.out.println("despues_image_falla NULL");
-                            break;
-                        case "14":
-                            despues_image_temp_l1 = Image.convert(bitmap);
-                            Log.e("despues_image_temp_l1","14");
-                            despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_temp_l1.isEmpty())
-                                System.out.println("despues_image_temp_l1 NULL");
-                            break;
-                        case "15":
-                            despues_image_temp_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_temp_l2","15");
-                            despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_temp_l2.isEmpty())
-                                System.out.println("despues_image_temp_l2 NULL");
-                            break;
-                        case "17":
-                            despues_image_presion_baja = Image.convert(bitmap);
-                            Log.e("image_presion_baja","17");
-                            despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                            if(despues_image_presion_baja.isEmpty())
-                                System.out.println("despues_image_presion_baja NULL");
-                            break;
-                        case "18":
-                            despues_image_presion_alta = Image.convert(bitmap);
-                            Log.e("despues_image_presion_alta","18");
-                            despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                            if(despues_image_presion_alta.isEmpty())
-                                System.out.println("despues_image_presion_alta NULL");
-                            break;
-                        case "19":
-                            despues_image_amp_l1 = Image.convert(bitmap);
-                            Log.e("image_amp_l1","19");
-                            despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l1.isEmpty())
-                                System.out.println("image_amp_l1 NULL");
-                            break;
-                        case "20":
-                            despues_image_amp_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_amp_l2","20");
-                            despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l2.isEmpty())
-                                System.out.println("despues_image_amp_l2 NULL");
-                            break;
-                        case "21":
-                            despues_image_amp_l3 = Image.convert(bitmap);
-                            Log.e("despues_image_amp_l3","21");
-                            despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l3.isEmpty())
-                                System.out.println("despues_image_amp_l3 NULL");
-                            break;
-                        case "22":
-                            despues_image_volt_l1 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l1","22");
-                            despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l1.isEmpty())
-                                System.out.println("despues_image_volt_l1 NULL");
-                            break;
-                        case "23":
-                            despues_image_volt_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l2","23");
-                            despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l2.isEmpty())
-                                System.out.println("despues_image_volt_l2 NULL");
-                            break;
-                        case "24":
-                            despues_image_volt_l3 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l3","24");
-                            despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l3.isEmpty())
-                                System.out.println("despues_image_volt_l3 NULL");
+                            despues_image_carcaza = Image.convert(bitmap);
+                            Log.e("despues_image_carcaza","7");
+                            despues_icon_camera_carcaza.setVisibility(View.GONE);
+                            despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
+                            if(despues_image_carcaza.isEmpty())
+                                System.out.println("despues_image_carcaza NULL");
                             break;
                     }
                 } catch (Exception e) {
@@ -3366,71 +1620,43 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
     void setAllValues()
     {
-        image_temp_l1 =image_falla;
-        image_temp_l2 =image_falla;
-        image_presion_alta =image_falla;
-        image_presion_baja =image_falla;
-        image_volt_l1 =image_falla;
-        image_volt_l2 =image_falla;
-        image_volt_l3 =image_falla;
-        image_amp_l1 =image_falla;
-        image_amp_l2 =image_falla;
-        image_amp_l3 =image_falla;
+        image_bomba =image_serpentin;
+        image_cortina =image_serpentin;
+        image_cond_serpentin =image_serpentin;
+        image_ventilador =image_serpentin;
+        image_carcaza =image_serpentin;
 
-        icon_camera_temp_l1.setVisibility(View.GONE);
-        icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-        icon_camera_temp_l2.setVisibility(View.GONE);
-        icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-        icon_camera_presion_baja.setVisibility(View.GONE);
-        icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-        icon_camera_presion_alta.setVisibility(View.GONE);
-        icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-        icon_camera_amp_l1.setVisibility(View.GONE);
-        icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-        icon_camera_amp_l2.setVisibility(View.GONE);
-        icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-        icon_camera_amp_l3.setVisibility(View.GONE);
-        icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-        icon_camera_volt_l1.setVisibility(View.GONE);
-        icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-        icon_camera_volt_l2.setVisibility(View.GONE);
-        icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-        icon_camera_volt_l3.setVisibility(View.GONE);
-        icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        icon_camera_bomba.setVisibility(View.GONE);
+        icon_camera_cortina.setVisibility(View.GONE);
+        icon_camera_cond_serpentin.setVisibility(View.GONE);
+        icon_camera_ventilador.setVisibility(View.GONE);
+        icon_camera_carcaza.setVisibility(View.GONE);
+
+        icon_gallery_bomba.setVisibility(View.VISIBLE);
+        icon_gallery_cortina.setVisibility(View.VISIBLE);
+        icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+        icon_gallery_ventilador.setVisibility(View.VISIBLE);
+        icon_gallery_carcaza.setVisibility(View.VISIBLE);
     }
 
     void setAllValuesDespues()
     {
-        despues_image_temp_l1 = despues_image_falla;
-        despues_image_temp_l2 = despues_image_falla;
-        despues_image_presion_alta = despues_image_falla;
-        despues_image_presion_baja = despues_image_falla;
-        despues_image_volt_l1 = despues_image_falla;
-        despues_image_volt_l2 = despues_image_falla;
-        despues_image_volt_l3 = despues_image_falla;
-        despues_image_amp_l1 = despues_image_falla;
-        despues_image_amp_l2 = despues_image_falla;
-        despues_image_amp_l3 = despues_image_falla;
+        despues_image_bomba = despues_image_serpentin;
+        despues_image_cortina = despues_image_serpentin;
+        despues_image_cond_serpentin = despues_image_serpentin;
+        despues_image_ventilador = despues_image_serpentin;
+        despues_image_carcaza = despues_image_serpentin;
 
-        despues_icon_camera_temp_l1.setVisibility(View.GONE);
-        despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-        despues_icon_camera_temp_l2.setVisibility(View.GONE);
-        despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-        despues_icon_camera_presion_baja.setVisibility(View.GONE);
-        despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-        despues_icon_camera_presion_alta.setVisibility(View.GONE);
-        despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-        despues_icon_camera_amp_l1.setVisibility(View.GONE);
-        despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-        despues_icon_camera_amp_l2.setVisibility(View.GONE);
-        despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-        despues_icon_camera_amp_l3.setVisibility(View.GONE);
-        icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-        despues_icon_camera_volt_l1.setVisibility(View.GONE);
-        despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-        despues_icon_camera_volt_l2.setVisibility(View.GONE);
-        despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-        despues_icon_camera_volt_l3.setVisibility(View.GONE);
-        despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        despues_icon_camera_bomba.setVisibility(View.GONE);
+        despues_icon_camera_cortina.setVisibility(View.GONE);
+        despues_icon_camera_cond_serpentin.setVisibility(View.GONE);
+        despues_icon_camera_ventilador.setVisibility(View.GONE);
+        despues_icon_camera_carcaza.setVisibility(View.GONE);
+
+        despues_icon_gallery_bomba.setVisibility(View.VISIBLE);
+        despues_icon_gallery_cortina.setVisibility(View.VISIBLE);
+        despues_icon_gallery_cond_serpentin.setVisibility(View.VISIBLE);
+        despues_icon_gallery_ventilador.setVisibility(View.VISIBLE);
+        despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
     }
 }
