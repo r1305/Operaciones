@@ -1,14 +1,11 @@
 package com.system.operaciones.activities;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,21 +14,16 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -49,7 +41,6 @@ import com.system.operaciones.utils.Credentials;
 import com.system.operaciones.utils.Image;
 import com.system.operaciones.utils.Utils;
 import com.system.operaciones.utils.ViewDialog;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -63,37 +54,55 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import jrizani.jrspinner.JRSpinner;
-
 public class FichaMantenimientoActivity extends AppCompatActivity {
 
     Context ctx;
     Credentials cred;
+    /************** MANTENIMIENTO ************************/
     //ANTES
     private ImageView icon_camera_serpentin,icon_camera_bomba,icon_camera_cortina;
     private ImageView icon_gallery_serpentin,icon_gallery_bomba,icon_gallery_cortina;
     private ImageView icon_camera_cond_serpentin,icon_camera_ventilador,icon_camera_carcaza;
     private ImageView icon_gallery_cond_serpentin,icon_gallery_ventilador,icon_gallery_carcaza;
-    String image_serpentin="",image_bomba="",image_cortina="";
-    String image_cond_serpentin="",image_ventilador="",image_carcaza="";
+    private String image_serpentin="",image_bomba="",image_cortina="";
+    private String image_cond_serpentin="",image_ventilador="",image_carcaza="";
 
     //DESPUES
     private ImageView despues_icon_camera_serpentin,despues_icon_camera_bomba,despues_icon_camera_cortina;
     private ImageView despues_icon_gallery_serpentin,despues_icon_gallery_bomba,despues_icon_gallery_cortina;
     private ImageView despues_icon_camera_cond_serpentin,despues_icon_camera_ventilador,despues_icon_camera_carcaza;
     private ImageView despues_icon_gallery_cond_serpentin,despues_icon_gallery_ventilador,despues_icon_gallery_carcaza;
-    String despues_image_serpentin="",despues_image_bomba="",despues_image_cortina="";
-    String despues_image_cond_serpentin="",despues_image_ventilador="",despues_image_carcaza="";
+    private String despues_image_serpentin="",despues_image_bomba="",despues_image_cortina="";
+    private String despues_image_cond_serpentin="",despues_image_ventilador="",despues_image_carcaza="";
+
+    private Button btn_mot_cancelar;
+    private Button btn_mto_guardar;
+
+    /************************** LECTURA ***************************/
+    //ANTES
+    private ImageView icon_camera_temp_serpentin,icon_camera_temp_ambiente,icon_camera_presion_alta,icon_camera_presion_baja,icon_camera_amp_l1,icon_camera_amp_l2,icon_camera_amp_l3,icon_camera_volt_l1,icon_camera_volt_l2,icon_camera_volt_l3;
+    private ImageView icon_gallery_temp_serpentin,icon_gallery_temp_ambiente,icon_gallery_presion_alta,icon_gallery_presion_baja,icon_gallery_amp_l1,icon_gallery_amp_l2,icon_gallery_amp_l3,icon_gallery_volt_l1,icon_gallery_volt_l2,icon_gallery_volt_l3;
+    private String temp_serpentin="",temp_ambiente="",presion_alta="",presion_baja="",amp_l1="",amp_l2="",amp_l3="",volt_l1="",volt_l2="",volt_l3="";
+    private String txt_temp_serpentin="0",txt_temp_ambiente="0",txt_presion_alta="0",txt_presion_baja="0",txt_amp_l1="0",txt_amp_l2="0",txt_amp_l3="0",txt_volt_l1="0",txt_volt_l2="0",txt_volt_l3="0";
+    private EditText et_temp_serpentin,et_temp_ambiente,et_presion_alta,et_presion_baja,et_amp_l1,et_amp_l2,et_amp_l3,et_volt_l1,et_volt_l2,et_volt_l3;
+
+    //DESPUES
+    private ImageView despues_icon_camera_temp_serpentin,despues_icon_camera_temp_ambiente,despues_icon_camera_presion_alta,despues_icon_camera_presion_baja,despues_icon_camera_amp_l1,despues_icon_camera_amp_l2,despues_icon_camera_amp_l3,despues_icon_camera_volt_l1,despues_icon_camera_volt_l2,despues_icon_camera_volt_l3;
+    private ImageView despues_icon_gallery_temp_serpentin,despues_icon_gallery_temp_ambiente,despues_icon_gallery_presion_alta,despues_icon_gallery_presion_baja,despues_icon_gallery_amp_l1,despues_icon_gallery_amp_l2,despues_icon_gallery_amp_l3,despues_icon_gallery_volt_l1,despues_icon_gallery_volt_l2,despues_icon_gallery_volt_l3;
+    private String despues_temp_serpentin="",despues_temp_ambiente="",despues_presion_alta="",despues_presion_baja="",despues_amp_l1="",despues_amp_l2="",despues_amp_l3="",despues_volt_l1="",despues_volt_l2="",despues_volt_l3="";
+    private String despues_txt_temp_serpentin="0",despues_txt_temp_ambiente="0",despues_txt_presion_alta="0",despues_txt_presion_baja="0",despues_txt_amp_l1="0",despues_txt_amp_l2="0",despues_txt_amp_l3="0",despues_txt_volt_l1="0",despues_txt_volt_l2="0",despues_txt_volt_l3="0";
+    private EditText despues_et_temp_serpentin,despues_et_temp_ambiente,despues_et_presion_alta,despues_et_presion_baja,despues_et_amp_l1,despues_et_amp_l2,despues_et_amp_l3,despues_et_volt_l1,despues_et_volt_l2,despues_et_volt_l3;
+
+    private Button btn_lectura_cancelar;
+    private Button btn_lectura_guardar;
+    /************************ FIRMAS ***************************/
 
     //Firmas
     String image_signature_cliente="",image_signature_tecnico="";
 
-    private Button btn_lectura_cancelar;
-    private Button btn_lectura_guardar;
     private String id,tienda_id;
 
     AlertDialog alertDialog;
-
     private String name_tecnico="",dni_tecnico="",cargo_tecnico="",name_cliente="",dni_cliente="",cargo_cliente="";
 
     int equipo_count=0;
@@ -158,15 +167,19 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
         cred.save_data("image_type","0");
 
-        Button btn_antes = findViewById(R.id.btn_antes);
-        Button btn_despues = findViewById(R.id.btn_despues);
+        Button btn_lectura_antes = findViewById(R.id.btn_antes);
+        Button btn_mto_antes = findViewById(R.id.btn_mto_antes);
 
-        btn_antes.setOnClickListener(new View.OnClickListener() {
+        Button btn_lectura_despues = findViewById(R.id.btn_despues);
+        Button btn_mto_despues = findViewById(R.id.btn_mto_despues);
+
+        // BTN_ANTES MANTENIMIENTO
+        btn_mto_antes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
+                View dialogView = inflater.inflate(R.layout.dialog_evidencia_mantenimiento, null);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
                 icon_camera_serpentin = dialogView.findViewById(R.id.icon_cam_serpentin);
@@ -183,8 +196,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_gallery_ventilador = dialogView.findViewById(R.id.icon_gallery_ventilador);
                 icon_gallery_carcaza = dialogView.findViewById(R.id.icon_gallery_carcaza);
 
-                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
-                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_mto_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_mto_btn_guardar);
                 btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -299,13 +312,13 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             }
         });
 
-        //BTN_DESPUES
-        btn_despues.setOnClickListener(new View.OnClickListener() {
+        //BTN_DESPUES MANTENIMIENTO
+        btn_mto_despues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                 LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
+                View dialogView = inflater.inflate(R.layout.dialog_evidencia_mantenimiento, null);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
 
@@ -325,8 +338,8 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
 
                 validateUploadDespues();
 
-                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
-                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_mto_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_mto_btn_guardar);
                 btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -434,6 +447,483 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         showPreview(image_carcaza,12);
+                    }
+                });
+
+            }
+        });
+
+        //BTN_ANTES LECTURA
+        btn_lectura_antes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
+                builder.setView(dialogView);
+                builder.setCancelable(false);
+                icon_camera_temp_serpentin = dialogView.findViewById(R.id.icon_cam_temp_serpentin);
+                icon_camera_temp_ambiente = dialogView.findViewById(R.id.icon_cam_temp_ambiente);
+                icon_camera_presion_baja = dialogView.findViewById(R.id.icon_cam_presion_baja);
+                icon_camera_presion_alta = dialogView.findViewById(R.id.icon_cam_presion_alta);
+                icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
+                icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
+                icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
+                icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
+                icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
+                icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                et_temp_serpentin = dialogView.findViewById(R.id.et_temp_serpentin);
+                et_temp_ambiente = dialogView.findViewById(R.id.et_temp_ambiente);
+                et_presion_baja = dialogView.findViewById(R.id.et_presion_baja);
+                et_presion_alta = dialogView.findViewById(R.id.et_presion_alta);
+                et_amp_l1 = dialogView.findViewById(R.id.et_amp_l1);
+                et_amp_l2 = dialogView.findViewById(R.id.et_amp_l2);
+                et_amp_l3 = dialogView.findViewById(R.id.et_amp_l3);
+                et_volt_l1 = dialogView.findViewById(R.id.et_volt_l1);
+                et_volt_l2 = dialogView.findViewById(R.id.et_volt_l2);
+                et_volt_l3 = dialogView.findViewById(R.id.et_volt_l3);
+
+                icon_gallery_temp_serpentin = dialogView.findViewById(R.id.icon_gallery_temp_serpentin);
+                icon_gallery_temp_ambiente = dialogView.findViewById(R.id.icon_gallery_temp_ambiente);
+                icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
+                icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
+                icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
+                icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
+                icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
+                icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
+                icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
+                icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
+
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+
+                validateLecturaUpload();
+
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txt_temp_serpentin = et_temp_serpentin.getText().toString();
+                        txt_temp_ambiente = et_temp_ambiente.getText().toString();
+                        txt_presion_baja = et_presion_baja.getText().toString();
+                        txt_presion_alta = et_presion_alta.getText().toString();
+                        txt_amp_l1 = et_amp_l1.getText().toString();
+                        txt_amp_l2 = et_amp_l2.getText().toString();
+                        txt_amp_l3 = et_amp_l3.getText().toString();
+                        txt_volt_l1 = et_volt_l1.getText().toString();
+                        txt_volt_l2 = et_volt_l2.getText().toString();
+                        txt_volt_l3 = et_volt_l3.getText().toString();
+                        alertDialog.dismiss();
+                        Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                icon_camera_temp_serpentin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("temp_serpentin","13");
+                        cred.save_data("image_type","13");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_temp_serpentin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(temp_serpentin,13);
+                    }
+                });
+
+                icon_camera_temp_ambiente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("temp_ambiente","14");
+                        cred.save_data("image_type","14");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_temp_ambiente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(temp_ambiente,14);
+                    }
+                });
+
+                icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("presion_baja","15");
+                        cred.save_data("image_type","15");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(presion_baja,15);
+                    }
+                });
+
+                icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("presion_alta","16");
+                        cred.save_data("image_type","16");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(presion_alta,16);
+                    }
+                });
+
+                icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("amp_l1","17");
+                        cred.save_data("image_type","17");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(amp_l1,17);
+                    }
+                });
+
+                icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("amp_l2","18");
+                        cred.save_data("image_type","18");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(amp_l2,18);
+                    }
+                });
+
+                icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("amp_l3","18");
+                        cred.save_data("image_type","19");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(amp_l3,19);
+                    }
+                });
+
+                //Voltaje
+                icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("volt_l1","20");
+                        cred.save_data("image_type","20");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(volt_l1,20);
+                    }
+                });
+
+                icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("volt_l2","21");
+                        cred.save_data("image_type","21");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(volt_l2,21);
+                    }
+                });
+
+                icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("volt_l3","22");
+                        cred.save_data("image_type","22");
+                        openChooser();
+                    }
+                });
+
+                icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(volt_l3,22);
+                    }
+                });
+
+            }
+        });
+
+        //BTN_DESPUES LECTURA
+        btn_lectura_despues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_lecturas_mantenimiento, null);
+                builder.setView(dialogView);
+                builder.setCancelable(false);
+                despues_icon_camera_temp_serpentin = dialogView.findViewById(R.id.icon_cam_temp_serpentin);
+                despues_icon_camera_temp_ambiente = dialogView.findViewById(R.id.icon_cam_temp_ambiente);
+                despues_icon_camera_presion_baja = dialogView.findViewById(R.id.icon_cam_presion_baja);
+                despues_icon_camera_presion_alta = dialogView.findViewById(R.id.icon_cam_presion_alta);
+                despues_icon_camera_amp_l1 = dialogView.findViewById(R.id.icon_cam_amp_l1);
+                despues_icon_camera_amp_l2 = dialogView.findViewById(R.id.icon_cam_amp_l2);
+                despues_icon_camera_amp_l3 = dialogView.findViewById(R.id.icon_cam_amp_l3);
+                despues_icon_camera_volt_l1 = dialogView.findViewById(R.id.icon_cam_volt_l1);
+                despues_icon_camera_volt_l2 = dialogView.findViewById(R.id.icon_cam_volt_l2);
+                despues_icon_camera_volt_l3 = dialogView.findViewById(R.id.icon_cam_volt_l3);
+
+                despues_et_temp_serpentin = dialogView.findViewById(R.id.et_temp_serpentin);
+                despues_et_temp_ambiente = dialogView.findViewById(R.id.et_temp_ambiente);
+                despues_et_presion_baja = dialogView.findViewById(R.id.et_presion_baja);
+                despues_et_presion_alta = dialogView.findViewById(R.id.et_presion_alta);
+                despues_et_amp_l1 = dialogView.findViewById(R.id.et_amp_l1);
+                despues_et_amp_l2 = dialogView.findViewById(R.id.et_amp_l2);
+                despues_et_amp_l3 = dialogView.findViewById(R.id.et_amp_l3);
+                despues_et_volt_l1 = dialogView.findViewById(R.id.et_volt_l1);
+                despues_et_volt_l2 = dialogView.findViewById(R.id.et_volt_l2);
+                despues_et_volt_l3 = dialogView.findViewById(R.id.et_volt_l3);
+
+                despues_icon_gallery_temp_serpentin = dialogView.findViewById(R.id.icon_gallery_temp_serpentin);
+                despues_icon_gallery_temp_ambiente = dialogView.findViewById(R.id.icon_gallery_temp_ambiente);
+                despues_icon_gallery_presion_baja = dialogView.findViewById(R.id.icon_gallery_presion_baja);
+                despues_icon_gallery_presion_alta = dialogView.findViewById(R.id.icon_gallery_presion_alta);
+                despues_icon_gallery_amp_l1 = dialogView.findViewById(R.id.icon_gallery_amp_l1);
+                despues_icon_gallery_amp_l2 = dialogView.findViewById(R.id.icon_gallery_amp_l2);
+                despues_icon_gallery_amp_l3 = dialogView.findViewById(R.id.icon_gallery_amp_l3);
+                despues_icon_gallery_volt_l1 = dialogView.findViewById(R.id.icon_gallery_volt_l1);
+                despues_icon_gallery_volt_l2 = dialogView.findViewById(R.id.icon_gallery_volt_l2);
+                despues_icon_gallery_volt_l3 = dialogView.findViewById(R.id.icon_gallery_volt_l3);
+
+                btn_lectura_cancelar = dialogView.findViewById(R.id.dialog_lectura_btn_cancelar);
+                btn_lectura_guardar = dialogView.findViewById(R.id.dialog_lectura_btn_guardar);
+
+                validateLecturaDespuesUpload();
+
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                btn_lectura_cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        despues_txt_temp_serpentin = despues_et_temp_serpentin.getText().toString();
+                        despues_txt_temp_ambiente = despues_et_temp_ambiente.getText().toString();
+                        despues_txt_presion_baja = despues_et_presion_baja.getText().toString();
+                        despues_txt_presion_alta = despues_et_presion_alta.getText().toString();
+                        despues_txt_amp_l1 = despues_et_amp_l1.getText().toString();
+                        despues_txt_amp_l2 = despues_et_amp_l2.getText().toString();
+                        despues_txt_amp_l3 = despues_et_amp_l3.getText().toString();
+                        despues_txt_volt_l1 = despues_et_volt_l1.getText().toString();
+                        despues_txt_volt_l2 = despues_et_volt_l2.getText().toString();
+                        despues_txt_volt_l3 = despues_et_volt_l3.getText().toString();
+
+                        alertDialog.dismiss();
+                        Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                despues_icon_camera_temp_serpentin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_temp_serpentin","23");
+                        cred.save_data("image_type","23");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_temp_serpentin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_temp_serpentin,23);
+                    }
+                });
+
+                despues_icon_camera_temp_ambiente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_temp_ambiente","24");
+                        cred.save_data("image_type","24");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_temp_ambiente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_temp_ambiente,24);
+                    }
+                });
+
+                despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_presion_baja","25");
+                        cred.save_data("image_type","25");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_presion_baja,25);
+                    }
+                });
+
+                despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_presion_alta","26");
+                        cred.save_data("image_type","26");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_presion_alta,26);
+                    }
+                });
+
+                despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_amp_l1","27");
+                        cred.save_data("image_type","27");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_amp_l1,27);
+                    }
+                });
+
+                despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_amp_l2","28");
+                        cred.save_data("image_type","28");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_amp_l2,28);
+                    }
+                });
+
+                despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_amp_l3","29");
+                        cred.save_data("image_type","29");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_amp_l3,29);
+                    }
+                });
+
+                //Voltaje
+                despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_volt_l1","30");
+                        cred.save_data("image_type","30");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_volt_l1,30);
+                    }
+                });
+
+                despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_volt_l2","31");
+                        cred.save_data("image_type","31");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_volt_l2,31);
+                    }
+                });
+
+                despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("despues_volt_l3","32");
+                        cred.save_data("image_type","32");
+                        openChooser();
+                    }
+                });
+
+                despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPreview(despues_volt_l3,32);
                     }
                 });
 
@@ -774,7 +1264,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
     void cleanPhoto(int element)
     {
         switch (element){
-            //Antes
+            //MANTENIMIENTO Antes
             case 1:
                 image_serpentin="";
                 icon_gallery_serpentin.setVisibility(View.GONE);
@@ -805,7 +1295,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 icon_gallery_carcaza.setVisibility(View.GONE);
                 icon_camera_carcaza.setVisibility(View.VISIBLE);
                 break;
-            //Despues
+            //MANTENIMIENTO Despues
             case 7:
                 despues_image_serpentin="";
                 despues_icon_gallery_serpentin.setVisibility(View.GONE);
@@ -835,6 +1325,108 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                 despues_image_carcaza="";
                 despues_icon_gallery_carcaza.setVisibility(View.GONE);
                 despues_icon_camera_carcaza.setVisibility(View.VISIBLE);
+                break;
+            //LECTURAS ANTES
+            case 13:
+                temp_serpentin="";
+                icon_camera_temp_serpentin.setVisibility(View.GONE);
+                icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                break;
+            case 14:
+                temp_ambiente="";
+                icon_camera_temp_ambiente.setVisibility(View.GONE);
+                icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                break;
+            case 15:
+                presion_baja="";
+                icon_camera_presion_baja.setVisibility(View.GONE);
+                icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                break;
+            case 16:
+                presion_alta="";
+                icon_camera_presion_alta.setVisibility(View.GONE);
+                icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                break;
+            case 17:
+                amp_l1="";
+                icon_camera_amp_l1.setVisibility(View.GONE);
+                icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                break;
+            case 18:
+                amp_l2="";
+                icon_camera_amp_l2.setVisibility(View.GONE);
+                icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                break;
+            case 19:
+                amp_l3="";
+                icon_camera_amp_l3.setVisibility(View.GONE);
+                icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                break;
+            case 20:
+                amp_l1="";
+                icon_camera_volt_l1.setVisibility(View.GONE);
+                icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                break;
+            case 21:
+                volt_l2="";
+                icon_camera_volt_l2.setVisibility(View.GONE);
+                icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                break;
+            case 22:
+                volt_l3="";
+                icon_camera_volt_l3.setVisibility(View.GONE);
+                icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                break;
+            //LECTURAS DESPUES
+            case 23:
+                despues_temp_serpentin="";
+                despues_icon_camera_temp_serpentin.setVisibility(View.GONE);
+                despues_icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                break;
+            case 24:
+                despues_temp_ambiente="";
+                despues_icon_camera_temp_ambiente.setVisibility(View.GONE);
+                despues_icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                break;
+            case 25:
+                despues_presion_baja="";
+                despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                break;
+            case 26:
+                despues_presion_alta="";
+                icon_camera_presion_alta.setVisibility(View.GONE);
+                despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                break;
+            case 27:
+                despues_amp_l1="";
+                despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                break;
+            case 28:
+                despues_amp_l2="";
+                despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                break;
+            case 29:
+                despues_amp_l3="";
+                despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                break;
+            case 30:
+                despues_amp_l1="";
+                despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                break;
+            case 31:
+                despues_volt_l2="";
+                despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                break;
+            case 32:
+                despues_volt_l3="";
+                despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -1158,15 +1750,6 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    String marca_id="",cond_marca_id = "";
-    String modelo_id="",cond_modelo_id = "";
-    String btu_id="",cond_btu_id="";
-    String tipo_id="",cond_tipo_id="";
-    String voltaje_id="",cond_voltaje_id="";
-    String fase_id="", cond_fase_id="";
-    String refrigerante_id="",cond_refrigerante_id="";
-    String nro_serie="",cond_nro_serie="";
-
     void validateUploadDespues()
     {
         if(!despues_image_serpentin.isEmpty()){
@@ -1269,6 +1852,194 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
         }
     }
 
+    void validateLecturaUpload()
+    {
+        et_temp_serpentin.setText(txt_temp_serpentin);
+        et_temp_ambiente.setText(txt_temp_ambiente);
+        et_presion_baja.setText(txt_presion_baja);
+        et_presion_alta.setText(txt_presion_alta);
+        et_amp_l1.setText(txt_amp_l1);
+        et_amp_l2.setText(txt_amp_l2);
+        et_amp_l3.setText(txt_amp_l3);
+        et_volt_l1.setText(txt_volt_l1);
+        et_volt_l2.setText(txt_volt_l2);
+        et_volt_l3.setText(txt_volt_l3);
+
+        if(!temp_serpentin.isEmpty()){
+            icon_camera_temp_serpentin.setVisibility(View.GONE);
+            icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+        }else{
+            icon_gallery_temp_serpentin.setVisibility(View.GONE);
+            icon_camera_temp_serpentin.setVisibility(View.VISIBLE);
+        }
+
+        if(!temp_ambiente.isEmpty()){
+            icon_camera_temp_ambiente.setVisibility(View.GONE);
+            icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_temp_ambiente.setVisibility(View.VISIBLE);
+            icon_gallery_temp_ambiente.setVisibility(View.GONE);
+        }
+
+        if(!presion_baja.isEmpty()){
+            icon_camera_presion_baja.setVisibility(View.GONE);
+            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_presion_baja.setVisibility(View.VISIBLE);
+            icon_gallery_presion_baja.setVisibility(View.GONE);
+        }
+
+        if(!presion_alta.isEmpty()){
+            icon_camera_presion_alta.setVisibility(View.GONE);
+            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_presion_alta.setVisibility(View.VISIBLE);
+            icon_gallery_presion_alta.setVisibility(View.GONE);
+        }
+
+        if(!amp_l1.isEmpty()){
+            icon_camera_amp_l1.setVisibility(View.GONE);
+            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l1.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l1.setVisibility(View.GONE);
+        }
+
+        if(!amp_l2.isEmpty()){
+            icon_camera_amp_l2.setVisibility(View.GONE);
+            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l2.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l2.setVisibility(View.GONE);
+        }
+
+        if(!amp_l3.isEmpty()){
+            icon_camera_amp_l3.setVisibility(View.GONE);
+            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_amp_l3.setVisibility(View.VISIBLE);
+            icon_gallery_amp_l3.setVisibility(View.GONE);
+        }
+
+        if(!volt_l1.isEmpty()){
+            icon_camera_volt_l1.setVisibility(View.GONE);
+            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l1.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l1.setVisibility(View.GONE);
+        }
+
+        if(!volt_l2.isEmpty()){
+            icon_camera_volt_l2.setVisibility(View.GONE);
+            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l2.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l2.setVisibility(View.GONE);
+        }
+
+        if(!volt_l3.isEmpty()){
+            icon_camera_volt_l3.setVisibility(View.GONE);
+            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        }else{
+            icon_camera_volt_l3.setVisibility(View.VISIBLE);
+            icon_gallery_volt_l3.setVisibility(View.GONE);
+        }
+    }
+
+    void validateLecturaDespuesUpload()
+    {
+         despues_et_temp_serpentin.setText(despues_txt_temp_serpentin);
+         despues_et_temp_ambiente.setText(despues_txt_temp_ambiente);
+         despues_et_presion_baja.setText(despues_txt_presion_baja);
+         despues_et_presion_alta.setText(despues_txt_presion_alta);
+         despues_et_amp_l1.setText(despues_txt_amp_l1);
+         despues_et_amp_l2.setText(despues_txt_amp_l2);
+         despues_et_amp_l3.setText(despues_txt_amp_l3);
+         despues_et_volt_l1.setText(despues_txt_volt_l1);
+         despues_et_volt_l2.setText(despues_txt_volt_l2);
+         despues_et_volt_l3.setText(despues_txt_volt_l3);
+
+        if(!despues_temp_serpentin.isEmpty()){
+            despues_icon_camera_temp_serpentin.setVisibility(View.GONE);
+            despues_icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_gallery_temp_serpentin.setVisibility(View.GONE);
+            despues_icon_camera_temp_serpentin.setVisibility(View.VISIBLE);
+        }
+
+        if(!despues_temp_ambiente.isEmpty()){
+            despues_icon_camera_temp_ambiente.setVisibility(View.GONE);
+            despues_icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_temp_ambiente.setVisibility(View.VISIBLE);
+            despues_icon_gallery_temp_ambiente.setVisibility(View.GONE);
+        }
+
+        if(!despues_presion_baja.isEmpty()){
+            despues_icon_camera_presion_baja.setVisibility(View.GONE);
+            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
+            despues_icon_gallery_presion_baja.setVisibility(View.GONE);
+        }
+
+        if(!despues_presion_alta.isEmpty()){
+            despues_icon_camera_presion_alta.setVisibility(View.GONE);
+            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
+            despues_icon_gallery_presion_alta.setVisibility(View.GONE);
+        }
+
+        if(!despues_amp_l1.isEmpty()){
+            despues_icon_camera_amp_l1.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l1.setVisibility(View.GONE);
+        }
+
+        if(!despues_amp_l2.isEmpty()){
+            despues_icon_camera_amp_l2.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l2.setVisibility(View.GONE);
+        }
+
+        if(!despues_amp_l3.isEmpty()){
+            despues_icon_camera_amp_l3.setVisibility(View.GONE);
+            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
+            despues_icon_gallery_amp_l3.setVisibility(View.GONE);
+        }
+
+        if(!despues_volt_l1.isEmpty()){
+            despues_icon_camera_volt_l1.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l1.setVisibility(View.GONE);
+        }
+
+        if(!despues_volt_l2.isEmpty()){
+            despues_icon_camera_volt_l2.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l2.setVisibility(View.GONE);
+        }
+
+        if(!despues_volt_l3.isEmpty()){
+            despues_icon_camera_volt_l3.setVisibility(View.GONE);
+            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+        }else{
+            despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
+            despues_icon_gallery_volt_l3.setVisibility(View.GONE);
+        }
+    }
+
     void actionTakePhoto(Intent in)
     {
         if (in.resolveActivity(getPackageManager()) != null) {
@@ -1319,7 +2090,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
             String image_type = cred.getData("image_type");
             String b64 = currentPhotoPath;
             switch (image_type){
-                //Antes
+                //Mantenimiento Antes
                 case "1":
                     image_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
                     Log.e("image_falla","1");
@@ -1372,7 +2143,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     if(image_carcaza.isEmpty())
                         System.out.println("image_carcaza NULL");
                     break;
-                //Después
+                //Mantenimiento Después
                 case "7":
                     despues_image_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
                     Log.e("despues_image_serpentin","1");
@@ -1424,6 +2195,168 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
                     if(despues_image_carcaza.isEmpty())
                         System.out.println("despues_image_carcaza NULL");
+                    break;
+                //LECTURA ANTES
+                case "13":
+                    temp_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("temp_serpentin","13");
+                    icon_camera_temp_serpentin.setVisibility(View.GONE);
+                    icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                    if(temp_serpentin.isEmpty())
+                        System.out.println("temp_serpentin NULL");
+                    break;
+                case "14":
+                    temp_ambiente = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("temp_ambiente","14");
+                    icon_camera_temp_ambiente.setVisibility(View.GONE);
+                    icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                    if(temp_ambiente.isEmpty())
+                        System.out.println("temp_ambiente NULL");
+                    break;
+                case "15":
+                    presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("presion_baja","3");
+                    icon_camera_presion_baja.setVisibility(View.GONE);
+                    icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(presion_baja.isEmpty())
+                        System.out.println("presion_baja NULL");
+                    break;
+                case "16":
+                    presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("presion_alta","16");
+                    icon_camera_presion_alta.setVisibility(View.GONE);
+                    icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(presion_alta.isEmpty())
+                        System.out.println("presion_alta NULL");
+                    break;
+                case "17":
+                    amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("amp_l1","17");
+                    icon_camera_amp_l1.setVisibility(View.GONE);
+                    icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(amp_l1.isEmpty())
+                        System.out.println("amp_l1 NULL");
+                    break;
+                case "18":
+                    amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("amp_l2","18");
+                    icon_camera_amp_l2.setVisibility(View.GONE);
+                    icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(amp_l2.isEmpty())
+                        System.out.println("amp_l2 NULL");
+                    break;
+                case "19":
+                    amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("amp_l3","19");
+                    icon_camera_amp_l3.setVisibility(View.GONE);
+                    icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(amp_l3.isEmpty())
+                        System.out.println("amp_l3 NULL");
+                    break;
+                case "20":
+                    volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("volt_l1","17");
+                    icon_camera_volt_l1.setVisibility(View.GONE);
+                    icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(volt_l1.isEmpty())
+                        System.out.println("volt_l1 NULL");
+                    break;
+                case "21":
+                    volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("volt_l2","18");
+                    icon_camera_volt_l2.setVisibility(View.GONE);
+                    icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(volt_l2.isEmpty())
+                        System.out.println("volt_l2 NULL");
+                    break;
+                case "22":
+                    volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("volt_l3","19");
+                    icon_camera_volt_l3.setVisibility(View.GONE);
+                    icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(volt_l3.isEmpty())
+                        System.out.println("volt_l3 NULL");
+                    break;
+                //LECTURA DESPUES
+                case "23":
+                    despues_temp_serpentin = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_temp_serpentin","20");
+                    despues_icon_camera_temp_serpentin.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                    if(despues_temp_serpentin.isEmpty())
+                        System.out.println("despues_temp_serpentin NULL");
+                    break;
+                case "24":
+                    despues_temp_ambiente = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_temp_ambiente","21");
+                    despues_icon_camera_temp_ambiente.setVisibility(View.GONE);
+                    despues_icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                    if(despues_temp_ambiente.isEmpty())
+                        System.out.println("despues_temp_ambiente NULL");
+                    break;
+                case "25":
+                    despues_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_presion_baja","22");
+                    despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                    if(despues_presion_baja.isEmpty())
+                        System.out.println("despues_presion_baja NULL");
+                    break;
+                case "26":
+                    despues_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_presion_alta","23");
+                    despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                    despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                    if(presion_alta.isEmpty())
+                        System.out.println("despues_presion_alta NULL");
+                    break;
+                case "27":
+                    despues_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_amp_l1","24");
+                    despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                    if(despues_amp_l1.isEmpty())
+                        System.out.println("despues_amp_l1 NULL");
+                    break;
+                case "28":
+                    despues_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_amp_l2","25");
+                    despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                    if(despues_amp_l2.isEmpty())
+                        System.out.println("despues_amp_l2 NULL");
+                    break;
+                case "29":
+                    despues_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_amp_l3","26");
+                    despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                    if(despues_amp_l3.isEmpty())
+                        System.out.println("despues_amp_l3 NULL");
+                    break;
+                case "30":
+                    despues_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_volt_l1","24");
+                    despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                    if(despues_volt_l1.isEmpty())
+                        System.out.println("despues_volt_l1 NULL");
+                    break;
+                case "31":
+                    despues_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_volt_l2","25");
+                    despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                    if(despues_volt_l2.isEmpty())
+                        System.out.println("despues_volt_l2 NULL");
+                    break;
+                case "32":
+                    despues_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    Log.e("despues_volt_l3","26");
+                    despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                    despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                    if(despues_volt_l3.isEmpty())
+                        System.out.println("despues_volt_l3 NULL");
                     break;
             }
         } catch (Exception e) {
@@ -1508,7 +2441,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                     String image_type = cred.getData("image_type");
                     String b64 = selectedImage.toString();
                     switch (image_type){
-                        //Antes
+                        //Mantenimiento Antes
                         case "1":
                             image_serpentin = Image.convert(bitmap);
                             Log.e("image_falla","1");
@@ -1557,7 +2490,7 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             if(image_carcaza.isEmpty())
                                 System.out.println("image_carcaza NULL");
                             break;
-                        //Depues
+                        //Mantenimiento Depues
                         case "7":
                             despues_image_serpentin = Image.convert(bitmap);
                             Log.e("despues_image_falla","1");
@@ -1605,6 +2538,168 @@ public class FichaMantenimientoActivity extends AppCompatActivity {
                             despues_icon_gallery_carcaza.setVisibility(View.VISIBLE);
                             if(despues_image_carcaza.isEmpty())
                                 System.out.println("despues_image_carcaza NULL");
+                            break;
+                        //LECTURA ANTES
+                        case "13":
+                            temp_serpentin = Image.convert(bitmap);
+                            Log.e("temp_serpentin","13");
+                            icon_camera_temp_serpentin.setVisibility(View.GONE);
+                            icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                            if(temp_serpentin.isEmpty())
+                                System.out.println("temp_serpentin NULL");
+                            break;
+                        case "14":
+                            temp_ambiente = Image.convert(bitmap);
+                            Log.e("temp_ambiente","14");
+                            icon_camera_temp_ambiente.setVisibility(View.GONE);
+                            icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                            if(temp_ambiente.isEmpty())
+                                System.out.println("temp_ambiente NULL");
+                            break;
+                        case "15":
+                            presion_baja = Image.convert(bitmap);
+                            Log.e("presion_baja","3");
+                            icon_camera_presion_baja.setVisibility(View.GONE);
+                            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                            if(presion_baja.isEmpty())
+                                System.out.println("presion_baja NULL");
+                            break;
+                        case "16":
+                            presion_alta = Image.convert(bitmap);
+                            Log.e("presion_alta","16");
+                            icon_camera_presion_alta.setVisibility(View.GONE);
+                            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                            if(presion_alta.isEmpty())
+                                System.out.println("presion_alta NULL");
+                            break;
+                        case "17":
+                            amp_l1 = Image.convert(bitmap);
+                            Log.e("amp_l1","17");
+                            icon_camera_amp_l1.setVisibility(View.GONE);
+                            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                            if(amp_l1.isEmpty())
+                                System.out.println("amp_l1 NULL");
+                            break;
+                        case "18":
+                            amp_l2 = Image.convert(bitmap);
+                            Log.e("amp_l2","18");
+                            icon_camera_amp_l2.setVisibility(View.GONE);
+                            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                            if(amp_l2.isEmpty())
+                                System.out.println("amp_l2 NULL");
+                            break;
+                        case "19":
+                            amp_l3 = Image.convert(bitmap);
+                            Log.e("amp_l3","19");
+                            icon_camera_amp_l3.setVisibility(View.GONE);
+                            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                            if(amp_l3.isEmpty())
+                                System.out.println("amp_l3 NULL");
+                            break;
+                        case "20":
+                            volt_l1 = Image.convert(bitmap);
+                            Log.e("volt_l1","17");
+                            icon_camera_volt_l1.setVisibility(View.GONE);
+                            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                            if(volt_l1.isEmpty())
+                                System.out.println("volt_l1 NULL");
+                            break;
+                        case "21":
+                            volt_l2 = Image.convert(bitmap);
+                            Log.e("volt_l2","18");
+                            icon_camera_volt_l2.setVisibility(View.GONE);
+                            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                            if(volt_l2.isEmpty())
+                                System.out.println("volt_l2 NULL");
+                            break;
+                        case "22":
+                            volt_l3 = Image.convert(bitmap);
+                            Log.e("volt_l3","19");
+                            icon_camera_volt_l3.setVisibility(View.GONE);
+                            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                            if(volt_l3.isEmpty())
+                                System.out.println("volt_l3 NULL");
+                            break;
+                        //LECTURA DESPUES
+                        case "23":
+                            despues_temp_serpentin = Image.convert(bitmap);
+                            Log.e("despues_temp_serpentin","20");
+                            despues_icon_camera_temp_serpentin.setVisibility(View.GONE);
+                            despues_icon_gallery_temp_serpentin.setVisibility(View.VISIBLE);
+                            if(despues_temp_serpentin.isEmpty())
+                                System.out.println("despues_temp_serpentin NULL");
+                            break;
+                        case "24":
+                            despues_temp_ambiente = Image.convert(bitmap);
+                            Log.e("despues_temp_ambiente","21");
+                            despues_icon_camera_temp_ambiente.setVisibility(View.GONE);
+                            despues_icon_gallery_temp_ambiente.setVisibility(View.VISIBLE);
+                            if(despues_temp_ambiente.isEmpty())
+                                System.out.println("despues_temp_ambiente NULL");
+                            break;
+                        case "25":
+                            despues_presion_baja = Image.convert(bitmap);
+                            Log.e("despues_presion_baja","22");
+                            despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                            if(despues_presion_baja.isEmpty())
+                                System.out.println("despues_presion_baja NULL");
+                            break;
+                        case "26":
+                            despues_presion_alta = Image.convert(bitmap);
+                            Log.e("despues_presion_alta","23");
+                            despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                            if(presion_alta.isEmpty())
+                                System.out.println("despues_presion_alta NULL");
+                            break;
+                        case "27":
+                            despues_amp_l1 = Image.convert(bitmap);
+                            Log.e("despues_amp_l1","24");
+                            despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                            if(despues_amp_l1.isEmpty())
+                                System.out.println("despues_amp_l1 NULL");
+                            break;
+                        case "28":
+                            despues_amp_l2 = Image.convert(bitmap);
+                            Log.e("despues_amp_l2","25");
+                            despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                            if(despues_amp_l2.isEmpty())
+                                System.out.println("despues_amp_l2 NULL");
+                            break;
+                        case "29":
+                            despues_amp_l3 = Image.convert(bitmap);
+                            Log.e("despues_amp_l3","26");
+                            despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                            if(despues_amp_l3.isEmpty())
+                                System.out.println("despues_amp_l3 NULL");
+                            break;
+                        case "30":
+                            despues_volt_l1 = Image.convert(bitmap);
+                            Log.e("despues_volt_l1","24");
+                            despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                            if(despues_volt_l1.isEmpty())
+                                System.out.println("despues_volt_l1 NULL");
+                            break;
+                        case "31":
+                            despues_volt_l2 = Image.convert(bitmap);
+                            Log.e("despues_volt_l2","25");
+                            despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                            if(despues_volt_l2.isEmpty())
+                                System.out.println("despues_volt_l2 NULL");
+                            break;
+                        case "32":
+                            despues_volt_l3 = Image.convert(bitmap);
+                            Log.e("despues_volt_l3","26");
+                            despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                            if(despues_volt_l3.isEmpty())
+                                System.out.println("despues_volt_l3 NULL");
                             break;
                     }
                 } catch (Exception e) {

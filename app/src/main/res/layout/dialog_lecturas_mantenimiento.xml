@@ -8,35 +8,6 @@
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp">
 
-    <!-- Falla -->
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:background="@color/verdePastel"
-                android:fontFamily="@font/gotham_medium"
-                android:gravity="center"
-                android:text="Limpieza de las partes de AA"
-                android:textColor="@color/blanco"
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-            
-        </LinearLayout>
-    </LinearLayout>
-
     <!-- Temperatura -->
     <LinearLayout
         android:layout_weight="1"
@@ -58,7 +29,7 @@
                 android:background="@color/verdePastel"
                 android:fontFamily="@font/gotham_medium"
                 android:gravity="center"
-                android:text="Evaporadora"
+                android:text="Temperatura (°C)"
                 android:textColor="@color/blanco"
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"/>
@@ -67,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <!-- Serpentin y Aletas -->
+                <!-- L1 -->
                 <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -75,34 +46,51 @@
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:text="Serpentín y aletas"
+                        android:layout_height="wrap_content"
+                        android:text="T(Serpentin)"
                         android:gravity="center"
                         android:fontFamily="@font/gotham_medium"
                         android:textColor="@color/negro"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/icon_cam_serpentin"
+                        <EditText
+                            android:id="@+id/et_temp_serpentin"
+                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:inputType="numberSigned"
+                            android:gravity="center"/>
+                        <TextView
+                            android:text="°C"
+                            android:layout_width="27dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/gotham_medium"
+                            android:visibility="gone"/>
+                        <ImageView
+                            android:id="@+id/icon_cam_temp_serpentin"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
                             android:src="@drawable/icon_cam2"
                             android:layout_gravity="center"/>
 
                         <ImageView
-                            android:id="@+id/icon_gallery_serpentin"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:id="@+id/icon_gallery_temp_serpentin"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
+
                     </LinearLayout>
 
                 </LinearLayout>
-                <!-- Bomba de condensado -->
+                <!-- L2 -->
                 <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
@@ -110,33 +98,48 @@
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:text="Bomba de condensado"
+                        android:layout_height="wrap_content"
+                        android:text="T(Ambiente)"
                         android:gravity="center"
                         android:fontFamily="@font/gotham_medium"
                         android:textColor="@color/negro"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:orientation="horizontal">
-   
-                        <ImageView
-                            android:id="@+id/icon_cam_bomba"
+                        <EditText
+                            android:id="@+id/et_temp_ambiente"
+                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:inputType="numberSigned"
+                            android:gravity="center"/>
+                        <TextView
+                            android:text="°C"
+                            android:layout_width="27dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="16sp"
                             android:layout_gravity="center"
-                            android:src="@drawable/icon_cam2"/>
+                            android:fontFamily="@font/gotham_medium"
+                            android:visibility="gone"/>
 
                         <ImageView
-                            android:id="@+id/icon_gallery_bomba"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:id="@+id/icon_cam_temp_ambiente"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_cam2" />
+
+                        <ImageView
+                            android:id="@+id/icon_gallery_temp_ambiente"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -156,6 +159,17 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@color/verdePastel"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="center"
+                android:text="Presión (PSI)"
+                android:textColor="@color/blanco"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp"/>
             <LinearLayout
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
@@ -170,28 +184,104 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cortinas de Aire"
+                        android:text="Baja"
                         android:fontFamily="@font/gotham_medium"
                         android:gravity="center"
                         android:textSize="15sp"
                         android:textColor="@color/negro"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_presion_baja"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:inputType="numberSigned"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:text="PSI"
+                            android:layout_width="27dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/gotham_medium"
+                            android:visibility="gone"/>
 
 
                         <ImageView
-                            android:id="@+id/icon_camera_cortina"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:id="@+id/icon_cam_presion_baja"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_cam2" />
 
                         <ImageView
-                            android:id="@+id/icon_gallery_cortina"
+                            android:id="@+id/icon_gallery_presion_baja"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_galery"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!-- Alta -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Alta"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="center"
+                        android:textSize="15sp"
+                        android:textColor="@color/negro"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_presion_alta"
+                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:inputType="numberSigned"
+                            android:gravity="center"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:text="PSI"
+                            android:layout_width="27dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/gotham_medium"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/icon_cam_presion_alta"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/icon_cam2" />
+
+                        <ImageView
+                            android:id="@+id/icon_gallery_presion_alta"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
@@ -204,7 +294,7 @@
     <!-- Eléctrica -->
     <LinearLayout
         android:layout_weight="1"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -230,7 +320,7 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:text="Condensadora"
+                android:text="Amperaje (A)"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
@@ -262,61 +352,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
-                            <!-- Serpentin y Aletas -->
-                            <LinearLayout
-                                android:layout_weight="1"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="30dp"
-                                    android:text="Serpentín y aletas"
-                                    android:gravity="center"
-                                    android:fontFamily="@font/gotham_medium"
-                                    android:textColor="@color/negro"/>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <ImageView
-                                        android:id="@+id/icon_cam_cond_serpentin"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:src="@drawable/icon_cam2"
-                                        android:layout_gravity="center"/>
-
-                                    <ImageView
-                                        android:id="@+id/icon_gallery_cond_serpentin"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_gravity="center"
-                                        android:src="@drawable/icon_galery"
-                                        android:visibility="gone"/>
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-                <!-- Voltaje -->
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:orientation="horizontal">
-                        <!-- Lineas Amperaje -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
                             <!-- L1 -->
                             <LinearLayout
                                 android:layout_weight="1"
@@ -325,26 +360,44 @@
                                 android:orientation="vertical">
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="30dp"
-                                    android:text="Ventilador"
+                                    android:layout_height="wrap_content"
+                                    android:text="L1"
                                     android:gravity="center"
                                     android:fontFamily="@font/gotham_medium"
                                     android:textColor="@color/negro"/>
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:orientation="horizontal">
-                                    <ImageView
-                                        android:id="@+id/icon_cam_ventilador"
+                                    <EditText
+                                        android:id="@+id/et_amp_l1"
+                                        android:layout_weight="1"
                                         android:layout_width="match_parent"
-                                        android:layout_height="30dp"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+                                    
+                                    <TextView
+                                        android:text="A"
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="16sp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:visibility="gone"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_amp_l1"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
-                                        android:id="@+id/icon_gallery_ventilador"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
+                                        android:id="@+id/icon_gallery_amp_l1"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:src="@drawable/icon_galery"
                                         android:visibility="gone"/>
@@ -360,27 +413,291 @@
                                 android:orientation="vertical">
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="30dp"
-                                    android:text="Carcaza metálica"
+                                    android:layout_height="wrap_content"
+                                    android:text="L2"
                                     android:gravity="center"
                                     android:fontFamily="@font/gotham_medium"
                                     android:textColor="@color/negro"/>
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_amp_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+
+                                    <TextView
+                                        android:text="A"
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="16sp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:visibility="gone"/>
 
                                     <ImageView
-                                        android:id="@+id/icon_cam_carcaza"
+                                        android:id="@+id/icon_cam_amp_l2"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_cam2"/>
+
+                                    <ImageView
+                                        android:id="@+id/icon_gallery_amp_l2"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L3 -->
+                            <LinearLayout
+                                android:id="@+id/linear_amp_l3"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="L3"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"
+                                    android:textColor="@color/negro"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_amp_l3"
+                                        android:layout_weight="1"
                                         android:layout_width="match_parent"
-                                        android:layout_height="30dp"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+
+                                    <TextView
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:gravity="center"
+                                        android:text="A"
+                                        android:textSize="16sp"
+                                        android:visibility="gone"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_amp_l3"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_cam2"/>
+
+                                    <ImageView
+                                        android:id="@+id/icon_gallery_amp_l3"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Voltaje -->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text="Voltaje (V)"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:background="@color/verdePastel"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="center"
+                        android:textColor="@color/blanco"
+                        android:textSize="15sp"/>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal">
+                        <!-- Lineas Amperaje -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <!-- L1 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/gotham_medium"
+                                    android:gravity="center"
+                                    android:text="L1"
+                                    android:textColor="@color/negro" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <EditText
+                                        android:id="@+id/et_volt_l1"
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+
+                                    <TextView
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:gravity="center"
+                                        android:text="V"
+                                        android:textSize="16sp"
+                                        android:visibility="gone" />
+
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l1"
+                                        android:layout_width="30dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="top"
+                                        android:src="@drawable/icon_cam2" />
+
+                                    <ImageView
+                                        android:id="@+id/icon_gallery_volt_l1"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L2 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="L2"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/gotham_medium"
+                                    android:textColor="@color/negro"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_volt_l2"
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+                                    <TextView
+                                        android:text="V"
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="16sp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:visibility="gone"/>
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l2"
+                                        android:layout_width="30dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_cam2"/>
+
+                                    <ImageView
+                                        android:id="@+id/icon_gallery_volt_l2"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/icon_galery"
+                                        android:visibility="gone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <!-- L3 -->
+                            <LinearLayout
+                                android:id="@+id/linear_volt_l3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/gotham_medium"
+                                    android:gravity="center"
+                                    android:text="L3"
+                                    android:textColor="@color/negro" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <EditText
+                                        android:id="@+id/et_volt_l3"
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:text="0"
+                                        android:inputType="numberDecimal"
+                                        android:gravity="center"/>
+                                    <TextView
+                                        android:text="V"
+                                        android:layout_width="27dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="16sp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/gotham_medium"
+                                        android:visibility="gone"/>
+
+                                    <ImageView
+                                        android:id="@+id/icon_cam_volt_l3"
+                                        android:layout_width="30dp"
+                                        android:layout_height="match_parent"
                                         android:layout_gravity="center"
                                         android:src="@drawable/icon_cam2" />
 
                                     <ImageView
-                                        android:id="@+id/icon_gallery_carcaza"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
+                                        android:id="@+id/icon_gallery_volt_l3"
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:src="@drawable/icon_galery"
                                         android:visibility="gone"/>

@@ -76,7 +76,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     LinearLayout tab_datos, tab_equipos, tab_servicios;
     ImageView btn_new_urgencia, icon_tuerca, icon_split, icon_check, btn_new_equipo,pdf_error;
     TextView tv_admin_cel, tv_admin, tv_tienda_tlf, tv_tienda, tv_email, tv_direccion;
-    TextView txt_settings, txt_equipos, txt_datos, observaciones;
+    TextView txt_settings, txt_equipos, txt_datos;
     Button dialog_btn_cancelar, dialog_btn_registrar;
     AlertDialog alertDialog;
     String tienda_id;
@@ -375,7 +375,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 dialog_hora = dialogView.findViewById(R.id.dialog_urgencia_hora);
                 dialog_btn_cancelar = dialogView.findViewById(R.id.dialog_btn_cancelar);
                 dialog_btn_registrar = dialogView.findViewById(R.id.dialog_btn_registrar);
-                observaciones = dialogView.findViewById(R.id.dialog_observaciones);
                 RadioButton radioUezu = dialogView.findViewById(R.id.radio_uezu);
                 RadioButton radioContratistas = dialogView.findViewById(R.id.radio_contratistas);
                 final TextView label_personal = dialogView.findViewById(R.id.label_personal);
@@ -503,7 +502,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
-                        registerMantenimiento(observaciones.getText().toString(), equipo_id, str_fecha, str_hora, personal_id);
+                        registerMantenimiento(equipo_id, str_fecha, str_hora, personal_id);
                     }
                 });
                 LinearLayout linear_fecha = dialogView.findViewById(R.id.linear_fecha);
@@ -881,7 +880,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         queue.add(stringRequest);
     }
 
-    public void registerMantenimiento(final String observaciones,final String equipo_id,final String fecha,final String hora,final String contratista_id)
+    public void registerMantenimiento(final String equipo_id,final String fecha,final String hora,final String contratista_id)
     {
         String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.crear_mantenimiento_url);
         Log.i("create_mantenimiento_url",url);
@@ -920,7 +919,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                 params.put("tienda_id", tienda_id);
                 params.put("usuario_id", cred.getData("user_id"));
                 params.put("equipo_id", equipo_id);
-                params.put("observaciones", observaciones);
+                params.put("observaciones", "");
                 params.put("fecha", fecha);
                 params.put("hora", hora);
                 params.put("personal_id", contratista_id);
