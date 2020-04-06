@@ -846,7 +846,6 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
 
     private void getTecnicos()
     {
-        tipo_proveedor = 2;
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTecnicos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -1144,17 +1143,27 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
                                 int i=0;
+                                int j=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     System.out.println(ob);
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
+                                        if(ob.get("tipo_equipo").equals("1")) {
+                                            equipos[i] = "Equipo " + ob.get("nro_equipo");
+                                        }else{
+                                            equipos[i] = "Cortina " + ob.get("nro_equipo");
+                                        }
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
                                     equipos_ids[i] = (String)ob.get("id");
-                                    i++;
-                                    setEquipo_count(i+1);
+                                    if(ob.get("tipo_equipo").equals("1")){
+                                        setEquipo_count(i+1);
+                                        i++;
+                                    }else{
+                                        setCortina_count(j+1);
+                                        j++;
+                                    }
                                 }
                                 equipos_adapter.notifyDataSetChanged();
                                 if(spinner_equipos!=null && equipos_adapter!=null) {
@@ -2317,8 +2326,7 @@ public class UrgenciasActivity extends AppCompatActivity implements View.OnClick
                             if (cliente.getIde_error() == 0) {
                                 Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
                             } else {
-//                                ((UrgenciasActivity)ctx).getEquiposTienda();
-                                ((UrgenciasActivity)ctx).getEquipos();
+                                ((UrgenciasActivity)ctx).getEquiposTienda();
                                 alertDialog.dismiss();
                             }
                         } catch (Exception e) {

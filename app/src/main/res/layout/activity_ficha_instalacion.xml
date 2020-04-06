@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom">
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:layout_marginTop="180dp"
+            android:layout_gravity="center">
+
+            <!-- Equipos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="Equipos"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btn_evaporadora"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:background="@drawable/btn_ingresar"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Evaporadora"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"/>
+                        <Button
+                            android:id="@+id/btn_condensadora"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:background="@drawable/btn_ingresar"
+                            android:text="Condensadora"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_cortina"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_ingresar"
+                            android:gravity="center"
+                            android:text="Cortina" />
+
+                        <Button
+                            android:id="@+id/btn_bomba"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_ingresar"
+                            android:baselineAligned="false"
+                            android:text="Bomba de condensado" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Mecánica-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="Sistema de refrigeración"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <!--Alta-->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_gravity="center|start">
+                        <!-- Línea de baja presión -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:layout_gravity="center"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Línea de baja presión (succión):"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent">
+                                            <ImageView
+                                                android:src="@drawable/icon_lista"
+                                                android:layout_width="28dp"
+                                                android:layout_height="28dp"/>
+                                        </LinearLayout>
+                                        <Spinner
+                                            android:id="@+id/spinner_linea_baja"
+                                            android:layout_width="110dp"
+                                            android:backgroundTint="@color/verdePastel"
+                                            android:layout_height="match_parent"
+                                            android:entries="@array/linea_baja"/>
+                                    </LinearLayout>                                    
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_linea_baja_mtr"
+                                        android:layout_width="99dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/linea_aux"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- Separador de aceite -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Separador de aceite:"/>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_separador"
+                                    android:layout_width="110dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/separador_aceite" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- Presostato de baja -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Presostato de baja:"/>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_presostato_baja"
+                                    android:layout_width="110dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/presostato"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp">
+                    <!-- Linea de alta presión -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Línea de alta presión (descarga):"/>
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_linea_alta"
+                                    android:layout_width="110dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/linea_alta"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_linea_alta_mtr"
+                                    android:layout_width="99dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/linea_aux"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- Filtro Secador -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Filtro secador:"/>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_secador"
+                                    android:layout_width="110dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/secador"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Presostato de alta -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Presostato de alta:" />
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_presostato_alta"
+                                    android:layout_width="110dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/presostato"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Eléctrica -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="Instalación Eléctrica"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <!--Cableado eléctrico (AWG):-->
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Cableado eléctrico -->
+                        <LinearLayout
+                            android:layout_weight="0.8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Cableado eléctrico (AWG):" />
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+
+                                    <Spinner
+                                        android:id="@+id/spinner_cableado"
+                                        android:layout_width="110dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/cableado_awg" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_cableado_mtr"
+                                        android:layout_width="99dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/linea_aux"/>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_weight="1.9"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:visibility="gone"
+                                android:src="@drawable/icon_cableado"
+                                android:layout_gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Interruptor termomagnético -->
+                        <LinearLayout
+                            android:layout_weight="0.8"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Interruptor termomagnético"/>
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_interruptor"
+                                        android:layout_width="110dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/interruptor"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_interruptor_mtr"
+                                        android:layout_width="99dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/linea_aux"/>
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Protector -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Protector de inversión de fase y voltaje:"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_protector"
+                                        android:layout_width="110dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/protector"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:text="Instalación de Drenaje"
+                        android:gravity="center"
+                        android:fontFamily="@font/gotham_medium"
+                        android:textSize="15sp"
+                        android:background="@color/verdePastel"
+                        android:textColor="@color/blanco"/>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Protector -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Bomba de condensado:"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_bomba"
+                                        android:layout_width="150dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/bomba"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Drenaje -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Tubería de drenaje: "/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_tuberia"
+                                        android:layout_width="150dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/drenaje"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+                        <!-- Bandeja -->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_medium"
+                                android:textColor="@color/negro"
+                                android:gravity="center|start"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Bandeja de condensado:"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="350dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:src="@drawable/icon_lista"
+                                            android:layout_width="28dp"
+                                            android:layout_height="28dp"/>
+                                    </LinearLayout>
+                                    <Spinner
+                                        android:id="@+id/spinner_bandeja"
+                                        android:layout_width="150dp"
+                                        android:backgroundTint="@color/verdePastel"
+                                        android:layout_height="match_parent"
+                                        android:entries="@array/bandeja"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Lecturas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="Registro Fotográfico"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp">
+                    <Button
+                        android:id="@+id/btn_fotos"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Equipos"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+                    <Button
+                        android:id="@+id/btn_lecturas"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:text="Lecturas"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="Firmas"
+                    android:gravity="center"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textSize="15sp"
+                    android:background="@color/verdePastel"
+                    android:textColor="@color/blanco"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp">
+                    <Button
+                        android:id="@+id/btn_firma_cliente"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:text="Cliente"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+
+                    <Button
+                        android:id="@+id/btn_firma_tecnico"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_ingresar"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Técnico"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btn_cerrar"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/plomoBackground"
+                    android:text="Cancelar"/>
+                <Button
+                    android:id="@+id/btn_registrar"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/verdePastel"
+                    android:text="Registrar"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
+

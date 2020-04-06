@@ -55,14 +55,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:orientation="horizontal">
+
                         <EditText
                             android:id="@+id/et_temp_serpentin"
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="0"
-                            android:inputType="numberSigned"
-                            android:gravity="center"/>
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:inputType="numberDecimal"
+                            android:text="0" />
+
                         <TextView
                             android:text="°C"
                             android:layout_width="27dp"
@@ -82,7 +84,7 @@
                         <ImageView
                             android:id="@+id/icon_gallery_temp_serpentin"
                             android:layout_width="30dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
@@ -113,7 +115,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="0"
-                            android:inputType="numberSigned"
+                            android:inputType="numberDecimal"
                             android:gravity="center"/>
                         <TextView
                             android:text="°C"
@@ -135,7 +137,7 @@
                         <ImageView
                             android:id="@+id/icon_gallery_temp_ambiente"
                             android:layout_width="30dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
@@ -225,7 +227,7 @@
                         <ImageView
                             android:id="@+id/icon_gallery_presion_baja"
                             android:layout_width="30dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>
@@ -281,7 +283,7 @@
                         <ImageView
                             android:id="@+id/icon_gallery_presion_alta"
                             android:layout_width="30dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:src="@drawable/icon_galery"
                             android:visibility="gone"/>

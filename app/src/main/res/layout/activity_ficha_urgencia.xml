@@ -323,7 +323,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:text="Observaciones de Instalación"
+                android:text="Consideraciones"
                 android:gravity="center"
                 android:fontFamily="@font/gotham_medium"
                 android:textSize="15sp"

@@ -101,6 +101,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
     String equipo_id = "0";
 
     int equipo_count = 0;
+    int cortina_count = 0;
     int tipo_nro_serie = 1;
     private static final int CODIGO_INTENT = 2;
 
@@ -250,6 +251,14 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
     public void setEquipo_count(int equipo_count) {
         this.equipo_count = equipo_count;
+    }
+
+    public int getCortina_count() {
+        return cortina_count;
+    }
+
+    public void setCortina_count(int cortina_count) {
+        this.cortina_count = cortina_count;
     }
 
     @Override
@@ -592,7 +601,6 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
 
     private void getTecnicos()
     {
-        tipo_proveedor = 2;
         String url = ctx.getApplicationContext().getString(R.string.base_url) + ctx.getApplicationContext().getString(R.string.getTecnicos_url);
         RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -780,6 +788,7 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                 String[] equipos = new String[respuesta.size()];
                                 equipos_ids = new String[respuesta.size()];
                                 int i=0;
+                                int j=0;
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     System.out.println(ob);
@@ -789,8 +798,13 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }
                                     equipos_ids[i] = (String)ob.get("id");
-                                    i++;
-                                    setEquipo_count(i+1);
+                                    if(ob.get("tipo_equipo").equals("1")){
+                                        setEquipo_count(i+1);
+                                        i++;
+                                    }else{
+                                        setCortina_count(j+1);
+                                        j++;
+                                    }
                                 }
                                 equipos_adapter.notifyDataSetChanged();
                                 if(spinner_equipos!=null && equipos_adapter!=null) {
@@ -2046,9 +2060,123 @@ public class MantenimientosActivity extends AppCompatActivity implements View.On
         choose_cortina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ctx,"Pronto estará disponible",Toast.LENGTH_SHORT).show();
+                showModalRegisterCortina();
             }
         });
         alertDialogChooser.show();
+    }
+
+    /**************************************/
+    EditText et_cortina_marca,et_cortina_modelo,et_cortina_nro_serie;
+    ImageView icon_cortina_scan;
+    Button btn_cortina_cancelar,btn_cortina_registrar;
+
+    private void showModalRegisterCortina()
+    {
+        viewDialog.showDialog();
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_new_cortina, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        et_cortina_marca = dialogView.findViewById(R.id.et_cortina_marca);
+        et_cortina_modelo = dialogView.findViewById(R.id.et_cortina_modelo);
+        et_cortina_nro_serie = dialogView.findViewById(R.id.et_cortina_nro_serie);
+        icon_cortina_scan = dialogView.findViewById(R.id.icon_cortina_scan);
+
+        icon_cortina_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tipo_nro_serie=3;
+                escanear();
+            }
+        });
+
+        btn_cortina_cancelar = dialogView.findViewById(R.id.btn_cortina_cancelar);
+        btn_cortina_registrar = dialogView.findViewById(R.id.btn_cortina_registrar);
+
+        final AlertDialog alertDialog = builder.create();
+
+        btn_cortina_registrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registrarCortina(alertDialog);
+            }
+        });
+
+        btn_cortina_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        viewDialog.hideDialog(1.5);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog.show();
+            }
+        }, 1500);
+    }
+
+    private void registrarCortina(final AlertDialog alertDialog)
+    {
+        Log.e("tienda_id",tienda_id);
+        Log.e("nro_equipo",getCortina_count()+"");
+        Log.e("marca",et_cortina_marca.getText().toString());
+        Log.e("modelo",et_cortina_modelo.getText().toString());
+        Log.e("nro_serie",et_cortina_nro_serie.getText().toString());
+
+        String url=ctx.getApplicationContext().getString(R.string.base_url)+ctx.getApplicationContext().getString(R.string.register_cortina_url);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("registerCortina_response: " + response);
+                        try {
+                            RespuestaResponse cliente = new Gson().fromJson(response, RespuestaResponse.class);
+                            JSONParser parser = new JSONParser();
+                            JSONArray respuesta = (JSONArray) parser.parse((String) cliente.getRespuesta());
+
+                            if (cliente.getIde_error() == 0) {
+                                Toast.makeText(ctx, cliente.getDes_error(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                ((MantenimientosActivity)ctx).getEquiposTienda();
+                                alertDialog.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("registerCortina_error1: " + e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("registerCortina_error2: " + error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                String nro_equipo = String.valueOf((getCortina_count()));
+                params.put("tienda_id", tienda_id);
+                params.put("nro_equipo", nro_equipo);
+                params.put("tipo","2");
+                //Evaporadora
+                params.put("marca", et_cortina_marca.getText().toString());
+                params.put("modelo", et_cortina_modelo.getText().toString());
+                params.put("nro_serie", et_cortina_nro_serie.getText().toString());
+                return params;
+            }
+        };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }

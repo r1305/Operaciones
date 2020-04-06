@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navInstalaciones"
+        android:title="Instalaciones"
+        android:iconTint="@color/negro"/>
+    <item
+        android:id="@+id/navMantenimientos"
+        android:title="Mantenimientos"
+        android:iconTint="@color/negro"/>
+
+    <item
+        android:id="@+id/navUrgencias"
+        android:title="Urgencias"
+        android:iconTint="@color/negro"/>
+</menu>

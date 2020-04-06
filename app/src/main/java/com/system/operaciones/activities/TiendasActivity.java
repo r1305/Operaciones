@@ -94,7 +94,7 @@ public class TiendasActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        this.finish();
         return true;
     }
 

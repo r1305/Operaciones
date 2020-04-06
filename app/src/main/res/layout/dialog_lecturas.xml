@@ -11,7 +11,7 @@
     <!-- Falla -->
     <LinearLayout
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -45,7 +45,7 @@
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="center"
                         android:gravity="center">
@@ -74,7 +74,7 @@
     <!-- Temperatura -->
     <LinearLayout
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -124,7 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="0"
-                            android:inputType="numberSigned"
+                            android:inputType="numberDecimal"
                             android:gravity="center"/>
                         <TextView
                             android:text="°C"
@@ -168,7 +168,7 @@
                         android:textColor="@color/negro"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="45dp"
                         android:orientation="horizontal">
                         <EditText
                             android:id="@+id/et_temperatura_l2"
@@ -176,7 +176,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="0"
-                            android:inputType="numberSigned"
+                            android:inputType="numberDecimal"
                             android:gravity="center"/>
                         <TextView
                             android:text="°C"
@@ -212,7 +212,7 @@
     <!-- Presión -->
     <LinearLayout
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -255,7 +255,7 @@
                         android:textColor="@color/negro"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="45dp"
                         android:orientation="horizontal">
 
                         <EditText
@@ -432,7 +432,7 @@
                                     android:textColor="@color/negro"/>
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="40dp"
+                                    android:layout_height="45dp"
                                     android:orientation="horizontal">
                                     <EditText
                                         android:id="@+id/et_amperaje_l1"
@@ -621,7 +621,7 @@
                                     android:textColor="@color/negro"/>
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="40dp"
+                                    android:layout_height="45dp"
                                     android:orientation="horizontal">
                                     <EditText
                                         android:id="@+id/et_voltaje_l1"
@@ -631,15 +631,7 @@
                                         android:text="0"
                                         android:inputType="numberDecimal"
                                         android:gravity="center"/>
-                                    <TextView
-                                        android:text="V"
-                                        android:layout_width="27dp"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:textSize="16sp"
-                                        android:layout_gravity="center"
-                                        android:fontFamily="@font/gotham_medium"
-                                        android:visibility="gone"/>
+
                                     <ImageView
                                         android:id="@+id/icon_cam_volt_l1"
                                         android:layout_width="30dp"

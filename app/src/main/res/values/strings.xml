@@ -52,13 +52,24 @@
     <string name="getFases_url">ocupa/equipo/getFases.php</string>
     <string name="getRefrigerantes_url">ocupa/equipo/getRefrigerantes.php</string>
 
+    <!-- Instalaciones -->
+    <string name="pdf_url_instalacion">https://uezuperu.com/app/files/pdf/instalaciones/</string>
+    <string name="getInstalaciones_url">ocupa/instalacion/getInstalaciones.php</string>
+    <string name="getInstalacionesByUsuario_url">ocupa/instalacion/getInstalacionesByUsuario.php</string>
+    <string name="getInstalacion_url">ocupa/instalacion/getInstalacion.php</string>
+    <string name="update_instalacion_url">ocupa/instalacion/updateInstalacion.php</string>
+    <string name="crear_instalacion_url">ocupa/instalacion/register.php</string>
+    <string name="getEquipoInstalacion_url">ocupa/instalacion/getEquipo.php</string>
+    <string name="register_ficha_instalacion_url">ocupa/instalacion/registerFicha.php</string>
+    <string name="crear_ficha_instalacion_url">ocupa/instalacion/createFicha.php</string>
+
     <!-- Mantenimientos -->
     <string name="pdf_url_mantenimiento">https://uezuperu.com/app/files/pdf/mantenimientos/</string>
     <string name="getMantenimientos_url">ocupa/mantenimiento/getMantenimientos.php</string>
     <string name="getMantenimientosByUsuario_url">ocupa/mantenimiento/getMantenimientosByUsuario.php</string>
     <string name="getMantenimiento_url">ocupa/mantenimiento/getMantenimiento.php</string>
     <string name="getDatosTecnico_url">ocupa/mantenimiento/getDatosTecnico.php</string>
-    <string name="update_mantenimiento_url">ocupa/mantenimiento/updateMantenimiento.php</string>
+    <string name="update_mantenimiento_url">ocupa/mantenimiento/updateInstalacion.php</string>
     <string name="crear_mantenimiento_url">ocupa/mantenimiento/register.php</string>
     <string name="getEquipoMantenimiento_url">ocupa/mantenimiento/getEquipo.php</string>
     <string name="register_ficha_mantenimiento_url">ocupa/mantenimiento/registerFicha.php</string>
@@ -70,7 +81,9 @@
     <string name="equipo_string_tipo"><u>Tipo:</u></string>
     <string name="equipo_string_voltaje"><u>Voltaje:</u></string>
     <string name="title_new_urgencia"><u>Nueva Urgencia</u></string>
+    <string name="title_new_instalacion"><u>Nueva Instalacion</u></string>
     <string name="title_update_urgencia"><u>Actualizar Urgencia</u></string>
+    <string name="title_update_instalacion"><u>Actualizar Instalacion</u></string>
     <string name="title_new_mantenimiento"><u>Nuevo Mantenimiento</u></string>
     <string name="title_update_mantenimiento"><u>Actualizar Mantenimiento</u></string>
 
@@ -125,4 +138,92 @@
         <item>Se requiere andamio de 3 cuerpos</item>
         <item>Otros</item>
     </array>
+
+    <array name="linea_alta">
+        <item>1/4"</item>
+        <item>3/8"</item>
+        <item>1/2"</item>
+        <item>5/8"</item>
+    </array>
+    <array name="protector">
+        <item>No</item>
+        <item>Si</item>
+    </array>
+    <array name="bandeja">
+        <item>No</item>
+        <item>Si</item>
+    </array>
+    <array name="bomba">
+        <item>Standard</item>
+        <item>Mini</item>
+        <item>No</item>
+    </array>
+    <array name="drenaje">
+        <item>1/2"</item>
+        <item>3/4"</item>
+    </array>
+    <array name="cableado_awg">
+        <item>2x10</item>
+        <item>2x12</item>
+        <item>2x14</item>
+        <item>3x10</item>
+        <item>3x12</item>
+        <item>3x14</item>
+    </array>
+
+    <array name="interruptor">
+        <item>2x20A</item>
+        <item>2x30A</item>
+        <item>2x40A</item>
+        <item>32x20A</item>
+        <item>3x30A</item>
+        <item>3x40A</item>
+    </array>
+    <array name="linea_baja">
+        <item>5/8"</item>
+        <item>3/4"</item>
+        <item>7/8"</item>
+    </array>
+
+    <array name="separador_aceite">
+        <item>No</item>
+        <item>1/2"</item>
+        <item>5/8"</item>
+        <item>7/8"</item>
+    </array>
+
+    <array name="secador">
+        <item>1/2"</item>
+        <item>3/8"</item>
+        <item>5/8"</item>
+    </array>
+
+    <array name="presostato">
+        <item>No</item>
+        <item>Si</item>
+    </array>
+
+    <array name="linea_aux">
+        <item>1m</item>
+        <item>2m</item>
+        <item>3m</item>
+        <item>4m</item>
+        <item>5m</item>
+        <item>6m</item>
+        <item>7m</item>
+        <item>8m</item>
+        <item>9m</item>
+        <item>10m</item>
+        <item>11m</item>
+        <item>12m</item>
+        <item>13m</item>
+        <item>14m</item>
+        <item>15m</item>
+        <item>16m</item>
+        <item>17m</item>
+        <item>18m</item>
+        <item>19m</item>
+        <item>20m</item>
+    </array>
+
 </resources>

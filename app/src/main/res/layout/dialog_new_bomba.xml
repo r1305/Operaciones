@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:gravity="center"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_marginTop="6dp"
+        android:text="Nueva Bomba de Condensado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textColor="@color/verdePastel"/>
+    <LinearLayout
+        android:id="@+id/linear_evaporadora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp">
+
+        <!-- Marcas -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marca"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <EditText
+                android:id="@+id/et_cortina_marca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/verdePastel"
+                android:inputType="textCapCharacters"
+                />
+        </LinearLayout>
+
+        <!-- Modelo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Modelo"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+            <EditText
+                android:id="@+id/et_cortina_modelo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/verdePastel"
+                android:inputType="textCapCharacters"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="16dp">
+            <ImageView
+                android:id="@+id/icon_cortina_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_code"
+                android:layout_gravity="center"/>
+            <EditText
+                android:id="@+id/et_cortina_nro_serie"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/verdePastel"
+                android:outlineAmbientShadowColor="@color/celesteClaro"
+                android:layout_marginStart="10dp"
+                android:inputType="textCapCharacters"
+                android:hint="Nro. Serie"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Botones -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_cortina_cancelar"
+            android:text="Cancelar"
+            android:layout_weight="1"
+            android:background="@color/plomoBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:id="@+id/btn_cortina_registrar"
+            android:text="Registrar"
+            android:layout_weight="1"
+            android:background="@color/verdePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="25dp">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <LinearLayout
+            android:layout_weight="2.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_run"
+                android:gravity="end"
+                android:layout_gravity="end"/>
+        </LinearLayout>
+        <TextView
+            android:layout_weight="1"
+            android:text="@string/title_new_instalacion"
+            android:textColor="@color/negro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start|center"
+            android:textSize="21sp"
+            android:fontFamily="@font/gotham_medium"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_fecha"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/dialog_icon_calendar"
+                    android:src="@drawable/icon_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Fecha Atención"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:id="@+id/dialog_urgencia_fecha"
+                    android:editable="false"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/dialog_icon_clock"
+                    android:src="@drawable/icon_clock"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:tint="@color/negro"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:text="Hora Atención"
+                    android:editable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:id="@+id/dialog_urgencia_hora"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_personal"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:src="@drawable/icon_casco"
+                    android:gravity="center"
+                    android:tint="@color/negro"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/dialog_proveedor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_uezu"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Uezu"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radio_contratistas"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contratistas"/>
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/label_personal"
+                    android:text="Técnicos"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/dialog_spinner_contratistas"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Observaciones -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/icon_alert"
+                    android:layout_gravity="top"
+                    android:tint="@color/negro"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Observaciones"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:textColor="@color/verdePastel"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+                <EditText
+                    android:id="@+id/dialog_observaciones"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/verdePastel"
+                    android:outlineAmbientShadowColor="@color/celesteClaro"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- Adjunto -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <ImageView
+            android:id="@+id/img_adjunto"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_cam2"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/img_adjunto_view"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_galery"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+        <TextView
+            android:text="Adjunto"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:textColor="@color/verdePastel"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <!-- Botones -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <Button
+            android:id="@+id/dialog_btn_cancelar"
+            android:text="Cancelar"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/plomoBackground"/>
+        <Button
+            android:id="@+id/dialog_btn_registrar"
+            android:text="Registrar"
+            android:layout_weight="1"
+            android:background="@color/verdePastel"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

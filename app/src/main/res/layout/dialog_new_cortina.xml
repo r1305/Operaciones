@@ -73,7 +73,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
             android:paddingEnd="16dp">
             <ImageView
                 android:id="@+id/icon_cortina_scan"

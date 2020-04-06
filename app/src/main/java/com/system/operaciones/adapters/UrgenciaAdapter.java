@@ -63,8 +63,8 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
     private List<JSONObject> l = new ArrayList<>();
     private EditText dialog_hora,dialog_fecha,observaciones;
     private ImageView icon_calendar,icon_clock;
-    private Button btn_cancelar,btn_update;
     private AlertDialog alertDialog;
+    private Button btn_cancelar,btn_update;
     private String str_fecha,str_hora;
     private String spinner_id;
     private int tipo_proveedor=1;
@@ -492,7 +492,11 @@ public class UrgenciaAdapter extends RecyclerView.Adapter<UrgenciaAdapter.ViewHo
                                 for(Object o: respuesta){
                                     JSONObject ob = (JSONObject)o;
                                     if(!ob.get("id").equals("0")){
-                                        equipos[i] = "Equipo "+ob.get("nro_equipo");
+                                        if(ob.get("tipo_equipo").equals("1")) {
+                                            equipos[i] = "Equipo " + ob.get("nro_equipo");
+                                        }else{
+                                            equipos[i] = "Cortina " + ob.get("nro_equipo");
+                                        }
                                     }else{
                                         equipos[i] = (String)ob.get("evap_nro_serie");
                                     }

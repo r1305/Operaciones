@@ -72,21 +72,20 @@
         <activity
             android:name=".activities.FichaUrgenciaActivity"
             android:theme="@style/YesBar"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator"
+            android:parentActivityName=".activities.UrgenciasActivity"/>
         <activity
             android:name=".activities.FichaMantenimientoActivity"
             android:theme="@style/YesBar"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator"
+            android:parentActivityName=".activities.MantenimientosActivity"/>
         <activity
             android:name=".activities.TiendasActivity"
             android:theme="@style/YesBar"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator"
+            android:parentActivityName=".activities.ClientesActivity"/>
         <activity
             android:name=".activities.ClientesActivity"
-            android:theme="@style/YesBar"
-            tools:ignore="InnerclassSeparator" />
-        <activity
-            android:name=".activities.InstalacionDetailActivity"
             android:theme="@style/YesBar"
             tools:ignore="InnerclassSeparator" />
         <activity
@@ -119,6 +118,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.FichaInstalacionActivity"
+            android:theme="@style/YesBar"
+            tools:ignore="InnerclassSeparator"
+            android:parentActivityName=".activities.InstalacionesActivity"/>
     </application>
 
 </manifest>

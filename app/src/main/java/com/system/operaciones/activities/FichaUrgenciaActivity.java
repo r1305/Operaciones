@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -48,6 +52,7 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,17 +116,35 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     EditText et_otros;
     Spinner spinner_observaciones;
 
+    JSONObject datos = new JSONObject();
+    String datos_guardados = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ficha_urgencia);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle("Ficha Urgencia");
 
         ctx = this;
         cred = new Credentials(ctx);
         id = getIntent().getStringExtra("id");
+        datos_guardados = cred.getData("3-"+id);
+        System.out.println("datos_guardados: "+datos_guardados);
+        if(!datos_guardados.isEmpty()){
+            try {
+                datos = (JSONObject)new JSONParser().parse(datos_guardados);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                System.out.println("parse: "+e);
+            }
+        }else{
+            datos.put("modulo",3);
+            datos.put("ficha_id",id);
+        }
+
+        cred.save_data("3-"+id,datos.toString());
         tienda_id = getIntent().getStringExtra("tienda_id");
         getEquipos(tienda_id);
         viewDialog = new ViewDialog(this);
@@ -173,6 +196,11 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 diagnostico_id = diagnosticos_id[i];
+                if(spinner_diagnosticos.getSelectedItem().equals("Otros")){
+                    et_diagnostico.setVisibility(View.VISIBLE);
+                }else{
+                    et_diagnostico.setVisibility(View.GONE);
+                }
                 getSolucion(diagnostico_id);
             }
 
@@ -243,7 +271,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
                 LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
 
-                if(fase.equals("1")){
+                if(fase==null || fase.equals("1")){
                     linear_amp_l3.setVisibility(View.GONE);
                     linear_volt_l3.setVisibility(View.GONE);
                 }else{
@@ -252,7 +280,6 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 }
 
                 validateUpload();
-
                 temp_l1.setText(et_temp_l1);
                 temp_l2.setText(et_temp_l2);
 
@@ -288,6 +315,18 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                         et_volt_l1=volt_l1.getText().toString();
                         et_volt_l2=volt_l2.getText().toString();
                         et_volt_l3=volt_l3.getText().toString();
+
+                        datos.put("et_temp_l1",et_temp_l1);
+                        datos.put("et_temp_l2",et_temp_l2);
+                        datos.put("et_presion_baja",et_presion_baja);
+                        datos.put("et_presion_alta",et_presion_alta);
+                        datos.put("et_amp_l1",et_amp_l1);
+                        datos.put("et_amp_l2",et_amp_l2);
+                        datos.put("et_amp_l3",et_amp_l3);
+                        datos.put("et_volt_l1",et_volt_l1);
+                        datos.put("et_volt_l2",et_volt_l2);
+                        datos.put("et_volt_l3",et_volt_l3);
+                        cred.save_data("3-"+id,datos.toString());
                         alertDialog.dismiss();
                         Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                     }
@@ -346,7 +385,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.e("presion_baja","1");
-                        cred.save_data("image_type","5");
+                        cred.save_data("image_type","4");
                         openChooser();
                     }
                 });
@@ -354,14 +393,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_baja,5);
+                        showPreview(image_presion_baja,4);
                     }
                 });
 
                 icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","6");
+                        cred.save_data("image_type","5");
                         openChooser();
                     }
                 });
@@ -369,14 +408,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_presion_alta,6);
+                        showPreview(image_presion_alta,5);
                     }
                 });
 
                 icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","7");
+                        cred.save_data("image_type","6");
                         openChooser();
                     }
                 });
@@ -384,14 +423,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l1,7);
+                        showPreview(image_amp_l1,6);
                     }
                 });
 
                 icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","8");
+                        cred.save_data("image_type","7");
                         openChooser();
                     }
                 });
@@ -399,14 +438,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l2,8);
+                        showPreview(image_amp_l2,7);
                     }
                 });
 
                 icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","9");
+                        cred.save_data("image_type","8");
                         openChooser();
                     }
                 });
@@ -414,14 +453,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_amp_l3,9);
+                        showPreview(image_amp_l3,8);
                     }
                 });
 
                 icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","10");
+                        cred.save_data("image_type","9");
                         openChooser();
                     }
                 });
@@ -429,14 +468,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l1,10);
+                        showPreview(image_volt_l1,9);
                     }
                 });
 
                 icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","11");
+                        cred.save_data("image_type","10");
                         openChooser();
                     }
                 });
@@ -444,14 +483,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l2,11);
+                        showPreview(image_volt_l2,10);
                     }
                 });
 
                 icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","12");
+                        cred.save_data("image_type","11");
                         openChooser();
                     }
                 });
@@ -459,7 +498,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(image_volt_l3,12);
+                        showPreview(image_volt_l3,11);
                     }
                 });
 
@@ -526,7 +565,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 LinearLayout linear_amp_l3 = dialogView.findViewById(R.id.linear_amp_l3);
                 LinearLayout linear_volt_l3 = dialogView.findViewById(R.id.linear_volt_l3);
 
-                if(fase.equals("1")){
+                if(fase==null || fase.equals("1")){
                     linear_amp_l3.setVisibility(View.GONE);
                     linear_volt_l3.setVisibility(View.GONE);
                 }else{
@@ -547,18 +586,30 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 btn_lectura_guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        et_despues_temp_l1=temp_l1.getText().toString();
-                        et_despues_temp_l2=temp_l2.getText().toString();
-                        et_despues_presion_baja=presion_baja.getText().toString();
-                        et_despues_presion_alta=presion_alta.getText().toString();
-                        et_despues_amp_l1=amp_l1.getText().toString();
-                        et_despues_amp_l2=amp_l2.getText().toString();
-                        et_despues_amp_l3=amp_l3.getText().toString();
-                        et_despues_volt_l1=volt_l1.getText().toString();
-                        et_despues_volt_l2=volt_l2.getText().toString();
-                        et_despues_volt_l3=volt_l3.getText().toString();
+                        et_despues_temp_l1=despues_temp_l1.getText().toString();
+                        et_despues_temp_l2=despues_temp_l2.getText().toString();
+                        et_despues_presion_baja=despues_presion_baja.getText().toString();
+                        et_despues_presion_alta=despues_presion_alta.getText().toString();
+                        et_despues_amp_l1=despues_amp_l1.getText().toString();
+                        et_despues_amp_l2=despues_amp_l2.getText().toString();
+                        et_despues_amp_l3=despues_amp_l3.getText().toString();
+                        et_despues_volt_l1=despues_volt_l1.getText().toString();
+                        et_despues_volt_l2=despues_volt_l2.getText().toString();
+                        et_despues_volt_l3=despues_volt_l3.getText().toString();
                         alertDialog.dismiss();
                         Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+
+                        datos.put("et_despues_temp_l1",et_despues_temp_l1);
+                        datos.put("et_despues_temp_l2",et_despues_temp_l2);
+                        datos.put("et_despues_presion_baja",et_despues_presion_baja);
+                        datos.put("et_despues_presion_alta",et_despues_presion_alta);
+                        datos.put("et_despues_amp_l1",et_despues_amp_l1);
+                        datos.put("et_despues_amp_l2",et_despues_amp_l2);
+                        datos.put("et_despues_amp_l3",et_despues_amp_l3);
+                        datos.put("et_despues_volt_l1",et_despues_volt_l1);
+                        datos.put("et_despues_volt_l2",et_despues_volt_l2);
+                        datos.put("et_despues_volt_l3",et_despues_volt_l3);
+                        cred.save_data("3-"+id,datos.toString());
                     }
                 });
 
@@ -568,8 +619,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_camera_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("despues_falla","13");
-                        cred.save_data("image_type","13");
+                        Log.e("despues_falla","12");
+                        cred.save_data("image_type","12");
                         openChooser();
                     }
                 });
@@ -577,14 +628,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_falla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_falla,13);
+                        showPreview(despues_image_falla,12);
                     }
                 });
 
                 despues_icon_camera_temp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","14");
+                        cred.save_data("image_type","13");
                         openChooser();
                     }
                 });
@@ -592,14 +643,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_temp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l1,14);
+                        showPreview(despues_image_temp_l1,13);
                     }
                 });
 
                 despues_icon_camera_temp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","15");
+                        cred.save_data("image_type","14");
                         openChooser();
                     }
                 });
@@ -607,15 +658,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_temp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_temp_l2,15);
+                        showPreview(despues_image_temp_l2,14);
                     }
                 });
 
                 despues_icon_camera_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("despues_presion_baja","17");
-                        cred.save_data("image_type","17");
+                        Log.e("despues_presion_baja","15");
+                        cred.save_data("image_type","15");
                         openChooser();
                     }
                 });
@@ -623,14 +674,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_presion_baja.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_presion_baja,17);
+                        showPreview(despues_image_presion_baja,15);
                     }
                 });
 
                 despues_icon_camera_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","18");
+                        cred.save_data("image_type","16");
                         openChooser();
                     }
                 });
@@ -638,14 +689,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_presion_alta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_presion_alta,18);
+                        showPreview(despues_image_presion_alta,16);
                     }
                 });
 
                 despues_icon_camera_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","19");
+                        cred.save_data("image_type","17");
                         openChooser();
                     }
                 });
@@ -653,14 +704,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_amp_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l1,19);
+                        showPreview(despues_image_amp_l1,17);
                     }
                 });
 
                 despues_icon_camera_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","20");
+                        cred.save_data("image_type","18");
                         openChooser();
                     }
                 });
@@ -668,14 +719,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_amp_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l2,20);
+                        showPreview(despues_image_amp_l2,18);
                     }
                 });
 
                 despues_icon_camera_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","21");
+                        cred.save_data("image_type","19");
                         openChooser();
                     }
                 });
@@ -683,14 +734,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_amp_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_amp_l3,21);
+                        showPreview(despues_image_amp_l3,19);
                     }
                 });
 
                 despues_icon_camera_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","22");
+                        cred.save_data("image_type","20");
                         openChooser();
                     }
                 });
@@ -698,14 +749,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_volt_l1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l1,22);
+                        showPreview(despues_image_volt_l1,20);
                     }
                 });
 
                 despues_icon_camera_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","23");
+                        cred.save_data("image_type","21");
                         openChooser();
                     }
                 });
@@ -713,14 +764,14 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_volt_l2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l2,23);
+                        showPreview(despues_image_volt_l2,21);
                     }
                 });
 
                 despues_icon_camera_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cred.save_data("image_type","24");
+                        cred.save_data("image_type","22");
                         openChooser();
                     }
                 });
@@ -728,7 +779,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 despues_icon_gallery_volt_l3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPreview(despues_image_volt_l3,24);
+                        showPreview(despues_image_volt_l3,22);
                     }
                 });
 
@@ -781,11 +832,30 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!fase.equals("1")){
+                if(fase!=null && !fase.equals("1")){
 
                     if(image_amp_l3.isEmpty())
                     {
                         Toast.makeText(ctx,"Debe cargar foto antes de la reparación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                if(image_volt_l1.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de voltaje en la Línea 1",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_volt_l2.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto antes de la reparación de voltaje en la Línea 2",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(fase!=null && !fase.equals("1")){
+
+                    if(image_volt_l3.isEmpty())
+                    {
+                        Toast.makeText(ctx,"Debe cargar foto antes de la reparación de voltaje en la Línea 3",Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -824,13 +894,64 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 2",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!fase.equals("1")){
+                if(fase!=null && !fase.equals("1")){
 
                     if(despues_image_amp_l3.isEmpty())
                     {
                         Toast.makeText(ctx,"Debe cargar foto después de la repación de amperaje en la Línea 3",Toast.LENGTH_SHORT).show();
                         return;
                     }
+                }
+                if(despues_image_volt_l1.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la reparación de voltaje en la Línea 1",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(despues_image_volt_l2.isEmpty())
+                {
+                    Toast.makeText(ctx,"Debe cargar foto después de la reparación de voltaje en la Línea 2",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(fase!=null && !fase.equals("1")){
+
+                    if(despues_image_volt_l3.isEmpty())
+                    {
+                        Toast.makeText(ctx,"Debe cargar foto después de la reparación de voltaje en la Línea 3",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if(image_signature_cliente.isEmpty()){
+                    Toast.makeText(ctx,"Debe hacer firmar al cliente",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(name_cliente.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar NOMBRE del cliente",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(dni_cliente.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar DNI del cliente",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(cargo_cliente.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar CARGO del cliente",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(image_signature_tecnico.isEmpty()){
+                    Toast.makeText(ctx,"Debes firmar antes de finalizar",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(name_tecnico.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar NOMBRE del tecnico",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(dni_tecnico.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar DNI del tecnico",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(cargo_tecnico.isEmpty()){
+                    Toast.makeText(ctx,"Debe ingresar CARGO del tecnico",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 registrarFicha(id);
             }
@@ -846,12 +967,33 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
+                Button limpiar = dialogView.findViewById(R.id.dialog_signature_btn_limpiar);
                 final EditText name = dialogView.findViewById(R.id.dialog_signature_et_name);
                 final EditText dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
                 final EditText cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
                 final SignaturePad signaturePad = dialogView.findViewById(R.id.dialog_signature);
+                if(!datos_guardados.isEmpty()){
+                    if(datos.get("name_cliente")!=null){
+                        name_cliente = (String)datos.get("name_cliente");
+                    }
+                    if(datos.get("dni_cliente")!=null){
+                        dni_cliente = (String)datos.get("dni_cliente");
+                    }
+                    if(datos.get("cargo_cliente")!=null){
+                        cargo_cliente = (String)datos.get("cargo_cliente");
+                    }
+                    if(datos.get("image_signature_cliente")!=null){
+                        image_signature_cliente = (String)datos.get("image_signature_cliente");
+                    }
+                }
                 final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+                limpiar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        signaturePad.clear();
+                    }
+                });
                 signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
                     @Override
                     public void onStartSigning() {
@@ -864,7 +1006,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
                     @Override
                     public void onClear() {
-
+                        image_signature_cliente = "";
                     }
                 });
                 guardar.setOnClickListener(new View.OnClickListener() {
@@ -897,6 +1039,11 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                         if(image_signature_cliente!=null && !image_signature_cliente.isEmpty() && name_cliente!=null && !name_cliente.isEmpty() && dni_cliente!=null && !dni_cliente.isEmpty() && cargo_cliente!=null && !cargo_cliente.isEmpty())
                         {
                             Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
+                            datos.put("name_cliente",name_cliente);
+                            datos.put("dni_cliente",dni_cliente);
+                            datos.put("cargo_cliente",cargo_cliente);
+                            datos.put("image_signature_cliente",image_signature_cliente);
+                            cred.save_data("3-"+id,datos.toString());
                             alertDialog.dismiss();
                         }else{
                             Toast.makeText(ctx,"Debe completar la información",Toast.LENGTH_SHORT).show();
@@ -934,9 +1081,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 builder.setCancelable(false);
                 Button guardar = dialogView.findViewById(R.id.dialog_signature_btn_guardar);
                 Button cancelar = dialogView.findViewById(R.id.dialog_signature_btn_cancelar);
+                Button limpiar = dialogView.findViewById(R.id.dialog_signature_btn_limpiar);
                 name = dialogView.findViewById(R.id.dialog_signature_et_name);
                 dni = dialogView.findViewById(R.id.dialog_signature_et_dni);
                 cargo = dialogView.findViewById(R.id.dialog_signature_et_cargo);
+                if(!datos_guardados.isEmpty()){
+                    if(datos.get("image_signature_tecnico")!=null){
+                        image_signature_tecnico = (String)datos.get("image_signature_tecnico");
+                    }
+                }
                 final SignaturePad signaturePad = dialogView.findViewById(R.id.dialog_signature);
                 final AlertDialog alertDialog = builder.create();
                 Log.e("tipo_proveedor",tipo_proveedor);
@@ -944,6 +1097,12 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     getDatosTecnico(proveedor_id);
                 }
                 alertDialog.show();
+                limpiar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        signaturePad.clear();
+                    }
+                });
                 signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
                     @Override
                     public void onStartSigning() {
@@ -956,6 +1115,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
                     @Override
                     public void onClear() {
+                        image_signature_tecnico = "";
                     }
                 });
                 guardar.setOnClickListener(new View.OnClickListener() {
@@ -985,6 +1145,11 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                         }
                         if(!image_signature_tecnico.isEmpty() && !name_tecnico.isEmpty() && !dni_tecnico.isEmpty() && !cargo_tecnico.isEmpty())
                         {
+                            datos.put("name_tecnico",name_tecnico);
+                            datos.put("dni_tecnico",dni_tecnico);
+                            datos.put("cargo_tecnico",cargo_tecnico);
+                            datos.put("image_signature_tecnico",image_signature_tecnico);
+                            cred.save_data("3-"+id,datos.toString());
                             Toast.makeText(ctx,"Guardado",Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
                         }else{
@@ -1108,101 +1273,155 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         switch (element){
             case 1:
                 image_falla="";
+                datos.put("image_falla",image_falla);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_falla.setVisibility(View.GONE);
                 icon_camera_falla.setVisibility(View.VISIBLE);
             break;
             case 2:
                 image_temp_l1="";
+                datos.put("image_temp_l1",image_temp_l1);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_temp_l1.setVisibility(View.GONE);
                 icon_camera_temp_l1.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 image_temp_l2="";
+                datos.put("image_temp_l2",image_temp_l2);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_temp_l2.setVisibility(View.GONE);
                 icon_camera_temp_l2.setVisibility(View.VISIBLE);
                 break;
-            case 5:
+            case 4:
                 image_presion_baja="";
+                datos.put("image_presion_baja",image_presion_baja);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_presion_baja.setVisibility(View.GONE);
                 icon_camera_presion_baja.setVisibility(View.VISIBLE);
                 break;
-            case 6:
+            case 5:
                 image_presion_alta="";
+                datos.put("image_presion_alta",image_presion_alta);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_presion_alta.setVisibility(View.GONE);
                 icon_camera_presion_alta.setVisibility(View.VISIBLE);
                 break;
-            case 7:
+            case 6:
                 image_amp_l1="";
+                datos.put("image_amp_l1",image_amp_l1);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_amp_l1.setVisibility(View.GONE);
                 icon_camera_amp_l1.setVisibility(View.VISIBLE);
                 break;
-            case 8:
+            case 7:
                 image_amp_l2="";
+                datos.put("image_amp_l2",image_amp_l2);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_amp_l2.setVisibility(View.GONE);
                 icon_camera_amp_l2.setVisibility(View.VISIBLE);
                 break;
-            case 9:
+            case 8:
                 image_amp_l3="";
+                datos.put("image_amp_l3",image_amp_l3);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_amp_l3.setVisibility(View.GONE);
                 icon_camera_amp_l3.setVisibility(View.VISIBLE);
                 break;
-            case 10:
+            case 9:
                 image_volt_l1="";
+                datos.put("image_volt_l1",image_volt_l1);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_volt_l1.setVisibility(View.GONE);
                 icon_camera_volt_l1.setVisibility(View.VISIBLE);
                 break;
-            case 11:
+            case 10:
                 image_volt_l2="";
+                datos.put("image_volt_l1",image_volt_l1);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_volt_l2.setVisibility(View.GONE);
                 icon_camera_volt_l2.setVisibility(View.VISIBLE);
                 break;
-            case 12:
+            case 11:
                 image_volt_l3="";
+                datos.put("image_volt_l3",image_volt_l3);
+                cred.save_data("3-"+id,datos.toString());
                 icon_gallery_volt_l3.setVisibility(View.GONE);
                 icon_camera_volt_l3.setVisibility(View.VISIBLE);
                 break;
-            case 13:
+            case 12:
                 despues_image_falla="";
+                datos.put("despues_image_falla",despues_image_falla);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_falla.setVisibility(View.GONE);
                 despues_icon_camera_falla.setVisibility(View.VISIBLE);
                 break;
-            case 14:
+            case 13:
                 despues_image_temp_l1="";
+                datos.put("despues_image_temp_l1",despues_image_temp_l1);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_temp_l1.setVisibility(View.GONE);
                 despues_icon_camera_temp_l1.setVisibility(View.VISIBLE);
                 break;
-            case 15:
+            case 14:
                 despues_image_temp_l2="";
+                datos.put("despues_image_temp_l2",despues_image_temp_l2);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_temp_l2.setVisibility(View.GONE);
                 despues_icon_camera_temp_l2.setVisibility(View.VISIBLE);
                 break;
+            case 15:
+                despues_image_presion_baja="";
+                datos.put("despues_image_presion_baja",despues_image_presion_baja);
+                cred.save_data("3-"+id,datos.toString());
+                despues_icon_gallery_presion_baja.setVisibility(View.GONE);
+                despues_icon_camera_presion_baja.setVisibility(View.VISIBLE);
+                break;
+            case 16:
+                despues_image_presion_alta="";
+                datos.put("despues_image_presion_alta",despues_image_presion_alta);
+                cred.save_data("3-"+id,datos.toString());
+                despues_icon_gallery_presion_alta.setVisibility(View.GONE);
+                despues_icon_camera_presion_alta.setVisibility(View.VISIBLE);
+                break;
             case 17:
                 despues_image_amp_l1="";
+                datos.put("despues_image_amp_l1",despues_image_amp_l1);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_amp_l1.setVisibility(View.GONE);
                 despues_icon_camera_amp_l1.setVisibility(View.VISIBLE);
                 break;
             case 18:
                 despues_image_amp_l2="";
+                datos.put("despues_image_amp_l2",despues_image_amp_l2);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_amp_l2.setVisibility(View.GONE);
                 despues_icon_camera_amp_l2.setVisibility(View.VISIBLE);
                 break;
             case 19:
                 despues_image_amp_l3="";
+                datos.put("despues_image_amp_l3",despues_image_amp_l3);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_amp_l3.setVisibility(View.GONE);
                 despues_icon_camera_amp_l3.setVisibility(View.VISIBLE);
                 break;
             case 20:
                 despues_image_volt_l1="";
+                datos.put("despues_image_volt_l1",despues_image_volt_l1);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_volt_l1.setVisibility(View.GONE);
                 despues_icon_camera_volt_l1.setVisibility(View.VISIBLE);
                 break;
             case 21:
                 despues_image_volt_l2="";
+                datos.put("despues_image_volt_l2",despues_image_volt_l2);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_volt_l2.setVisibility(View.GONE);
                 despues_icon_camera_volt_l2.setVisibility(View.VISIBLE);
                 break;
             case 22:
                 despues_image_volt_l3="";
+                datos.put("despues_image_volt_l3",despues_image_volt_l3);
+                cred.save_data("3-"+id,datos.toString());
                 despues_icon_gallery_volt_l3.setVisibility(View.GONE);
                 despues_icon_camera_volt_l3.setVisibility(View.VISIBLE);
                 break;
@@ -1210,10 +1429,15 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp()
-    {
-        onBackPressed();
+    public boolean onSupportNavigateUp() {
+        this.finish();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
     }
 
     private void registrarFicha(final String urgencia_id)
@@ -1573,70 +1797,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    //Dialog New Equipo
-    Button btn_cancelar,btn_actualizar,btn_registrar,btn_siguiente,btn_atras;
-    LinearLayout linear_evaporadora,linear_condensadora;
-
-    Spinner spinner_marcas;
-    ArrayAdapter<String> marcas_adapter;
-    String[] marcas_id;
-
-    Spinner spinner_selection_equipos;
-    ArrayAdapter<String> selection_equipos_adapter;
-    String[] selection_equipos_id;
-
-    Spinner spinner_cond_marcas;
-    ArrayAdapter<String> marcas_cond_adapter;
-    String[] marcas_cond_id;
-
-    JRSpinner spinner_modelos;
-    String[] modelos_ids;
-
-    JRSpinner spinner_cond_modelos;
-    String[] modelos_cond_ids;
-
-    Spinner spinner_btus;
-    ArrayAdapter<String> btu_adapter;
-    String[] btus_id;
-
-    Spinner spinner_cond_btus;
-    ArrayAdapter<String> btu_cond_adapter;
-    String[] btus_cond_id;
-
-    Spinner spinner_tipos;
-    ArrayAdapter<String> tipo_adapter;
-    String[] tipos_id;
-
-    Spinner spinner_cond_tipos;
-    ArrayAdapter<String> tipo_cond_adapter;
-    String[] tipos_cond_id;
-
-    Spinner spinner_voltajes;
-    ArrayAdapter<String> voltaje_adapter;
-    String[] voltajes_id;
-
-    Spinner spinner_cond_voltajes;
-    ArrayAdapter<String> voltaje_cond_adapter;
-    String[] voltajes_cond_id;
-
-    Spinner spinner_fases;
-    ArrayAdapter<String> fase_adapter;
-    String[] fases_id;
-
-    Spinner spinner_cond_fases;
-    ArrayAdapter<String> fase_cond_adapter;
-    String[] fases_cond_id;
-
-    Spinner spinner_refrigerantes;
-    ArrayAdapter<String> refrigerante_adapter;
-    String[] refrigerantes_id;
-
-    Spinner spinner_cond_refrigerantes;
-    ArrayAdapter<String> refrigerante_cond_adapter;
-    String[] refrigerantes_cond_id;
-
     EditText et_nro_serie,et_cond_nro_serie;
-    ImageView icon_evap_scan,icon_cond_scan;
 
     TextView tv_marca,tv_modelo,tv_btu,tv_nro_serie,tv_tipo,tv_voltaje,tv_refrigerante,tv_motivo,tv_nro_equipo;
     String equipo_id;
@@ -1749,6 +1910,34 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
     void validateUploadDespues()
     {
+        if(!datos_guardados.isEmpty()){
+            et_despues_temp_l1 = (String)datos.get("et_despues_temp_l1")==null?"0":(String)datos.get("et_despues_temp_l1");
+            et_despues_temp_l2 = (String)datos.get("et_despues_temp_l2")==null?"0":(String)datos.get("et_despues_temp_l2");
+            et_despues_presion_alta = (String)datos.get("et_despues_presion_alta")==null?"0":(String)datos.get("et_despues_presion_alta");
+            et_despues_presion_baja = (String)datos.get("et_despues_presion_baja")==null?"0":(String)datos.get("et_despues_presion_baja");
+            et_despues_amp_l1 = (String)datos.get("et_despues_amp_l1")==null?"0":(String)datos.get("et_despues_amp_l1");
+            et_despues_amp_l2 = (String)datos.get("et_despues_amp_l2")==null?"0":(String)datos.get("et_despues_amp_l2");
+            et_despues_amp_l3 = (String)datos.get("et_despues_amp_l3")==null?"0":(String)datos.get("et_despues_amp_l3");
+
+            et_despues_volt_l1 = (String)datos.get("et_despues_volt_l1")==null?"0":(String)datos.get("et_despues_volt_l1");
+            et_despues_volt_l2 = (String)datos.get("et_despues_volt_l2")==null?"0":(String)datos.get("et_despues_volt_l2");
+            et_despues_volt_l3 = (String)datos.get("et_despues_volt_l3")==null?"0":(String)datos.get("et_despues_volt_l3");
+
+            despues_image_falla = (String)datos.get("despues_image_falla")==null?"":(String)datos.get("despues_image_falla");
+            despues_image_temp_l1 = (String)datos.get("despues_image_temp_l1")==null?"":(String)datos.get("despues_image_temp_l1");
+            despues_image_temp_l2 = (String)datos.get("despues_image_temp_l2")==null?"":(String)datos.get("despues_image_temp_l2");
+
+            despues_image_presion_baja = (String)datos.get("despues_image_presion_baja")==null?"":(String)datos.get("despues_image_presion_baja");
+            despues_image_presion_alta = (String)datos.get("despues_image_presion_alta")==null?"":(String)datos.get("despues_image_presion_alta");
+
+            despues_image_amp_l1 = (String)datos.get("despues_image_amp_l1")==null?"":(String)datos.get("despues_image_amp_l1");
+            despues_image_amp_l2 = (String)datos.get("despues_image_amp_l2")==null?"":(String)datos.get("despues_image_amp_l2");
+            despues_image_amp_l3 = (String)datos.get("despues_image_amp_l3")==null?"":(String)datos.get("despues_image_amp_l3");
+
+            despues_image_volt_l1 = (String)datos.get("despues_image_volt_l1")==null?"":(String)datos.get("despues_image_volt_l1");
+            despues_image_volt_l2 = (String)datos.get("despues_image_volt_l2")==null?"":(String)datos.get("despues_image_volt_l2");
+            despues_image_volt_l3 = (String)datos.get("despues_image_volt_l3")==null?"":(String)datos.get("despues_image_volt_l3");
+        }
         despues_temp_l1.setText(et_despues_temp_l1);
         despues_temp_l2.setText(et_despues_temp_l2);
 
@@ -1860,6 +2049,33 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
     void validateUpload()
     {
+        if(!datos_guardados.isEmpty()){
+            et_temp_l1 = (String)datos.get("et_temp_l1")==null?"0":(String)datos.get("et_temp_l1");
+            et_temp_l2 = (String)datos.get("et_temp_l2")==null?"0":(String)datos.get("et_temp_l2");
+            et_presion_alta = (String)datos.get("et_presion_alta")==null?"0":(String)datos.get("et_presion_alta");
+            et_presion_baja = (String)datos.get("presion_baja")==null?"0":(String)datos.get("presion_baja");
+            et_amp_l1 = (String)datos.get("et_amp_l1")==null?"0":(String)datos.get("et_amp_l1");
+            et_amp_l2 = (String)datos.get("et_amp_l2")==null?"0":(String)datos.get("et_amp_l2");
+            et_amp_l3 = (String)datos.get("et_amp_l3")==null?"0":(String)datos.get("et_amp_l3");
+            et_volt_l1 = (String)datos.get("et_volt_l1")==null?"0":(String)datos.get("et_volt_l1");
+            et_volt_l2 = (String)datos.get("et_volt_l2")==null?"0":(String)datos.get("et_volt_l2");
+            et_volt_l3 = (String)datos.get("et_volt_l3")==null?"0":(String)datos.get("et_volt_l3");
+
+            image_falla = (String)datos.get("image_falla")==null?"":(String)datos.get("image_falla");
+            image_temp_l1 = (String)datos.get("image_temp_l1")==null?"":(String)datos.get("image_temp_l1");
+            image_temp_l2 = (String)datos.get("image_temp_l2")==null?"":(String)datos.get("image_temp_l2");
+
+            image_presion_baja = (String)datos.get("image_presion_baja")==null?"":(String)datos.get("image_presion_baja");
+            image_presion_alta = (String)datos.get("image_presion_alta")==null?"":(String)datos.get("image_presion_alta");
+
+            image_amp_l1 = (String)datos.get("image_amp_l1")==null?"":(String)datos.get("image_amp_l1");
+            image_amp_l2 = (String)datos.get("image_amp_l2")==null?"":(String)datos.get("image_amp_l2");
+            image_amp_l3 = (String)datos.get("image_amp_l3")==null?"":(String)datos.get("image_amp_l3");
+
+            image_volt_l1 = (String)datos.get("image_volt_l1")==null?"":(String)datos.get("image_volt_l1");
+            image_volt_l2 = (String)datos.get("image_volt_l2")==null?"":(String)datos.get("image_volt_l2");
+            image_volt_l3 = (String)datos.get("image_volt_l3")==null?"":(String)datos.get("image_volt_l3");
+        }
         temp_l1.setText(et_temp_l1);
         temp_l2.setText(et_temp_l2);
 
@@ -1875,15 +2091,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         volt_l3.setText(et_volt_l3);
 
         //Falla
-        if(!image_falla.isEmpty()){
-            icon_camera_falla.setVisibility(View.GONE);
-            icon_gallery_falla.setVisibility(View.VISIBLE);
-        }else{
-            icon_gallery_falla.setVisibility(View.GONE);
-            icon_camera_falla.setVisibility(View.VISIBLE);
-        }
-
-        if(!image_falla.isEmpty()){
+        if(image_falla!=null && !image_falla.isEmpty()){
             icon_camera_falla.setVisibility(View.GONE);
             icon_gallery_falla.setVisibility(View.VISIBLE);
         }else{
@@ -1892,7 +2100,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         }
 
         //Temperatura
-        if(!image_temp_l1.isEmpty()){
+        if(image_temp_l1!=null && !image_temp_l1.isEmpty()){
             icon_camera_temp_l1.setVisibility(View.GONE);
             icon_gallery_temp_l1.setVisibility(View.VISIBLE);
         }else{
@@ -1942,7 +2150,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             icon_camera_amp_l2.setVisibility(View.VISIBLE);
             icon_gallery_amp_l2.setVisibility(View.GONE);
         }
-        if(!fase.equals("1")){
+        if(fase==null || fase.equals("1")){
 
             if(!image_amp_l3.isEmpty()){
                 icon_camera_amp_l3.setVisibility(View.GONE);
@@ -1970,7 +2178,7 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             icon_gallery_volt_l2.setVisibility(View.GONE);
         }
 
-        if(!fase.equals("1")){
+        if(fase==null || !fase.equals("1")){
 
             if(!image_volt_l3.isEmpty()){
                 icon_camera_volt_l3.setVisibility(View.GONE);
@@ -2034,6 +2242,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
             switch (image_type){
                 case "1":
                     image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_falla",image_falla);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_falla","1");
                     icon_camera_falla.setVisibility(View.GONE);
                     icon_gallery_falla.setVisibility(View.VISIBLE);
@@ -2046,6 +2256,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "2":
                     image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_temp_l1",image_temp_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_temp_l1","2");
                     icon_camera_temp_l1.setVisibility(View.GONE);
                     icon_gallery_temp_l1.setVisibility(View.VISIBLE);
@@ -2054,6 +2266,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "3":
                     image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_temp_l2",image_temp_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_temp_l2","3");
                     icon_camera_temp_l2.setVisibility(View.GONE);
                     icon_gallery_temp_l2.setVisibility(View.VISIBLE);
@@ -2062,6 +2276,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "5":
                     image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_presion_baja",image_presion_baja);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_presion_baja","5");
                     icon_camera_presion_baja.setVisibility(View.GONE);
                     icon_gallery_presion_baja.setVisibility(View.VISIBLE);
@@ -2070,6 +2286,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "6":
                     image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_presion_alta",image_presion_alta);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_presion_alta","6");
                     icon_camera_presion_alta.setVisibility(View.GONE);
                     icon_gallery_presion_alta.setVisibility(View.VISIBLE);
@@ -2078,6 +2296,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "7":
                     image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_amp_l1",image_amp_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_amp_l1","7");
                     icon_camera_amp_l1.setVisibility(View.GONE);
                     icon_gallery_amp_l1.setVisibility(View.VISIBLE);
@@ -2086,6 +2306,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "8":
                     image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_amp_l2",image_amp_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_amp_l2","8");
                     icon_camera_amp_l2.setVisibility(View.GONE);
                     icon_gallery_amp_l2.setVisibility(View.VISIBLE);
@@ -2094,6 +2316,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "9":
                     image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_amp_l3",image_amp_l3);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_amp_l3","9");
                     icon_camera_amp_l3.setVisibility(View.GONE);
                     icon_gallery_amp_l3.setVisibility(View.VISIBLE);
@@ -2102,6 +2326,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "10":
                     image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_volt_l1",image_volt_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_volt_l1","10");
                     icon_camera_volt_l1.setVisibility(View.GONE);
                     icon_gallery_volt_l1.setVisibility(View.VISIBLE);
@@ -2110,6 +2336,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "11":
                     image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_volt_l2",image_volt_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_volt_l2","11");
                     icon_camera_volt_l2.setVisibility(View.GONE);
                     icon_gallery_volt_l2.setVisibility(View.VISIBLE);
@@ -2118,6 +2346,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "12":
                     image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("image_volt_l3",image_volt_l3);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_volt_l3","12");
                     icon_camera_volt_l3.setVisibility(View.GONE);
                     icon_gallery_volt_l3.setVisibility(View.VISIBLE);
@@ -2128,6 +2358,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 //despues
                 case "13":
                     despues_image_falla = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_falla",despues_image_falla);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_falla","13");
                     despues_icon_camera_falla.setVisibility(View.GONE);
                     despues_icon_gallery_falla.setVisibility(View.VISIBLE);
@@ -2140,6 +2372,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "14":
                     despues_image_temp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_temp_l1",despues_image_temp_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_temp_l1","14");
                     despues_icon_camera_temp_l1.setVisibility(View.GONE);
                     despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
@@ -2148,6 +2382,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "15":
                     despues_image_temp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_temp_l2",despues_image_temp_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_temp_l2","15");
                     despues_icon_camera_temp_l2.setVisibility(View.GONE);
                     despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
@@ -2157,6 +2393,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
 
                 case "17":
                     despues_image_presion_baja = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_presion_baja",despues_image_presion_baja);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_presion_baja","17");
                     despues_icon_camera_presion_baja.setVisibility(View.GONE);
                     despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
@@ -2165,6 +2403,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "18":
                     despues_image_presion_alta = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_presion_alta",despues_image_presion_alta);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_presion_alta","18");
                     despues_icon_camera_presion_alta.setVisibility(View.GONE);
                     despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
@@ -2173,6 +2413,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "19":
                     despues_image_amp_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_amp_l1",despues_image_amp_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("image_amp_l1","19");
                     despues_icon_camera_amp_l1.setVisibility(View.GONE);
                     despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
@@ -2181,6 +2423,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "20":
                     despues_image_amp_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_amp_l2",despues_image_amp_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_amp_l2","20");
                     despues_icon_camera_amp_l2.setVisibility(View.GONE);
                     despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
@@ -2189,6 +2433,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "21":
                     despues_image_amp_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_amp_l3",despues_image_amp_l3);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_amp_l3","21");
                     despues_icon_camera_amp_l3.setVisibility(View.GONE);
                     despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
@@ -2197,6 +2443,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "22":
                     despues_image_volt_l1 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_volt_l1",despues_image_volt_l1);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_volt_l1","22");
                     despues_icon_camera_volt_l1.setVisibility(View.GONE);
                     despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
@@ -2205,6 +2453,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "23":
                     despues_image_volt_l2 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_volt_l2",despues_image_volt_l2);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_volt_l2","23");
                     despues_icon_camera_volt_l2.setVisibility(View.GONE);
                     despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
@@ -2213,6 +2463,8 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                     break;
                 case "24":
                     despues_image_volt_l3 = Image.convert(BitmapFactory.decodeFile(b64,options));
+                    datos.put("despues_image_volt_l3",despues_image_volt_l3);
+                    cred.save_data("3-"+id,datos.toString());
                     Log.e("despues_image_volt_l3","24");
                     despues_icon_camera_volt_l3.setVisibility(View.GONE);
                     despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
@@ -2291,206 +2543,253 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
                 break;
             case 2://choose from gallery
                 //data.getData return the content URI for the selected Image
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
-                //Get the column index of MediaStore.Images.Media.DATA
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                //Gets the String value in the column
-                String imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-                Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString,options);
-                try {
-                    String image_type = cred.getData("image_type");
+                if(data!=null){
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+                    //Get the column index of MediaStore.Images.Media.DATA
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    //Gets the String value in the column
+                    String imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 2;
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString,options);
+                    try {
+                        String image_type = cred.getData("image_type");
 //                    String b64 = selectedImage.toString();
-                    switch (image_type){
-                        case "1":
-                            image_falla = Image.convert(bitmap);
-                            Log.e("image_falla","1");
-                            icon_camera_falla.setVisibility(View.GONE);
-                            icon_gallery_falla.setVisibility(View.VISIBLE);
-                            if(image_falla.isEmpty())
-                                System.out.println("image_falla NULL");
-                            break;
-                        case "2":
-                            image_temp_l1 = Image.convert(bitmap);
-                            Log.e("image_temp_l1","2");
-                            icon_camera_temp_l1.setVisibility(View.GONE);
-                            icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                            if(image_temp_l1.isEmpty())
-                                System.out.println("image_temp_l1 NULL");
-                            break;
-                        case "3":
-                            image_temp_l2 = Image.convert(bitmap);
-                            Log.e("image_temp_l2","3");
-                            icon_camera_temp_l2.setVisibility(View.GONE);
-                            icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                            if(image_temp_l2.isEmpty())
-                                System.out.println("image_temp_l2 NULL");
-                            break;
-                        case "5":
-                            image_presion_baja = Image.convert(bitmap);
-                            Log.e("image_presion_baja","5");
-                            icon_camera_presion_baja.setVisibility(View.GONE);
-                            icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                            if(image_presion_baja.isEmpty())
-                                System.out.println("image_presion_baja NULL");
-                            break;
-                        case "6":
-                            image_presion_alta = Image.convert(bitmap);
-                            Log.e("image_presion_alta","6");
-                            icon_camera_presion_alta.setVisibility(View.GONE);
-                            icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                            if(image_presion_alta.isEmpty())
-                                System.out.println("image_presion_alta NULL");
-                            break;
-                        case "7":
-                            image_amp_l1 = Image.convert(bitmap);
-                            Log.e("image_amp_l1","7");
-                            icon_camera_amp_l1.setVisibility(View.GONE);
-                            icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                            if(image_amp_l1.isEmpty())
-                                System.out.println("image_amp_l1 NULL");
-                            break;
-                        case "8":
-                            image_amp_l2 = Image.convert(bitmap);
-                            Log.e("image_amp_l2","8");
-                            icon_camera_amp_l2.setVisibility(View.GONE);
-                            icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                            if(image_amp_l2.isEmpty())
-                                System.out.println("image_amp_l2 NULL");
-                            break;
-                        case "9":
-                            image_amp_l3 = Image.convert(bitmap);
-                            Log.e("image_amp_l3","9");
-                            icon_camera_amp_l3.setVisibility(View.GONE);
-                            icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                            if(image_amp_l3.isEmpty())
-                                System.out.println("image_amp_l3 NULL");
-                            break;
-                        case "10":
-                            image_volt_l1 = Image.convert(bitmap);
-                            Log.e("image_volt_l1","10");
-                            icon_camera_volt_l1.setVisibility(View.GONE);
-                            icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                            if(image_volt_l1.isEmpty())
-                                System.out.println("image_volt_l1 NULL");
-                            break;
-                        case "11":
-                            image_volt_l2 = Image.convert(bitmap);
-                            Log.e("image_volt_l2","11");
-                            icon_camera_volt_l2.setVisibility(View.GONE);
-                            icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                            if(image_volt_l2.isEmpty())
-                                System.out.println("image_volt_l2 NULL");
-                            break;
-                        case "12":
-                            image_volt_l3 = Image.convert(bitmap);
-                            Log.e("image_volt_l3","12");
-                            icon_camera_volt_l3.setVisibility(View.GONE);
-                            icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                            if(image_volt_l3.isEmpty())
-                                System.out.println("image_volt_l3 NULL");
-                            break;
+                        switch (image_type){
+                            case "1":
+                                image_falla = Image.convert(bitmap);
+                                Log.e("image_falla","1");
+                                icon_camera_falla.setVisibility(View.GONE);
+                                icon_gallery_falla.setVisibility(View.VISIBLE);
+                                datos.put("image_falla",image_falla);
+                                cred.save_data("3-"+id,datos.toString());
 
-                        //despues
-                        case "13":
-                            despues_image_falla = Image.convert(bitmap);
-                            Log.e("despues_image_falla","13");
-                            despues_icon_camera_falla.setVisibility(View.GONE);
-                            despues_icon_gallery_falla.setVisibility(View.VISIBLE);
-                            if(despues_image_falla.isEmpty())
-                                System.out.println("despues_image_falla NULL");
-                            break;
-                        case "14":
-                            despues_image_temp_l1 = Image.convert(bitmap);
-                            Log.e("despues_image_temp_l1","14");
-                            despues_icon_camera_temp_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_temp_l1.isEmpty())
-                                System.out.println("despues_image_temp_l1 NULL");
-                            break;
-                        case "15":
-                            despues_image_temp_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_temp_l2","15");
-                            despues_icon_camera_temp_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_temp_l2.isEmpty())
-                                System.out.println("despues_image_temp_l2 NULL");
-                            break;
-                        case "17":
-                            despues_image_presion_baja = Image.convert(bitmap);
-                            Log.e("image_presion_baja","17");
-                            despues_icon_camera_presion_baja.setVisibility(View.GONE);
-                            despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
-                            if(despues_image_presion_baja.isEmpty())
-                                System.out.println("despues_image_presion_baja NULL");
-                            break;
-                        case "18":
-                            despues_image_presion_alta = Image.convert(bitmap);
-                            Log.e("despues_image_presion_alta","18");
-                            despues_icon_camera_presion_alta.setVisibility(View.GONE);
-                            despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
-                            if(despues_image_presion_alta.isEmpty())
-                                System.out.println("despues_image_presion_alta NULL");
-                            break;
-                        case "19":
-                            despues_image_amp_l1 = Image.convert(bitmap);
-                            Log.e("image_amp_l1","19");
-                            despues_icon_camera_amp_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l1.isEmpty())
-                                System.out.println("image_amp_l1 NULL");
-                            break;
-                        case "20":
-                            despues_image_amp_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_amp_l2","20");
-                            despues_icon_camera_amp_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l2.isEmpty())
-                                System.out.println("despues_image_amp_l2 NULL");
-                            break;
-                        case "21":
-                            despues_image_amp_l3 = Image.convert(bitmap);
-                            Log.e("despues_image_amp_l3","21");
-                            despues_icon_camera_amp_l3.setVisibility(View.GONE);
-                            despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
-                            if(despues_image_amp_l3.isEmpty())
-                                System.out.println("despues_image_amp_l3 NULL");
-                            break;
-                        case "22":
-                            despues_image_volt_l1 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l1","22");
-                            despues_icon_camera_volt_l1.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l1.isEmpty())
-                                System.out.println("despues_image_volt_l1 NULL");
-                            break;
-                        case "23":
-                            despues_image_volt_l2 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l2","23");
-                            despues_icon_camera_volt_l2.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l2.isEmpty())
-                                System.out.println("despues_image_volt_l2 NULL");
-                            break;
-                        case "24":
-                            despues_image_volt_l3 = Image.convert(bitmap);
-                            Log.e("despues_image_volt_l3","24");
-                            despues_icon_camera_volt_l3.setVisibility(View.GONE);
-                            despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
-                            if(despues_image_volt_l3.isEmpty())
-                                System.out.println("despues_image_volt_l3 NULL");
-                            break;
+                                if(image_falla.isEmpty())
+                                    System.out.println("image_falla NULL");
+                                break;
+                            case "2":
+                                image_temp_l1 = Image.convert(bitmap);
+                                datos.put("image_temp_l1",image_temp_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_temp_l1","2");
+                                icon_camera_temp_l1.setVisibility(View.GONE);
+                                icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                                if(image_temp_l1.isEmpty())
+                                    System.out.println("image_temp_l1 NULL");
+                                break;
+                            case "3":
+                                image_temp_l2 = Image.convert(bitmap);
+                                datos.put("image_temp_l2",image_temp_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_temp_l2","3");
+                                icon_camera_temp_l2.setVisibility(View.GONE);
+                                icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                                if(image_temp_l2.isEmpty())
+                                    System.out.println("image_temp_l2 NULL");
+                                break;
+                            case "4":
+                                image_presion_baja = Image.convert(bitmap);
+                                datos.put("image_presion_baja",image_presion_baja);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_presion_baja","5");
+                                icon_camera_presion_baja.setVisibility(View.GONE);
+                                icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                                if(image_presion_baja.isEmpty())
+                                    System.out.println("image_presion_baja NULL");
+                                break;
+                            case "5":
+                                image_presion_alta = Image.convert(bitmap);
+                                datos.put("image_presion_alta",image_presion_alta);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_presion_alta","5");
+                                icon_camera_presion_alta.setVisibility(View.GONE);
+                                icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                                if(image_presion_alta.isEmpty())
+                                    System.out.println("image_presion_alta NULL");
+                                break;
+                            case "6":
+                                image_amp_l1 = Image.convert(bitmap);
+                                datos.put("image_amp_l1",image_amp_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_amp_l1","6");
+                                icon_camera_amp_l1.setVisibility(View.GONE);
+                                icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                                if(image_amp_l1.isEmpty())
+                                    System.out.println("image_amp_l1 NULL");
+                                break;
+                            case "7":
+                                image_amp_l2 = Image.convert(bitmap);
+                                datos.put("image_amp_l2",image_amp_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_amp_l2","7");
+                                icon_camera_amp_l2.setVisibility(View.GONE);
+                                icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                                if(image_amp_l2.isEmpty())
+                                    System.out.println("image_amp_l2 NULL");
+                                break;
+                            case "8":
+                                image_amp_l3 = Image.convert(bitmap);
+                                datos.put("image_amp_l3",image_amp_l3);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_amp_l3","8");
+                                icon_camera_amp_l3.setVisibility(View.GONE);
+                                icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                                if(image_amp_l3.isEmpty())
+                                    System.out.println("image_amp_l3 NULL");
+                                break;
+                            case "9":
+                                image_volt_l1 = Image.convert(bitmap);
+                                datos.put("image_volt_l1",image_volt_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_volt_l1","9");
+                                icon_camera_volt_l1.setVisibility(View.GONE);
+                                icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                                if(image_volt_l1.isEmpty())
+                                    System.out.println("image_volt_l1 NULL");
+                                break;
+                            case "10":
+                                image_volt_l2 = Image.convert(bitmap);
+                                datos.put("image_volt_l2",image_volt_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_volt_l2","10");
+                                icon_camera_volt_l2.setVisibility(View.GONE);
+                                icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                                if(image_volt_l2.isEmpty())
+                                    System.out.println("image_volt_l2 NULL");
+                                break;
+                            case "11":
+                                image_volt_l3 = Image.convert(bitmap);
+                                datos.put("image_volt_l3",image_volt_l3);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_volt_l3","11");
+                                icon_camera_volt_l3.setVisibility(View.GONE);
+                                icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                                if(image_volt_l3.isEmpty())
+                                    System.out.println("image_volt_11 NULL");
+                                break;
+
+                            //despues
+                            case "12":
+                                despues_image_falla = Image.convert(bitmap);
+                                datos.put("despues_image_falla",despues_image_falla);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_falla","12");
+                                despues_icon_camera_falla.setVisibility(View.GONE);
+                                despues_icon_gallery_falla.setVisibility(View.VISIBLE);
+                                if(despues_image_falla.isEmpty())
+                                    System.out.println("despues_image_falla NULL");
+                                break;
+                            case "13":
+                                despues_image_temp_l1 = Image.convert(bitmap);
+                                datos.put("despues_image_temp_l1",despues_image_temp_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_temp_l1","13");
+                                despues_icon_camera_temp_l1.setVisibility(View.GONE);
+                                despues_icon_gallery_temp_l1.setVisibility(View.VISIBLE);
+                                if(despues_image_temp_l1.isEmpty())
+                                    System.out.println("despues_image_temp_l1 NULL");
+                                break;
+                            case "14":
+                                despues_image_temp_l2 = Image.convert(bitmap);
+                                datos.put("despues_image_temp_l2",despues_image_temp_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_temp_l2","14");
+                                despues_icon_camera_temp_l2.setVisibility(View.GONE);
+                                despues_icon_gallery_temp_l2.setVisibility(View.VISIBLE);
+                                if(despues_image_temp_l2.isEmpty())
+                                    System.out.println("despues_image_temp_l2 NULL");
+                                break;
+                            case "15":
+                                despues_image_presion_baja = Image.convert(bitmap);
+                                datos.put("despues_image_presion_baja",despues_image_presion_baja);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_presion_baja","15");
+                                despues_icon_camera_presion_baja.setVisibility(View.GONE);
+                                despues_icon_gallery_presion_baja.setVisibility(View.VISIBLE);
+                                if(despues_image_presion_baja.isEmpty())
+                                    System.out.println("despues_image_presion_baja NULL");
+                                break;
+                            case "16":
+                                despues_image_presion_alta = Image.convert(bitmap);
+                                datos.put("despues_image_presion_alta",despues_image_presion_alta);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_presion_alta","16");
+                                despues_icon_camera_presion_alta.setVisibility(View.GONE);
+                                despues_icon_gallery_presion_alta.setVisibility(View.VISIBLE);
+                                if(despues_image_presion_alta.isEmpty())
+                                    System.out.println("despues_image_presion_alta NULL");
+                                break;
+                            case "17":
+                                despues_image_amp_l1 = Image.convert(bitmap);
+                                datos.put("despues_image_amp_l1",despues_image_amp_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("image_amp_l1","17");
+                                despues_icon_camera_amp_l1.setVisibility(View.GONE);
+                                despues_icon_gallery_amp_l1.setVisibility(View.VISIBLE);
+                                if(despues_image_amp_l1.isEmpty())
+                                    System.out.println("image_amp_l1 NULL");
+                                break;
+                            case "18":
+                                despues_image_amp_l2 = Image.convert(bitmap);
+                                datos.put("despues_image_amp_l2",despues_image_amp_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_amp_l2","18");
+                                despues_icon_camera_amp_l2.setVisibility(View.GONE);
+                                despues_icon_gallery_amp_l2.setVisibility(View.VISIBLE);
+                                if(despues_image_amp_l2.isEmpty())
+                                    System.out.println("despues_image_amp_l2 NULL");
+                                break;
+                            case "19":
+                                despues_image_amp_l3 = Image.convert(bitmap);
+                                datos.put("despues_image_amp_l3",despues_image_amp_l3);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_amp_l3","19");
+                                despues_icon_camera_amp_l3.setVisibility(View.GONE);
+                                despues_icon_gallery_amp_l3.setVisibility(View.VISIBLE);
+                                if(despues_image_amp_l3.isEmpty())
+                                    System.out.println("despues_image_amp_l3 NULL");
+                                break;
+                            case "20":
+                                despues_image_volt_l1 = Image.convert(bitmap);
+                                datos.put("despues_image_volt_l1",despues_image_volt_l1);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_volt_l1","20");
+                                despues_icon_camera_volt_l1.setVisibility(View.GONE);
+                                despues_icon_gallery_volt_l1.setVisibility(View.VISIBLE);
+                                if(despues_image_volt_l1.isEmpty())
+                                    System.out.println("despues_image_volt_l1 NULL");
+                                break;
+                            case "21":
+                                despues_image_volt_l2 = Image.convert(bitmap);
+                                datos.put("despues_image_volt_l2",despues_image_volt_l2);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_volt_l2","21");
+                                despues_icon_camera_volt_l2.setVisibility(View.GONE);
+                                despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
+                                if(despues_image_volt_l2.isEmpty())
+                                    System.out.println("despues_image_volt_l2 NULL");
+                                break;
+                            case "22":
+                                despues_image_volt_l3 = Image.convert(bitmap);
+                                datos.put("despues_image_volt_l3",despues_image_volt_l3);
+                                cred.save_data("3-"+id,datos.toString());
+                                Log.e("despues_image_volt_l3","22");
+                                despues_icon_camera_volt_l3.setVisibility(View.GONE);
+                                despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+                                if(despues_image_volt_l3.isEmpty())
+                                    System.out.println("despues_image_volt_l3 NULL");
+                                break;
+                        }
+                    } catch (Exception e) {
+                        viewDialog.hideDialog(1);
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    viewDialog.hideDialog(1);
-                    e.printStackTrace();
                 }
                 break;
         }
@@ -2615,5 +2914,29 @@ public class FichaUrgenciaActivity extends AppCompatActivity {
         despues_icon_gallery_volt_l2.setVisibility(View.VISIBLE);
         despues_icon_camera_volt_l3.setVisibility(View.GONE);
         despues_icon_gallery_volt_l3.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.floating_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.navInstalaciones:
+                cred.save_data("key_act","1");
+                break;
+            case R.id.navMantenimientos:
+                cred.save_data("key_act","2");
+                break;
+            case R.id.navUrgencias:
+                cred.save_data("key_act","3");
+                break;
+        }
+        startActivity(new Intent(ctx, TiendasActivity.class));
+        return true;
     }
 }
