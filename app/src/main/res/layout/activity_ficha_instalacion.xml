@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scroll"
@@ -22,7 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:orientation="vertical"
-            android:layout_marginTop="180dp"
+            android:layout_marginTop="210dp"
             android:layout_gravity="center">
 
             <!-- Equipos -->
@@ -100,6 +99,50 @@
                             android:background="@drawable/btn_ingresar"
                             android:baselineAligned="false"
                             android:text="Bomba de condensado" />
+                    </LinearLayout>
+
+                    <!-- Lugar -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_weight="1"
+                            android:fontFamily="@font/gotham_medium"
+                            android:textColor="@color/negro"
+                            android:gravity="center|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Lugar:"/>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="350dp"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:src="@drawable/icon_lista"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"/>
+                                </LinearLayout>
+                                <Spinner
+                                    android:id="@+id/spinner_lugar"
+                                    android:layout_width="160dp"
+                                    android:backgroundTint="@color/verdePastel"
+                                    android:layout_height="match_parent"
+                                    android:entries="@array/lugar" />
+                            </LinearLayout>
+
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

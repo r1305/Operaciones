@@ -361,7 +361,7 @@
                                     android:layout_height="match_parent"
                                     android:orientation="horizontal">
                                     <EditText
-                                        android:id="@+id/et_amp_l1"
+                                        android:id="@+id/et_amperaje"
                                         android:layout_weight="1"
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
@@ -370,14 +370,14 @@
                                         android:gravity="center"/>
 
                                     <ImageView
-                                        android:id="@+id/icon_cam_amp_l1"
+                                        android:id="@+id/icon_cam_amperaje"
                                         android:layout_width="30dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
                                         android:src="@drawable/icon_cam2"/>
 
                                     <ImageView
-                                        android:id="@+id/icon_gallery_amp_l1"
+                                        android:id="@+id/icon_gallery_amperaje"
                                         android:layout_width="30dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
@@ -440,7 +440,7 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/et_volt_l1"
+                                android:id="@+id/et_voltaje"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -459,14 +459,14 @@
                                 android:visibility="gone" />
 
                             <ImageView
-                                android:id="@+id/icon_cam_volt_l1"
+                                android:id="@+id/icon_cam_voltaje"
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="top"
                                 android:src="@drawable/icon_cam2" />
 
                             <ImageView
-                                android:id="@+id/icon_gallery_volt_l1"
+                                android:id="@+id/icon_gallery_voltaje"
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

@@ -203,6 +203,11 @@
         <item>Si</item>
     </array>
 
+    <array name="lugar">
+        <item>1° (Entrada)</item>
+        <item>2° (Fondo)</item>
+    </array>
+
     <array name="linea_aux">
         <item>1m</item>
         <item>2m</item>
@@ -224,6 +229,32 @@
         <item>18m</item>
         <item>19m</item>
         <item>20m</item>
+    </array>
+
+    <array name="evap_ubicacion">
+        <item>2m</item>
+        <item>2.5m</item>
+        <item>3m</item>
+        <item>3.5m</item>
+        <item>4m</item>
+        <item>4.5m</item>
+        <item>5m</item>
+    </array>
+
+    <array name="cond_ubicacion">
+        <item>1er Piso</item>
+        <item>1er Piso Azotea</item>
+        <item>2do Piso</item>
+        <item>2do Piso Azotea</item>
+        <item>3er Piso</item>
+        <item>3er Piso Azotea</item>
+        <item>4to Piso</item>
+        <item>4to Piso Azotea</item>
+    </array>
+
+    <array name="acceso">
+        <item>No</item>
+        <item>Si</item>
     </array>
 
 </resources>

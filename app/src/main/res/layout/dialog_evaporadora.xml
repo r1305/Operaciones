@@ -46,6 +46,34 @@
             </LinearLayout>
 
         </LinearLayout>
+        <!-- Ubicación -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubicación"
+                android:fontFamily="@font/gotham_medium"
+                android:textColor="@color/verdePastel"
+                android:textSize="15sp"/>
+
+            <Spinner
+                android:id="@+id/spinner_ubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:backgroundTint="@color/verdePastel"
+                android:entries="@array/evap_ubicacion"
+                />
+        </LinearLayout>
+
         <!-- Marcas -->
         <LinearLayout
             android:layout_weight="1"
@@ -129,7 +157,7 @@
                 android:fontFamily="@font/gotham_medium"
                 android:textColor="@color/verdePastel"
                 android:textSize="15sp"/>
-            <Spinner
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/spinner_tipos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,108 +180,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="horizontal">
-            <!-- Btu -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Btu/h"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_btus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
-
-            <!-- Refrigerante -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Refrigerante"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_refrigerantes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal">
-
-            <!-- Voltaje -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Voltaje"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_voltajes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
-
-            <!-- Fase -->
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Fase"
-                    android:fontFamily="@font/gotham_medium"
-                    android:textColor="@color/verdePastel"
-                    android:textSize="15sp"/>
-                <Spinner
-                    android:id="@+id/spinner_fases"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:backgroundTint="@color/verdePastel"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -269,7 +197,7 @@
                 android:src="@drawable/icon_code"
                 android:layout_gravity="start"/>
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/nro_serie"
+                android:id="@+id/evap_nro_serie"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

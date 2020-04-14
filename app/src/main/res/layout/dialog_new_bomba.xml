@@ -38,7 +38,7 @@
                 android:textColor="@color/verdePastel"
                 android:textSize="15sp"/>
             <EditText
-                android:id="@+id/et_cortina_marca"
+                android:id="@+id/et_bomba_marca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/verdePastel"
@@ -60,7 +60,7 @@
                 android:textColor="@color/verdePastel"
                 android:textSize="15sp"/>
             <EditText
-                android:id="@+id/et_cortina_modelo"
+                android:id="@+id/et_bomba_modelo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/verdePastel"
@@ -75,13 +75,13 @@
             android:orientation="horizontal"
             android:paddingEnd="16dp">
             <ImageView
-                android:id="@+id/icon_cortina_scan"
+                android:id="@+id/icon_bomba_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_code"
                 android:layout_gravity="center"/>
             <EditText
-                android:id="@+id/et_cortina_nro_serie"
+                android:id="@+id/et_bomba_nro_serie"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -91,31 +91,5 @@
                 android:inputType="textCapCharacters"
                 android:hint="Nro. Serie"/>
         </LinearLayout>
-
     </LinearLayout>
-
-    <!-- Botones -->
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_cortina_cancelar"
-            android:text="Cancelar"
-            android:layout_weight="1"
-            android:background="@color/plomoBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <Button
-            android:id="@+id/btn_cortina_registrar"
-            android:text="Registrar"
-            android:layout_weight="1"
-            android:background="@color/verdePastel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
 </LinearLayout>

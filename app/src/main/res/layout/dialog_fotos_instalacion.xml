@@ -460,7 +460,7 @@
             android:background="@color/plomoBackground"/>
 
         <Button
-            android:id="@+id/dialog_lectura_btn_guardar"
+            android:id="@+id/dialog_fotos_btn_guardar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

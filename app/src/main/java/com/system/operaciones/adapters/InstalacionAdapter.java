@@ -122,12 +122,13 @@ public class InstalacionAdapter extends RecyclerView.Adapter<InstalacionAdapter.
             });
         }
 
-        /*holder.number.setText((String)ob.get("urgencia"));
+        holder.number.setText((String)ob.get("instalacion"));
         holder.registro.setText((String)ob.get("registro"));
         holder.fecha_hora_atencion.setText((String)ob.get("atencion"));
         holder.contratista.setText((String)ob.get("proveedor"));
         holder.cierre.setText((String)ob.get("cierre"));
-        holder.nro_equipo.setText("Equipo N° "+(String)ob.get("nro_equipo"));
+//        holder.nro_equipo.setText("Equipo N° "+(String)ob.get("nro_equipo"));
+        holder.nro_equipo.setText("Equipo N° 1");
         if(status.equals("0")){
 
             holder.icon_file.setImageDrawable(ctx.getResources().getDrawable(R.drawable.icon_write,null));
@@ -324,7 +325,7 @@ public class InstalacionAdapter extends RecyclerView.Adapter<InstalacionAdapter.
             holder.icon_status.setBackgroundColor(ctx.getResources().getColor(R.color.verdePastel,null));
             holder.icon_status.setImageResource(R.drawable.icon_file);
             holder.linear_full.setBackground(ctx.getResources().getDrawable(R.drawable.fondo_cardview_naranja,null));
-        }*/
+        }
     }
 
     @Override
@@ -344,13 +345,16 @@ public class InstalacionAdapter extends RecyclerView.Adapter<InstalacionAdapter.
         private ViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.item_card_instalacion);
-            registro = itemView.findViewById(R.id.item_urgencia_registro);
-            fecha_hora_atencion = itemView.findViewById(R.id.item_urgencia_atencion);
-            contratista = itemView.findViewById(R.id.item_urgencia_contratista);
-            cierre = itemView.findViewById(R.id.item_urgencia_cierre);
+            registro = itemView.findViewById(R.id.item_instalacion_registro);
+            fecha_hora_atencion = itemView.findViewById(R.id.item_instalacion_atencion);
+            contratista = itemView.findViewById(R.id.item_instalacion_contratista);
+            cierre = itemView.findViewById(R.id.item_instalacion_cierre);
             icon_file = itemView.findViewById(R.id.icon_file);
             icon_status = itemView.findViewById(R.id.icon_status);
             icon_pencil = itemView.findViewById(R.id.icon_pencil);
+            number = itemView.findViewById(R.id.instalacion_number);
+            nro_equipo = itemView.findViewById(R.id.instalacion_number);
+            linear_full = itemView.findViewById(R.id.linear_card);
         }
     }
 

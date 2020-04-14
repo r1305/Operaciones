@@ -46,7 +46,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginStart="2dp">
-                    <!-- Urgencia NUMBER-->
+                    <!-- instalacion NUMBER-->
                     <LinearLayout
                         android:layout_weight="1"
                         android:layout_marginStart="6dp"
@@ -56,7 +56,7 @@
                         android:layout_gravity="center"
                         android:gravity="center">
                         <TextView
-                            android:id="@+id/urgencia_number"
+                            android:id="@+id/instalacion_number"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="N° "
@@ -99,7 +99,7 @@
                             android:gravity="left|center"/>
 
                         <TextView
-                            android:id="@+id/item_urgencia_registro"
+                            android:id="@+id/item_instalacion_registro"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -128,7 +128,7 @@
                             android:layout_gravity="center"
                             android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_atencion"
+                            android:id="@+id/item_instalacion_atencion"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -158,7 +158,7 @@
                             android:layout_gravity="center"
                             android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_contratista"
+                            android:id="@+id/item_instalacion_contratista"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
@@ -187,7 +187,7 @@
                             android:layout_gravity="center"
                             android:gravity="left|center"/>
                         <TextView
-                            android:id="@+id/item_urgencia_cierre"
+                            android:id="@+id/item_instalacion_cierre"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:layout_width="0dp"
